@@ -1,4 +1,4 @@
-package com.example.feedfeature.Model;
+package com.example.feedfeature.data.source.local;
 
 public class Feed {
     private String FeedId;

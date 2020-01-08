@@ -1,4 +1,4 @@
-package com.example.feedfeature.Retrofit;
+package com.example.feedfeature.data.retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -10,7 +10,7 @@ public class RetrofitClient {
     public static Retrofit getInstance() {
         if(ourInstance == null)
             ourInstance = new Retrofit.Builder()
-                    .baseUrl("http://hris.anagata.co.id/indexapi.php/feed/")
+                    .baseUrl("http://hris.anagata.co.id/indexapi.php/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
