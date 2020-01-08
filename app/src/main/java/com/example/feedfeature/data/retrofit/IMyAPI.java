@@ -17,5 +17,5 @@ public interface IMyAPI {
 
     @FormUrlEncoded
     @POST("feed/getFeedPagination")
-    Single<List<Feed>> getPosts();
+    Single<List<Feed>> feed(@Field("page") int page, @Field("limit") int limit, @Field("empId") int empId);
 }

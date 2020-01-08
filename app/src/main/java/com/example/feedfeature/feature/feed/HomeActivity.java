@@ -1,4 +1,4 @@
-package com.example.feedfeature;
+package com.example.feedfeature.feature.feed;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,11 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.feedfeature.LoginActivity;
+import com.example.feedfeature.R;
 import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
 import com.example.feedfeature.utils.Constant;
 
