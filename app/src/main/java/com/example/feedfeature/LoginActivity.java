@@ -1,20 +1,44 @@
 package com.example.feedfeature;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.feedfeature.data.retrofit.IMyAPI;
+import com.example.feedfeature.data.retrofit.RetrofitClient;
+import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
+import com.example.feedfeature.data.source.remote.response.ResponseLogin;
+import com.example.feedfeature.utils.Constant;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+
 public class LoginActivity extends AppCompatActivity {
+
+    public static Intent getIntent(Context context){
+        return new Intent(context,LoginActivity.class);
+    }
+
+    IMyAPI myAPI;
 
     EditText edtEmail;
     EditText edtPassword;
 
     Button btnSignin;
+    SharedPreferenceManager spm;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +46,21 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initView();
         initListener();
+        initRetrofit();
+        initSP();
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void initSP() {
+        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
+        spm = new SharedPreferenceManager(sp,sp.edit());
+    }
+
+    private void initRetrofit() {
+        //Init API
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(IMyAPI.class);
+
     }
 
     private void initListener() {
@@ -36,28 +75,40 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void validateLogin(String username, String password) {
-        if(!username.isEmpty() && !password.isEmpty()){
-            if(username.equals("admin") && password.equals("admin")){
-                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
+    private void validateLogin(final String email, String password) {
+        if(!email.isEmpty() && !password.isEmpty()){
+            myAPI.login(email, password)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<ResponseLogin>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
 
-                /* this is what passed through intent
-                * Intent is used for relay bundle(s) through activities
-                Intent homeIntent = new Intent(this,HomeActivity.class);
-                homeIntent.putExtra("user_key", username);
-                homeIntent.putExtra("password_key", password);
-                startActivity(homeIntent);
-                 */
+                        @Override
+                        public void onSuccess(ResponseLogin responseLogin) {
+                            if(responseLogin.getStatus().equalsIgnoreCase("Success")){
+                                spm.saveSPString(Constant.SP_EMAIL,email);
+                                spm.saveSPInt(Constant.SP_EMPLOYEE_ID,responseLogin.getEmployee().getEmployeeId());
+                                spm.saveSPBoolean(Constant.SP_IS_LOGGED_IN,true);
+                                startActivity(HomeActivity.getIntent(LoginActivity.this));
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this,responseLogin.getMessage(),Toast.LENGTH_LONG).show();
+                            }
 
-                startActivity(HomeActivity.getIntent(this,username,password));
-            }
-            else{
-                Toast.makeText(this, "Invalid username or password!", Toast.LENGTH_LONG).show();
-            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    });
 
         }
         else{
-            Toast.makeText(this, "Please enter username or password!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please enter email or password!", Toast.LENGTH_LONG).show();
         }
     }
 
