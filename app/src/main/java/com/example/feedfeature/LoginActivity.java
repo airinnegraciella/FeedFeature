@@ -16,6 +16,7 @@ import com.example.feedfeature.data.retrofit.IMyAPI;
 import com.example.feedfeature.data.retrofit.RetrofitClient;
 import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
 import com.example.feedfeature.data.source.remote.response.ResponseLogin;
+import com.example.feedfeature.feature.feed.HomeActivity;
 import com.example.feedfeature.utils.Constant;
 
 import io.reactivex.SingleObserver;
@@ -67,9 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = edtEmail.getText().toString();
+                String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
-                validateLogin(username, password);
+                validateLogin(email, password);
 
             }
         });

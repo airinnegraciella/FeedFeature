@@ -1,6 +1,7 @@
 package com.example.feedfeature.data.retrofit;
 
 import com.example.feedfeature.data.source.local.Feed;
+import com.example.feedfeature.data.source.remote.response.ResponseFeed;
 import com.example.feedfeature.data.source.remote.response.ResponseLogin;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface IMyAPI {
 
     @FormUrlEncoded
     @POST("feed/getFeedPagination")
-    Single<List<Feed>> getPosts();
+    Single<ResponseFeed> feed(@Field("page") int page, @Field("limit") int limit, @Field("empId") int empId);
 }
