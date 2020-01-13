@@ -22,7 +22,6 @@ import com.example.feedfeature.feature.feed.adapter.FeedLikesAdapter;
 import com.example.feedfeature.pagination.PaginationScrollListener;
 
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -83,7 +82,7 @@ public class FeedLikeActivity extends AppCompatActivity implements SwipeRefreshL
         recycler_feed_like.setHasFixedSize(true);
         recycler_feed_like.setAdapter(feedLikesAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh);
+        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh_likes);
 
         btn_back = (TextView)findViewById(R.id.btn_back);
 

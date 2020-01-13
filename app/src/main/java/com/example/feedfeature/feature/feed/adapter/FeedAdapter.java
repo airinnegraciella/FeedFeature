@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -153,9 +152,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 feedViewHolder.tv_likes.setTextColor(
                         ContextCompat.getColor(
                                 feedViewHolder.tv_likes.getContext(),
-                                R.color.colorGrey)
+                                R.color.gray)
                 );
-                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.colorGrey);
+                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.gray);
             }
 
             ((FeedViewHolder) holder).setOnBtnCommentClickListener(

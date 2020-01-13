@@ -32,7 +32,7 @@
             android:layout_marginStart="@dimen/activity_margin"
             android:background="@drawable/circle_layout_gray_single_stroke"
             android:padding="@dimen/padding_layout_sub"
-            android:tint="@color/colorGrey"
+            android:tint="@color/gray"
             android:tintMode="src_in"
             app:srcCompat="@drawable/ic_refresh_black_24dp"
             tools:targetApi="lollipop" />

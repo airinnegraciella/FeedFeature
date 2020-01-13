@@ -1,5 +1,143 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="small_vertical_margin">8dp</dimen>
+    <dimen name="small_horizontal_margin">8dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="margin_paragraph">4dp</dimen>
+
+    <!--LAYOUT SIZE-->
+    <dimen name="height_layout_bar">48dp</dimen>
+    <dimen name="min_height_total_data">35dp</dimen>
+    <dimen name="min_height_work_history">35dp</dimen>
+    <dimen name="height_service_card">200dp</dimen>
+    <dimen name="min_height_layout">40dp</dimen>
+
+    <!--FONT SIZE-->
+    <dimen name="font_size_company_name">16sp</dimen>
+    <dimen name="font_size_app_version">14sp</dimen>
+
+    <!--FONT ACTION BAR-->
+    <dimen name="font_size_action_bar_title">18sp</dimen>
+    <dimen name="font_size_action_bar_subtitle">14sp</dimen>
+
+    <!--font body modal text-->
+    <dimen name="font_size_modal_text">14sp</dimen>
+
+    <!--font page title-->
+    <dimen name="font_size_page_title">20sp</dimen>
+    <dimen name="font_size_secondary_page_title">16sp</dimen>
+    <dimen name="font_size_cardview_title">18sp</dimen>
+    <dimen name="font_size_scanner_title">18sp</dimen>
+
+    <!--font paragraph-->
+    <dimen name="font_size_big_title_text">18sp</dimen>
+    <dimen name="font_size_title_text">16sp</dimen>
+    <dimen name="font_size_body_text">14sp</dimen>
+    <dimen name="font_size_sub_body_text">13sp</dimen>
+    <dimen name="font_size_small_body_text">12sp</dimen>
+    <dimen name="font_size_very_small_text">10sp</dimen>
+
+    <!--font form-->
+    <dimen name="font_size_form_tab">14sp</dimen>
+    <dimen name="font_size_form_button">14sp</dimen>
+    <dimen name="font_size_form_text_input">14sp</dimen>
+    <dimen name="font_size_form_error_text_input">12sp</dimen>
+    <dimen name="sub_height_app_company_version">80dp</dimen>
+    <dimen name="input_form_height">48dp</dimen>
+    <dimen name="text_area_min_height">80dp</dimen>
+
+    <!--font item menu-->
+    <dimen name="font_size_text_item_menu">12sp</dimen>
+
+    <!--CORNER RADIUS-->
+    <dimen name="corner_radius_card">8dp</dimen>
+    <dimen name="radius_layout_rounded">8dp</dimen>
+    <dimen name="radius_layout_rounded_image">32dp</dimen>
+    <dimen name="radius_layout_rounded_big">48dp</dimen>
+    <dimen name="radius_button_rounded">32dp</dimen>
+    <dimen name="radius_card_rounded">32dp</dimen>
+
+    <!--ELEVATION-->
+    <dimen name="actionbar_elevation">3dp</dimen>
+    <dimen name="button_elevation">3dp</dimen>
+    <dimen name="card_view_elevation">3dp</dimen>
+
+    <!--PADDING-->
+    <dimen name="padding_layout">16dp</dimen>
     <dimen name="padding_layout_sub">8dp</dimen>
+    <dimen name="padding_layout_big">48dp</dimen>
+    <dimen name="padding_layout_test">16dp</dimen>
+    <dimen name="padding_layout_item_form">10dp</dimen>
+    <dimen name="padding_layout_item_list">8dp</dimen>
+    <dimen name="padding_icon_circle_layout">10dp</dimen>
+    <dimen name="image_view_icon_cirle_layout">30dp</dimen>
+    <dimen name="padding_text_inside_circle_background">10dp</dimen>
+    <dimen name="padding_vertical_menu">10dp</dimen>
+    <dimen name="padding_horizontal_menu">15dp</dimen>
+    <dimen name="padding_left_total_data">10dp</dimen>
+    <dimen name="padding_layout_left">15dp</dimen>
+    <dimen name="padding_item_menu">20dp</dimen>
+    <dimen name="padding_card_view">20dp</dimen>
+    <dimen name="padding_total_data">8dp</dimen>
+    <dimen name="padding_content_card_view">16dp</dimen>
+    <dimen name="padding_edit_text">8dp</dimen>
+    <dimen name="padding_paragraph">4dp</dimen>
+    <dimen name="padding_vertical_paragraph">2dp</dimen>
+    <dimen name="big_padding">32dp</dimen>
+    <dimen name="padding_circle_layout_gradient_stroke">12dp</dimen>
+    <dimen name="padding_image_account">2dp</dimen>
+
+    <!--font schedule-->
+    <dimen name="font_size_schedule_title">16sp</dimen>
+    <dimen name="font_size_schedule_description">14sp</dimen>
+    <dimen name="font_size_schedule_body_text">14sp</dimen>
+    <dimen name="font_size_schedule_sub_body_text">12sp</dimen>
+
+    <!--BORDER-->
+    <dimen name="border_size_circular_image_view">8dp</dimen>
+
+    <!--IMAGE-->
+    <dimen name="image_width">32dp</dimen>
+    <dimen name="image_height">32dp</dimen>
+    <dimen name="min_height_login_logo">160dp</dimen>
+    <dimen name="icon_menu_size">56dp</dimen>
+    <dimen name="image_icon_menu_size">40dp</dimen>
+    <dimen name="image_profile_size">48dp</dimen>
+    <dimen name="image_emp_selected_size">60dp</dimen>
+    <dimen name="image_account_size">120dp</dimen>
+    <dimen name="minheight_no_event">150dp</dimen>
+    <dimen name="image_small_size">20dp</dimen>
+    <dimen name="image_icon_item_size">48dp</dimen>
+    <dimen name="height_bar_option">60dp</dimen>
+    <dimen name="corner_radius_rounded">16dp</dimen>
+    <dimen name="big_elevation">16dp</dimen>
+    <dimen name="image_size_big_button">150dp</dimen>
+    <dimen name="icon_account_size_stroke">3dp</dimen>
+
+    <!--ATTENDANCE-->
+    <dimen name="font_size_button_attendance">20sp</dimen>
+    <dimen name="big_margin">32dp</dimen>
+    <dimen name="height_attendance_header">200dp</dimen>
+    <dimen name="font_size_big_title">40sp</dimen>
+    <dimen name="margin_top_attendance_header">200dp</dimen>
+    <dimen name="height_employee_header">170dp</dimen>
+    <dimen name="height_employee_header_content">95dp</dimen>
+
+    <!--NOTIFICATION BADGE-->
+    <dimen name="icon_circle_size_notification_badge">24dp</dimen>
+    <dimen name="padding_notification_badge">-24dp</dimen>
+    <dimen name="font_size_initial_service">32sp</dimen>
+    <dimen name="icon_size_my_request_approval">70dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="image_creator_size">40dp</dimen>
+
+    <dimen name="bottom_navigation_height">56dp</dimen>
 </resources>

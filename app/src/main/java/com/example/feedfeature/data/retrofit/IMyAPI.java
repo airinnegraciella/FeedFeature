@@ -2,6 +2,7 @@ package com.example.feedfeature.data.retrofit;
 
 import com.example.feedfeature.data.source.local.Feed;
 import com.example.feedfeature.data.source.remote.response.ResponseFeed;
+import com.example.feedfeature.data.source.remote.response.ResponseFeedComments;
 import com.example.feedfeature.data.source.remote.response.ResponseFeedLikes;
 import com.example.feedfeature.data.source.remote.response.ResponseLogin;
 
@@ -24,5 +25,9 @@ public interface IMyAPI {
     @FormUrlEncoded
     @POST("feed/getFeedLikePagination")
     Single<ResponseFeedLikes> feed_likes(@Field("feedId") int feedId, @Field("page") int page, @Field("limit") int limit);
+
+    @FormUrlEncoded
+    @POST("feed/getFeedCommentPagination")
+    Single<ResponseFeedComments> feed_comments(@Field("empId") int empId, @Field("feedId") int feedId, @Field("page") int page, @Field("limit") int limit);
 
 }
