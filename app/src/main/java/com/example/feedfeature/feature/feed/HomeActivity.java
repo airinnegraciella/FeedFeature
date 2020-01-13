@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,9 @@ import com.example.feedfeature.data.retrofit.RetrofitClient;
 import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
 import com.example.feedfeature.data.source.local.Feed;
 import com.example.feedfeature.data.source.remote.response.ResponseFeed;
+import com.example.feedfeature.data.source.remote.response.ResponseFeedLikes;
 import com.example.feedfeature.feature.feed.adapter.FeedAdapter;
+import com.example.feedfeature.feature.feed.adapter.FeedLikesAdapter;
 import com.example.feedfeature.pagination.PaginationScrollListener;
 import com.example.feedfeature.utils.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -129,6 +132,8 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
                 return isLoading;
             }
         });
+
+
     }
 
     public void onStartRefresh() {
@@ -289,8 +294,8 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     @Override
-    public void onClickTotalLike(int feedId) {
-
+    public void onClickTotalLike(final int feedId) {
+        startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
     }
 
     @Override

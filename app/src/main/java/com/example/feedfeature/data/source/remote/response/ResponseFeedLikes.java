@@ -1,14 +1,15 @@
 package com.example.feedfeature.data.source.remote.response;
 
-import com.example.feedfeature.data.source.local.FeedPagination;
+import com.example.feedfeature.data.source.local.FeedLikePagination;
 import com.google.gson.annotations.SerializedName;
 
-public class ResponseFeed {
+public class ResponseFeedLikes {
+
     private String status;
     private String message;
 
     @SerializedName("result")
-    private FeedPagination feedPagination;
+    private FeedLikePagination feedLikePagination;
 
     public String getStatus() {
         return status;
@@ -26,11 +27,11 @@ public class ResponseFeed {
         this.message = message;
     }
 
-    public FeedPagination getFeedPagination() {
-        return feedPagination;
+    public FeedLikePagination getFeedLikePagination() {
+        return feedLikePagination;
     }
 
-    public void setFeedPagination(FeedPagination feedPagination) {
-        this.feedPagination = feedPagination;
+    public void setFeedLikePagination(FeedLikePagination feedLikePagination) {
+        this.feedLikePagination = feedLikePagination;
     }
 }
