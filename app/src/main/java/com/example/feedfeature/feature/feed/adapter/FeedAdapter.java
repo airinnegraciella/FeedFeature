@@ -344,38 +344,38 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tv_caption.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnPostClickListener.onClick();
                 }
             });
             iv_image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnImagePostClickListener.onClick();
                 }
             });
 //            btn_option.setOnClickListener(v -> onBtnOptionClickListener.onClick());
             tv_likes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnTotalLikeClickListener.onClick();
                 }
             });
             tv_comments.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnTotalCommentClickListener.onClick();
                 }
             });
             btn_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnLikeClickListener.onClick();
                 }
             });
             btn_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBtnEmpClickListener.onClick();
+                    onBtnCommentClickListener.onClick();
                 }
             });
         }
