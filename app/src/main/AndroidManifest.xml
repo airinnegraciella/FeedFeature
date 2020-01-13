@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".feature.feed.FeedLikeActivity">
         </activity>
+        <activity android:name=".feature.feed.FeedCommentActivity">
+        </activity>
     </application>
 
 </manifest>

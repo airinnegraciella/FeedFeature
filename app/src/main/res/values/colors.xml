@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="colorGrey">#6D6D6D</color>
-    <color name="lite_gray">#D8D8D8</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#2b6788</color>
+    <color name="colorAccentSoft">#0280c5</color>
+    <color name="colorAccentVerySoft">#64B1DB</color>
+    <color name="colorAccentSecondary">#1D8ECC</color>
+    <color name="colorAccentSecondarySoft">#34a9ea</color>
+    <color name="colorAccentThird">#dcb626</color>
+    <color name="colorAccentThirdSoft">#F5D459</color>
+    <color name="colorAccentSecondaryVerySoft">#FFF8DA</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="textColorButtonDark">#FFFFFF</color>
+
+    <color name="hint_color">#696969</color>
+    <color name="dark_blue">#323643</color>
     <color name="light_blue">#EFF3F8</color>
+    <color name="darker_gray">#757575</color>
+    <color name="dark_gray">#989898</color>
+    <color name="gray">#C6C6C6</color>
+    <color name="lite_gray">#D8D8D8</color>
     <color name="lighter_gray">#F8F8F8</color>
+
+    <color name="light_green">#F0F8EF</color>
+
+    <color name="colorReimbursement">#dcb626</color>
+    <color name="colorReimbursementSoft">#F5D459</color>
+    <color name="colorOvertime">#66BB6A</color>
+    <color name="colorOvertimeSoft">#71CC76</color>
+    <color name="colorLeave">#EF5350</color>
+    <color name="colorLeaveSoft">#FC7875</color>
+    <color name="colorEcin">#29B6F6</color>
+    <color name="colorEcinSoft">#4BC6FD</color>
+    <color name="colorEpmp">#dcb626</color>
+    <color name="colorEpmpSoft">#F5D459</color>
+
+    <color name="colorError">#EF5350</color>
+    <color name="colorInfo">#29B6F6</color>
+    <color name="colorSuccess">#66BB6A</color>
+    <color name="colorWarning">#FFA726</color>
 </resources>

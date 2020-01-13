@@ -300,6 +300,7 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onClickTotalComment(int feedId, int position) {
+        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
 
     }
 

@@ -26,7 +26,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:contentDescription="Image"
-                android:tint="@color/colorGrey"
+                android:tint="@color/gray"
                 app:srcCompat="@drawable/ic_rss_feed_black_24dp" />
 
             <TextView
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="no like"
-                android:textColor="@color/colorGrey"
+                android:textColor="@color/gray"
                 android:textSize="16dp" />
         </LinearLayout>
 
@@ -63,17 +63,13 @@
         </LinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_to_refresh"
+            android:id="@+id/swipe_to_refresh_likes"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_feed_likes"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
