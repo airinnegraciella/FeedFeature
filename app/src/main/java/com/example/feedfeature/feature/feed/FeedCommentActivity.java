@@ -188,7 +188,7 @@ public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefr
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().isEmpty()) {
+                if (!s.toString().isEmpty()) {
                     btn_comment.setVisibility(View.VISIBLE);
                 } else {
                     btn_comment.setVisibility(View.GONE);
