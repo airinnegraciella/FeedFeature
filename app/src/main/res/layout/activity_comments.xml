@@ -5,35 +5,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/layout_no_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:contentDescription="Image"
-                android:tint="@color/gray"
-                app:srcCompat="@drawable/ic_rss_feed_black_24dp" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="no comment"
-                android:textColor="@color/gray"
-                android:textSize="16sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,6 +29,37 @@
 
             </TextView>
         </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_no_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Image"
+            android:tint="@color/gray"
+            app:srcCompat="@drawable/ic_rss_feed_black_24dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="no comment"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+    </LinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_to_refresh_comments"

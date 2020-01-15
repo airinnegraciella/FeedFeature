@@ -114,14 +114,29 @@
                     android:layout_weight="1"
                     android:gravity="center">
                     <TextView
+                        android:id="@+id/btn_like_before"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/white"
                         android:drawableStart="@drawable/ic_thumb_up_black_24dp"
                         android:drawablePadding="8dp"
+                        android:visibility="visible"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/dark_gray"
+                        android:text="Like"
+                        />
+                    <TextView
+                        android:id="@+id/btn_like_after"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:drawableStart="@drawable/ic_thumb_up_blue_24dp"
+                        android:drawablePadding="8dp"
+                        android:visibility="gone"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorAccentSoft"
                         android:text="Like"
                         />
                 </LinearLayout>
@@ -139,7 +154,7 @@
                         android:drawablePadding="8dp"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/dark_gray"
                         android:text="Comment"
                         />
                 </LinearLayout>
