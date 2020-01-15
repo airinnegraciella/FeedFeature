@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.retrofit.IMyAPI;
-import com.example.feedfeature.data.retrofit.RetrofitClient;
-import com.example.feedfeature.data.source.local.FeedLike;
-import com.example.feedfeature.data.source.remote.response.ResponseFeedLikes;
+import com.example.feedfeature.core.data.retrofit.IMyAPI;
+import com.example.feedfeature.core.data.retrofit.IMyAPI;
+import com.example.feedfeature.core.data.retrofit.RetrofitClient;
+import com.example.featurelike.data.source.local.FeedLike;
+import com.example.featurelike.data.source.remote.response.ResponseFeedLikes;
 import com.example.feedfeature.feature.feed.adapter.FeedLikesAdapter;
 import com.example.feedfeature.pagination.PaginationScrollListener;
 

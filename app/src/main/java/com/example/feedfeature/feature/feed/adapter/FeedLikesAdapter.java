@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.source.local.FeedLike;
+import com.example.featurelike.data.source.local.FeedLike;
 import com.example.feedfeature.utils.Constant;
 
 import java.util.ArrayList;

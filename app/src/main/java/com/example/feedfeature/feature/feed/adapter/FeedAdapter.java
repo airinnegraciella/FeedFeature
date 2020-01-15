@@ -20,7 +20,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.source.local.Feed;
+import com.example.featurelike.data.source.local.Feed;
 import com.example.feedfeature.utils.Constant;
 
 import java.util.ArrayList;

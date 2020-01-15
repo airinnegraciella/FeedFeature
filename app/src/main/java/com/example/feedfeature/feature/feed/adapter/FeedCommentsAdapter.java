@@ -16,7 +16,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.source.remote.response.comment.FeedComment;
+import com.example.featurelike.data.source.local.FeedComment;
 import com.example.feedfeature.utils.Constant;
 
 import java.util.ArrayList;

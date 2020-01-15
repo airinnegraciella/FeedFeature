@@ -26,11 +26,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.retrofit.IMyAPI;
-import com.example.feedfeature.data.retrofit.RetrofitClient;
-import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
-import com.example.feedfeature.data.source.remote.response.ResponseFeedComments;
-import com.example.feedfeature.data.source.remote.response.comment.FeedComment;
+import com.example.feedfeature.core.data.retrofit.IMyAPI;
+import com.example.feedfeature.core.data.retrofit.RetrofitClient;
+import com.example.feedfeature.core.data.sharedPreference.SharedPreferenceManager;
+import com.example.featurelike.data.source.remote.response.comment.ResponseFeedCommentPagination;
+import com.example.featurelike.data.source.local.FeedComment;
 import com.example.feedfeature.feature.feed.adapter.FeedCommentsAdapter;
 import com.example.feedfeature.pagination.PaginationScrollListener;
 import com.example.feedfeature.utils.Constant;
@@ -44,7 +44,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener {
+public class FeedCommentActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener {
     
     private final int PAGE_START = 1;
     private static final String FEED_ID = "feedId";
@@ -71,7 +71,7 @@ public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefr
     public static Intent getIntent(Context context, int feedId, int positionFeed){
         return new Intent(context, FeedCommentActivity.class)
                     .putExtra(FEED_ID, feedId)
-                .putExtra(POSITION_FEED, positionFeed);
+                    .putExtra(POSITION_FEED, positionFeed);
     }
 
     private LinearLayoutManager linearLayoutManager;
@@ -79,7 +79,7 @@ public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefr
     RecyclerView recycler_feed_comment;
     IMyAPI myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    SharedPreferenceManager spm;
+    Sh spm;
     SwipeRefreshLayout swipe_to_refresh;
     FeedCommentsAdapter feedCommentsAdapter;
     LinearLayout layout_no_comment;
@@ -375,15 +375,15 @@ public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefr
         myAPI.feed_comments(spm.getSPEmployeeId(),feedID,currentPage,LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedComments>() {
+                .subscribe(new SingleObserver<ResponseFeedCommentPagination>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(ResponseFeedComments responseFeedComments) {
-                        onAcceptLoadFeedCommentFirstPage(responseFeedComments.getFeedCommentPagination().getFeed_comment_list(),responseFeedComments.getFeedCommentPagination().getTotal_page());
+                    public void onSuccess(ResponseFeedCommentPagination responseFeedCommentPagination) {
+                        onAcceptLoadFeedCommentFirstPage(responseFeedCommentPagination.getFeedCommentPagination().getFeed_comment_list(), responseFeedCommentPagination.getFeedCommentPagination().getTotal_page());
                         onStopLoad();
 
                     }
@@ -406,15 +406,15 @@ public class FeedCommentActivity  extends AppCompatActivity implements SwipeRefr
         myAPI.feed_comments(spm.getSPEmployeeId(),feedID,currentPage,LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedComments>() {
+                .subscribe(new SingleObserver<ResponseFeedCommentPagination>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(ResponseFeedComments responseFeedComments) {
-                        onAcceptLoadFeedCommentNextPage(responseFeedComments.getFeedCommentPagination().getFeed_comment_list(),responseFeedComments.getFeedCommentPagination().getTotal_page());
+                    public void onSuccess(ResponseFeedCommentPagination responseFeedCommentPagination) {
+                        onAcceptLoadFeedCommentNextPage(responseFeedCommentPagination.getFeedCommentPagination().getFeed_comment_list(), responseFeedCommentPagination.getFeedCommentPagination().getTotal_page());
                     }
 
                     @Override

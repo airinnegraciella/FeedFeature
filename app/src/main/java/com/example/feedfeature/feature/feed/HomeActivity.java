@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,21 +18,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.feedfeature.LoginActivity;
 import com.example.feedfeature.R;
-import com.example.feedfeature.data.retrofit.IMyAPI;
-import com.example.feedfeature.data.retrofit.RetrofitClient;
-import com.example.feedfeature.data.sharedPreference.SharedPreferenceManager;
-import com.example.feedfeature.data.source.local.Feed;
-import com.example.feedfeature.data.source.remote.response.ResponseFeed;
-import com.example.feedfeature.data.source.remote.response.ResponseFeedLikes;
+import com.example.feedfeature.core.data.retrofit.IMyAPI;
+import com.example.feedfeature.core.data.retrofit.RetrofitClient;
+import com.example.feedfeature.core.data.sharedPreference.SharedPreferenceManager;
+import com.example.featurelike.data.source.local.Feed;
+import com.example.featurelike.data.source.remote.response.feed.ResponseFeedPagination;
 import com.example.feedfeature.feature.feed.adapter.FeedAdapter;
-import com.example.feedfeature.feature.feed.adapter.FeedLikesAdapter;
+import com.example.feedfeature.feature.feed.usecase.LikeFeedUseCase;
 import com.example.feedfeature.pagination.PaginationScrollListener;
 import com.example.feedfeature.utils.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -52,6 +48,7 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
     SwipeRefreshLayout refreshLayout;
     FloatingActionButton buttonAdd;
     FeedAdapter feedAdapter;
+    LikeFeedUseCase likeFeedUseCase;
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
     private final int LIMIT = 5;
@@ -198,14 +195,14 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         myAPI.feed(currentPage,LIMIT,spm.getSPEmployeeId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeed>() {
+                .subscribe(new SingleObserver<ResponseFeedPagination>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(ResponseFeed responseFeed) {
+                    public void onSuccess(ResponseFeedPagination responseFeed) {
                         onAcceptLoadFeedFirstPage(responseFeed.getFeedPagination().getFeed_list(),responseFeed.getFeedPagination().getTotal_page());
                         onStopRefresh();
                     }
@@ -228,14 +225,14 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         myAPI.feed(currentPage,LIMIT,spm.getSPEmployeeId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeed>() {
+                .subscribe(new SingleObserver<ResponseFeedPagination>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(ResponseFeed responseFeed) {
+                    public void onSuccess(ResponseFeedPagination responseFeed) {
                         onAcceptLoadFeedNextPage(responseFeed.getFeedPagination().getFeed_list(),responseFeed.getFeedPagination().getTotal_page());
                     }
 
@@ -294,7 +291,7 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     @Override
-    public void onClickTotalLike(final int feedId) {
+    public void onClickTotalLike(int feedId) {
         startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
     }
 
@@ -306,13 +303,15 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onClickBtnLike(int feedId, int isLiked, int position) {
-
-
+        onStartRefresh();
+//        likeFeedUseCase.execute(
+//                LikeFeed(feedId, c)
+//        );
     }
 
     @Override
     public void onClickBtnComment(int feedId, int position) {
-
+        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
     }
 
     @Override
