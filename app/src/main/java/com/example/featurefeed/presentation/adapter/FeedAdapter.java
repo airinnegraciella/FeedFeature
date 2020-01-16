@@ -147,6 +147,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 feedViewHolder.tv_likes.getContext(),
                                 R.color.colorAccent)
                 );
+                feedViewHolder.btn_like_before.setVisibility(View.GONE);
+                feedViewHolder.btn_like_after.setVisibility(View.VISIBLE);
                 setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.colorAccent);
             } else {
                 feedViewHolder.tv_likes.setTextColor(
@@ -154,6 +156,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 feedViewHolder.tv_likes.getContext(),
                                 R.color.gray)
                 );
+                feedViewHolder.btn_like_before.setVisibility(View.VISIBLE);
+                feedViewHolder.btn_like_after.setVisibility(View.GONE);
                 setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.gray);
             }
 
@@ -272,6 +276,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class FeedViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_pp, iv_image;
         TextView tv_name, tv_date, tv_caption, tv_likes, tv_comments;
+        TextView btn_like_before, btn_like_after;
         LinearLayout btn_like, btn_comment, layout_total;
 
         IItemClickListener onBtnTotalLikeClickListener;
@@ -325,6 +330,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tv_likes = (TextView) itemView.findViewById(R.id.tv_likes);
             tv_comments = (TextView) itemView.findViewById(R.id.tv_comments);
             btn_like = (LinearLayout) itemView.findViewById(R.id.btn_like);
+            btn_like_before = (TextView) itemView.findViewById(R.id.btn_like_before);
+            btn_like_after = (TextView) itemView.findViewById(R.id.btn_like_after);
             btn_comment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
             layout_total = (LinearLayout) itemView.findViewById(R.id.layout_total);
 

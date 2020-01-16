@@ -9,6 +9,11 @@ import io.reactivex.disposables.Disposable;
 
 public class GetCurrentUserUseCase extends BaseUseCase<String, ICallback<CurrentUser>> {
     UserRepository userRepository;
+
+    public GetCurrentUserUseCase(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
     @Override
     public void execute(String s, final ICallback<CurrentUser> callback) {
         userRepository.getCurrentUserLogin((ICallback<CurrentUser>)(new ICallback<CurrentUser>() {

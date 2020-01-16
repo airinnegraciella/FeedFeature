@@ -23,6 +23,16 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
         this.view = view;
     }
 
+    @Override
+    public void onCreate(int feedId) {
+        feedID = feedId;
+        initAPI();
+    }
+
+    private void initAPI() {
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(IMyAPI.class);
+    }
 
     @Override
     public void loadFirstPageFromServer(int currentPage) {
@@ -75,14 +85,4 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
                 });
     }
 
-    @Override
-    public void onCreate(int feedId) {
-        feedID = feedId;
-        initAPI();
-    }
-
-    private void initAPI() {
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
-    }
 }
