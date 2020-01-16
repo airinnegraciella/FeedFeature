@@ -2,7 +2,7 @@ package com.example.feedfeature.core.data.sharedPreference;
 
 import android.content.SharedPreferences;
 
-import com.example.feedfeature.utils.Constant;
+import com.example.feedfeature.core.utils.Constant;
 
 public class SharedPreferenceManager {
 

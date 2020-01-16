@@ -1,9 +1,9 @@
 package com.example.feedfeature.core.data.retrofit;
 
-import com.example.featurelike.data.source.remote.response.feed.ResponseFeedPagination;
-import com.example.featurelike.data.source.remote.response.comment.ResponseFeedCommentPagination;
-import com.example.featurelike.data.source.remote.response.ResponseFeedLikes;
-import com.example.featurelike.data.source.remote.response.ResponseLogin;
+import com.example.featurelike.data.source.model.remote.response.feed.ResponseFeedPagination;
+import com.example.featurelike.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
+import com.example.featurelike.data.source.model.remote.response.like.ResponseFeedLikesPagination;
+import com.example.featurelike.data.source.model.remote.response.ResponseLogin;
 
 import io.reactivex.Single;
 import retrofit2.http.Field;
@@ -21,7 +21,7 @@ public interface IMyAPI {
 
     @FormUrlEncoded
     @POST("feed/getFeedLikePagination")
-    Single<ResponseFeedLikes> feed_likes(@Field("feedId") int feedId, @Field("page") int page, @Field("limit") int limit);
+    Single<ResponseFeedLikesPagination> feed_likes(@Field("feedId") int feedId, @Field("page") int page, @Field("limit") int limit);
 
     @FormUrlEncoded
     @POST("feed/getFeedCommentPagination")

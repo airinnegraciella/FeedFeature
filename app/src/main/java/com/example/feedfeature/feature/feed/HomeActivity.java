@@ -16,17 +16,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.featurelike.data.source.model.remote.response.ResponseDislikeFeed;
+import com.example.featurelike.domain.model.DislikeFeed;
+import com.example.featurelike.domain.usecase.DislikeFeedUseCase;
+import com.example.featurelike.presentation.comment.FeedCommentActivity;
+import com.example.featurelike.presentation.like.FeedLikeActivity;
 import com.example.feedfeature.LoginActivity;
 import com.example.feedfeature.R;
+import com.example.feedfeature.core.base.ICallback;
 import com.example.feedfeature.core.data.retrofit.IMyAPI;
 import com.example.feedfeature.core.data.retrofit.RetrofitClient;
 import com.example.feedfeature.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.featurelike.data.source.local.Feed;
-import com.example.featurelike.data.source.remote.response.feed.ResponseFeedPagination;
-import com.example.feedfeature.feature.feed.adapter.FeedAdapter;
-import com.example.feedfeature.feature.feed.usecase.LikeFeedUseCase;
+import com.example.featurelike.data.source.model.local.Feed;
+import com.example.featurelike.data.source.model.remote.response.feed.ResponseFeedPagination;
+import com.example.featurelike.presentation.adapter.FeedAdapter;
+import com.example.featurelike.domain.usecase.LikeFeedUseCase;
+import com.example.feedfeature.core.domain.user.model.CurrentUser;
+import com.example.feedfeature.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.feedfeature.pagination.PaginationScrollListener;
-import com.example.feedfeature.utils.Constant;
+import com.example.feedfeature.core.utils.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -49,6 +57,9 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
     FloatingActionButton buttonAdd;
     FeedAdapter feedAdapter;
     LikeFeedUseCase likeFeedUseCase;
+    DislikeFeedUseCase dislikeFeedUseCase;
+    GetCurrentUserUseCase getCurrentUserUseCase;
+    private int currentEmployeeId = 0;
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
     private final int LIMIT = 5;
@@ -73,6 +84,30 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
                 loadFirstPage();
             }
         });
+        /*
+        getCurrentUserUseCase.execute("", (ICallback<CurrentUser>)(new ICallback<CurrentUser>() {
+            @Override
+            public void onDisposableAcquired(Disposable disposable) {
+
+            }
+
+            @Override
+            public void onSuccess(CurrentUser result) {
+                currentEmployeeId =result.getEmployeeId();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onInputEmpty() {
+
+            }
+        }));
+
+         */
 
     }
 
@@ -304,9 +339,29 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onClickBtnLike(int feedId, int isLiked, int position) {
         onStartRefresh();
-//        likeFeedUseCase.execute(
-//                LikeFeed(feedId, c)
-//        );
+        if(isLiked == 1){
+            dislikeFeedUseCase.execute(new DislikeFeed(feedId, currentEmployeeId), (ICallback<ResponseDislikeFeed>)(new ICallback<ResponseDislikeFeed>() {
+                @Override
+                public void onDisposableAcquired(Disposable disposable) {
+                    compositeDisposable.add(disposable);
+                }
+
+                @Override
+                public void onSuccess(ResponseDislikeFeed result) {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+
+                @Override
+                public void onInputEmpty() {
+
+                }
+            }));
+        }
     }
 
     @Override

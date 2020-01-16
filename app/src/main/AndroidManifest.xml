@@ -25,9 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".feature.feed.FeedLikeActivity">
+        <activity android:name="com.example.featurelike.presentation.like.FeedLikeActivity">
         </activity>
-        <activity android:name=".feature.feed.FeedCommentActivity">
+        <activity android:name="com.example.featurelike.presentation.comment.FeedCommentActivity">
         </activity>
     </application>
 

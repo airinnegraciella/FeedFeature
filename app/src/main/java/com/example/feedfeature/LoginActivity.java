@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.feedfeature.core.data.retrofit.IMyAPI;
 import com.example.feedfeature.core.data.retrofit.RetrofitClient;
 import com.example.feedfeature.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.featurelike.data.source.remote.response.ResponseLogin;
+import com.example.featurelike.data.source.model.remote.response.ResponseLogin;
 import com.example.feedfeature.feature.feed.HomeActivity;
-import com.example.feedfeature.utils.Constant;
+import com.example.feedfeature.core.utils.Constant;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
