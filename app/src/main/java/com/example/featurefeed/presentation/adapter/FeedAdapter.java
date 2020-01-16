@@ -86,7 +86,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 loadingVH.mErrorLayout.setVisibility(View.GONE);
                 loadingVH.mProgressBar.setVisibility(View.VISIBLE);
             }
-        } else if (holder.getItemViewType() == ITEM) {
+        }
+
+        else if (holder.getItemViewType() == ITEM) {
             FeedViewHolder feedViewHolder = (FeedViewHolder) holder;
             Glide.with(feedViewHolder.iv_pp.getContext())
                     .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_EMPLOYEE,

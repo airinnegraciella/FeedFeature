@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 public class FeedRepositoryImpl implements FeedRepository {
 
     private IMyAPI myAPI;
-    HostSelectionInterceptor hostSelectionInterceptor;
+    private HostSelectionInterceptor hostSelectionInterceptor;
 
     public FeedRepositoryImpl(IMyAPI myAPI){
         this.myAPI = myAPI;
