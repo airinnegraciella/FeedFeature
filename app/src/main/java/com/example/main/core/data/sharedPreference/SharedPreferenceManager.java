@@ -37,6 +37,10 @@ public class SharedPreferenceManager {
         return sp.getInt(Constant.SP_EMPLOYEE_ID, 0);
     }
 
+    public String getSPUserId(){
+        return sp.getString(Constant.SP_USER_ID, "");
+    }
+
     public boolean isLoggedIn() {
         return sp.getBoolean(Constant.SP_IS_LOGGED_IN, false);
     }

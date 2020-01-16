@@ -8,12 +8,23 @@ import java.util.Locale;
 public class Constant {
     public static final String SP_APP = "spApp";
     public static final String SP_EMAIL = "spEmail";
+    public static final String SP_USER_ID = "spUserId";
     public static final String SP_EMPLOYEE_ID = "spEmployeeId";
     public static final String SP_IS_LOGGED_IN = "spIsLoggedIn";
     private static final String IMAGE_ASSET_PATH_SERVER = "/assets/images/";
     public static final String IMAGE_TYPE_EMPLOYEE = "employees/";
     public static final String IMAGE_TYPE_FEED = "feed/";
     private static final String HOST = "http://hris.anagata.co.id";
+
+    public static String getHOST() {
+        return HOST;
+    }
+
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
+    private static final String BASE_URL = "http://hris.anagata.co.id/indexapi.php/";
 
     public static String convertDateTimeToFullDateDay(String date){
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);

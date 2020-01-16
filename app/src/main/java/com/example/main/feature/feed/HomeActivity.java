@@ -16,52 +16,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
-import com.example.featurefeed.domain.model.DislikeFeed;
-import com.example.featurefeed.domain.usecase.DislikeFeedUseCase;
+import com.example.featurefeed.data.source.model.local.Feed;
+import com.example.featurefeed.presentation.adapter.FeedAdapter;
 import com.example.featurefeed.presentation.comment.FeedCommentActivity;
 import com.example.featurefeed.presentation.like.FeedLikeActivity;
 import com.example.main.LoginActivity;
 import com.example.main.R;
-import com.example.main.core.base.ICallback;
-import com.example.main.core.data.retrofit.IMyAPI;
-import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.featurefeed.data.source.model.local.Feed;
-import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
-import com.example.featurefeed.presentation.adapter.FeedAdapter;
-import com.example.featurefeed.domain.usecase.LikeFeedUseCase;
-import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
-import com.example.main.pagination.PaginationScrollListener;
 import com.example.main.core.utils.Constant;
+import com.example.main.pagination.PaginationScrollListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
+public class HomeActivity extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener, HomeContract.View {
 
-public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener {
-
-    IMyAPI myAPI;
     RecyclerView recycler_feeds;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
     SharedPreferenceManager spm;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     SwipeRefreshLayout refreshLayout;
     FloatingActionButton buttonAdd;
     FeedAdapter feedAdapter;
-    LikeFeedUseCase likeFeedUseCase;
-    DislikeFeedUseCase dislikeFeedUseCase;
-    GetCurrentUserUseCase getCurrentUserUseCase;
-    private int currentEmployeeId = 0;
+    HomePresenterImpl homePresenter;
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
-    private final int LIMIT = 5;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, HomeActivity.class);
@@ -75,38 +54,15 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         initAdapter();
         initView();
         initListener();
-        intAPI();
         checkLogIn();
+        homePresenter = new HomePresenterImpl(this,spm);
+        homePresenter.onCreate();
         refreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 loadFirstPage();
             }
         });
-        /*
-        getCurrentUserUseCase.execute("", (ICallback<CurrentUser>)(new ICallback<CurrentUser>() {
-            @Override
-            public void onDisposableAcquired(Disposable disposable) {
-
-            }
-
-            @Override
-            public void onSuccess(CurrentUser result) {
-                currentEmployeeId =result.getEmployeeId();
-            }
-
-            @Override
-            public void onError(String error) {
-
-            }
-
-            @Override
-            public void onInputEmpty() {
-
-            }
-        }));
-
-         */
 
     }
 
@@ -125,11 +81,10 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         feedAdapter = new FeedAdapter(HomeActivity.this);
     }
 
-
-    private void intAPI() {
-        //Init API
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
+    @SuppressLint("CommitPrefEdits")
+    private void initSP() {
+        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
+        spm = new SharedPreferenceManager(sp, sp.edit());
     }
 
     private void initListener() {
@@ -167,18 +122,48 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
+    @Override
     public void onStartRefresh() {
         refreshLayout.setRefreshing(true);
     }
 
+    @Override
     public void onStopRefresh() {
         refreshLayout.setRefreshing(false);
     }
 
+    @Override
     public void showMessage(String message) {
         Toast.makeText(this, message,Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void navigateToLikeList(int feedId) {
+        startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
+
+    }
+
+    @Override
+    public void navigateToCommentList(int feedId, int position) {
+        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
+    }
+
+    @Override
+    public void setLikeFeed(int position) {
+        feedAdapter.setLikeFeed(position);
+    }
+
+    @Override
+    public void setDislikeFeed(int position) {
+        feedAdapter.setDisLikeFeed(position);
+    }
+
+    @Override
+    public void setTotalComment(int position, int totalComment) {
+        feedAdapter.setTotalComment(position, totalComment);
+    }
+
+    @Override
     public void onAcceptLoadFeedFirstPage(List<Feed> feedList, int total_page) {
         feedAdapter.addAll(feedList);
 
@@ -192,7 +177,8 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
-    private void onAcceptLoadFeedNextPage(List<Feed> feed_list, int total_page) {
+    @Override
+    public void onAcceptLoadFeedNextPage(List<Feed> feed_list, int total_page) {
         feedAdapter.removeLoadingFooter();
         isLoading = false;
 
@@ -218,67 +204,17 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         refreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                loadFirstPageFromServer(currentPage);
+                homePresenter.loadFirstPageFromServer(currentPage);
             }
         });
     }
 
-    private void loadFirstPageFromServer(int currentPage) {
-        onStartRefresh();
-        compositeDisposable.clear();
-        myAPI.feed(currentPage,LIMIT,spm.getSPEmployeeId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedPagination>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseFeedPagination responseFeed) {
-                        onAcceptLoadFeedFirstPage(responseFeed.getFeedPagination().getFeed_list(),responseFeed.getFeedPagination().getTotal_page());
-                        onStopRefresh();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showMessage(e.getMessage());
-                        onStopRefresh();
-                    }
-                });
-    }
-
-
     private void loadNextPage() {
-        loadNextPageFromServer(currentPage);
+        homePresenter.loadNextPageFromServer(currentPage);
     }
 
-    private void loadNextPageFromServer(int currentPage) {
-        compositeDisposable.clear();
-        myAPI.feed(currentPage,LIMIT,spm.getSPEmployeeId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedPagination>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseFeedPagination responseFeed) {
-                        onAcceptLoadFeedNextPage(responseFeed.getFeedPagination().getFeed_list(),responseFeed.getFeedPagination().getTotal_page());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        onErrorLoadNextPage(e.getMessage());
-
-                    }
-                });
-    }
-
-    private void onErrorLoadNextPage(String message) {
+    @Override
+    public void onErrorLoadNextPage(String message) {
         feedAdapter.showRetry(true, message);
     }
 
@@ -289,11 +225,6 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
-    @SuppressLint("CommitPrefEdits")
-    private void initSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp, sp.edit());
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -324,77 +255,54 @@ public class HomeActivity extends AppCompatActivity implements SwipeRefreshLayou
         loadFirstPage();
     }
 
+
     @Override
     public void onClickTotalLike(int feedId) {
-        startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
+        homePresenter.onClickTotalLike(feedId);
     }
 
     @Override
     public void onClickTotalComment(int feedId, int position) {
-        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
-
+        homePresenter.onClickTotalComment(feedId, position);
     }
 
     @Override
     public void onClickBtnLike(int feedId, int isLiked, int position) {
-        onStartRefresh();
-        if(isLiked == 1){
-            dislikeFeedUseCase.execute(new DislikeFeed(feedId, currentEmployeeId), (ICallback<ResponseDislikeFeed>)(new ICallback<ResponseDislikeFeed>() {
-                @Override
-                public void onDisposableAcquired(Disposable disposable) {
-                    compositeDisposable.add(disposable);
-                }
-
-                @Override
-                public void onSuccess(ResponseDislikeFeed result) {
-
-                }
-
-                @Override
-                public void onError(String error) {
-
-                }
-
-                @Override
-                public void onInputEmpty() {
-
-                }
-            }));
-        }
+        homePresenter.onClickBtnLike(feedId, isLiked, position);
     }
 
     @Override
     public void onClickBtnComment(int feedId, int position) {
-        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
+        homePresenter.onClickBtnComment(feedId, position);
     }
 
     @Override
     public void onClickEmp(int empId) {
-
+        homePresenter.onClickEmp(empId);
     }
 
     @Override
     public void onClickImagePost(String imageName) {
-
+        homePresenter.onClickImagePost(imageName);
     }
 
     @Override
     public void onClickPost(Feed feed) {
-
+        homePresenter.onClickPost(feed);
     }
 
     @Override
     public void onClickEditFeed(int feedId, String feedPost, String feedImage, int position) {
-
+        homePresenter.onClickEditFeed(feedId, feedPost, feedImage, position);
     }
 
     @Override
     public void onClickDeleteFeed(int feedId, int position) {
-
+        homePresenter.onClickDeleteFeed(feedId, position);
     }
 
     @Override
     public void retryPageLoad() {
-        loadNextPageFromServer(currentPage);
+        homePresenter.loadNextPageFromServer(currentPage);
     }
 }

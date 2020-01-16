@@ -16,8 +16,9 @@ public interface FeedLikeContract {
     }
 
     interface Presenter{
+        void onCreate(int feedId);
         void loadFirstPageFromServer(int currentPage);
         void loadNextPageFromServer(int currentPage);
-        void onCreate(int feedId);
+
     }
 }
