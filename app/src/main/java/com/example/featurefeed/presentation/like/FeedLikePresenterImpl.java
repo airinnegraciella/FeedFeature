@@ -25,7 +25,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
     private int feedID;
     private final int LIMIT = 5;
 
-    public FeedLikePresenterImpl(FeedLikeContract.View view, GetFeedLikePaginationUseCase getFeedLikePaginationUseCase) {
+    FeedLikePresenterImpl(FeedLikeContract.View view, GetFeedLikePaginationUseCase getFeedLikePaginationUseCase) {
         this.view = view;
         this.getFeedLikePaginationUseCase = getFeedLikePaginationUseCase;
     }
