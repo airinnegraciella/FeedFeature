@@ -16,7 +16,7 @@ public class GetCurrentUserUseCase extends BaseUseCase<String, ICallback<Current
 
     @Override
     public void execute(String s, final ICallback<CurrentUser> callback) {
-        userRepository.getCurrentUserLogin((ICallback<CurrentUser>)(new ICallback<CurrentUser>() {
+        userRepository.getCurrentUserLogin(new ICallback<CurrentUser>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
 
@@ -36,6 +36,6 @@ public class GetCurrentUserUseCase extends BaseUseCase<String, ICallback<Current
             public void onInputEmpty() {
                 callback.onInputEmpty();
             }
-        }));
+        });
     }
 }

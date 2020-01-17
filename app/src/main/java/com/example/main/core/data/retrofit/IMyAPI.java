@@ -1,5 +1,6 @@
 package com.example.main.core.data.retrofit;
 
+import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
@@ -58,4 +59,30 @@ public interface IMyAPI {
             @Field("feedId") int feedId,
             @Field("employeeId") int employeeId
     );
+
+    @FormUrlEncoded
+    @POST("feed/createFeed")
+    Single<ResponseCreateFeed> createFeed(
+            @Field("makerId") int makerId,
+            @Field("post") String post,
+            @Field("image") String image
+    );
+
+    @FormUrlEncoded
+    @POST("feed/getFeedCommentPagination")
+    Single<ResponseFeedCommentPagination> getFeedCommentPagination(
+            @Field("empId") int empId,
+            @Field("feedId") int feedId,
+            @Field("page") int page,
+            @Field("limit") int limit
+    );
+
+    @FormUrlEncoded
+    @POST("feed/getFeedLikePagination")
+    Single<ResponseFeedLikesPagination> getFeedLikePagination(
+            @Field("feedId") int feedId,
+            @Field("page") int page,
+            @Field("limit") int limit
+    );
+
 }

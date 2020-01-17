@@ -91,7 +91,7 @@
                 android:id="@+id/edt_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/btn_comment"
+                android:layout_toStartOf="@id/btn_add_comment"
                 android:background="@drawable/layout_rounded_gray"
                 android:hint="@string/txt_hint_comment"
                 android:importantForAutofill="no"
@@ -105,7 +105,7 @@
                 android:textSize="@dimen/font_size_form_text_input" />
 
             <ImageView
-                android:id="@+id/btn_comment"
+                android:id="@+id/btn_add_comment"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentEnd="true"

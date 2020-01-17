@@ -13,11 +13,14 @@ public interface HomeContract {
         void onAcceptLoadFeedNextPage(List<Feed> feed_list, int total_page);
         void onErrorLoadNextPage(String message);
         void showMessage(String message);
+        void navigateToAddFeed();
         void navigateToLikeList(int feedId);
         void navigateToCommentList(int feedId, int position);
         void setLikeFeed(int position);
         void setDislikeFeed(int position);
         void setTotalComment(int position, int totalComment);
+        void addFeed(Feed newFeed);
+
 
     }
 

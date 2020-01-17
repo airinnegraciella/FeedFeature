@@ -1,5 +1,8 @@
 package com.example.main.core.utils;
 
+import android.os.Environment;
+
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,4 +45,8 @@ public class Constant {
     public static String getImageAssetPath(String imageType, String image){
         return HOST + IMAGE_ASSET_PATH_SERVER + imageType + image;
     }
+
+    //Photo Directory
+    public static File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath(), "Camera");
+
 }

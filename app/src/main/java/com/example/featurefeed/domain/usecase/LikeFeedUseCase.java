@@ -17,7 +17,7 @@ public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLik
 
     @Override
     public void execute(LikeFeed params, final ICallback<ResponseLikeFeed> callback) {
-        feedRepository.likeFeed(params.getFeedId(), params.getEmployeeId(), (ICallback<ResponseLikeFeed>)(new ICallback<ResponseLikeFeed>() {
+        feedRepository.likeFeed(params.getFeedId(), params.getEmployeeId(), new ICallback<ResponseLikeFeed>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
@@ -41,6 +41,6 @@ public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLik
             public void onInputEmpty() {
                 callback.onInputEmpty();
             }
-        }) );
+        });
     }
 }

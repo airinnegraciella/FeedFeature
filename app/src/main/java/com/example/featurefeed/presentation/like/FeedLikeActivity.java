@@ -13,12 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.GetFeedLikePaginationUseCase;
 import com.example.main.R;
 import com.example.featurefeed.data.source.model.local.FeedLike;
 import com.example.featurefeed.presentation.adapter.FeedLikesAdapter;
+import com.example.main.core.data.retrofit.IMyAPI;
+import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
+
+import retrofit2.Retrofit;
 
 public class FeedLikeActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedLikesAdapter.ClickListener, FeedLikeContract.View {
@@ -34,6 +40,7 @@ public class FeedLikeActivity extends AppCompatActivity
 
     private LinearLayoutManager linearLayoutManager;
 
+    IMyAPI myAPI;
     RecyclerView recycler_feed_like;
     SwipeRefreshLayout swipe_to_refresh;
     FeedLikesAdapter feedLikesAdapter;
@@ -52,11 +59,13 @@ public class FeedLikeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
-        feedLikePresenter = new FeedLikePresenterImpl(this);
-        feedLikePresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0));
+        initAPI();
         initAdapter();
         initView();
         initListener();
+        feedLikePresenter = new FeedLikePresenterImpl(this,
+                new GetFeedLikePaginationUseCase(new FeedRepositoryImpl(myAPI)));
+        feedLikePresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
@@ -64,6 +73,11 @@ public class FeedLikeActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void initAPI() {
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(IMyAPI.class);
     }
 
     private void initView() {
