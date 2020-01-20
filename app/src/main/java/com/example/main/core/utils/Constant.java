@@ -9,15 +9,23 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Constant {
+    public static final String APPLICATION_ID = "com.anagata.hris";
     public static final String SP_APP = "spApp";
     public static final String SP_EMAIL = "spEmail";
     public static final String SP_USER_ID = "spUserId";
     public static final String SP_EMPLOYEE_ID = "spEmployeeId";
     public static final String SP_IS_LOGGED_IN = "spIsLoggedIn";
-    private static final String IMAGE_ASSET_PATH_SERVER = "/assets/images/";
-    public static final String IMAGE_TYPE_EMPLOYEE = "employees/";
-    public static final String IMAGE_TYPE_FEED = "feed/";
     private static final String HOST = "http://hris.anagata.co.id";
+
+    public static final int GALLERY_REQUEST_CODE = 9996;
+    public static final int CAMERA_REQUEST_CODE = 9995;
+
+    //Image
+    public static final String IMAGE_TYPE_EMPLOYEE = "employees/";
+    public static final String IMAGE_TYPE_COMPANY_INFO = "company_info/";
+    public static final String IMAGE_TYPE_FEED = "feed/";
+    public static final String IMAGE_TYPE_CLAIM = "claim/";
+    private static final String IMAGE_ASSET_PATH_SERVER = "/assets/images/";
 
     public static String getHOST() {
         return HOST;

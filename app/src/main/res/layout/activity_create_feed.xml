@@ -63,7 +63,7 @@
             android:hint="@string/txt_hint_post"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
-            android:padding="@dimen/padding_edit_text"
+            android:padding="16dp"
             android:textColor="@color/dark_blue"
             android:textCursorDrawable="@null" />
 

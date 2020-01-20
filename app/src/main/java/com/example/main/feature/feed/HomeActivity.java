@@ -90,13 +90,13 @@ public class HomeActivity extends AppCompatActivity
 
     private void initView() {
         //View
-        recycler_feeds = (RecyclerView) findViewById(R.id.recycler_feeds);
+        recycler_feeds = findViewById(R.id.recycler_feeds);
         recycler_feeds.setHasFixedSize(true);
         recycler_feeds.setLayoutManager(linearLayoutManager);
         recycler_feeds.setAdapter(feedAdapter);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe);
-        buttonAdd = (FloatingActionButton) findViewById(R.id.btn_add_feed);
+        refreshLayout = findViewById(R.id.layout_swipe);
+        buttonAdd = findViewById(R.id.btn_add_feed);
     }
 
     private void initAdapter() {
@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(FeedCreateActivity);
+                navigateToAddFeed();
             }
         });
         refreshLayout.setOnRefreshListener(this);
@@ -161,7 +161,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void navigateToAddFeed() {
-//        startActivity(FeedCreateActivity.getIntent);
+        startActivity(FeedCreateActivity.getIntent(this, 0, false, "", "", 0));
     }
 
     @Override

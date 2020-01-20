@@ -29,6 +29,8 @@
         </activity>
         <activity android:name="com.example.featurefeed.presentation.comment.FeedCommentActivity">
         </activity>
+        <activity android:name="com.example.featurefeed.presentation.create_feed.FeedCreateActivity">
+        </activity>
     </application>
 
 </manifest>
