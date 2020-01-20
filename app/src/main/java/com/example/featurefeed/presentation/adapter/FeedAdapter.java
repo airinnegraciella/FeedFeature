@@ -86,9 +86,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 loadingVH.mErrorLayout.setVisibility(View.GONE);
                 loadingVH.mProgressBar.setVisibility(View.VISIBLE);
             }
-        }
-
-        else if (holder.getItemViewType() == ITEM) {
+        } else if (holder.getItemViewType() == ITEM) {
             FeedViewHolder feedViewHolder = (FeedViewHolder) holder;
             Glide.with(feedViewHolder.iv_pp.getContext())
                     .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_EMPLOYEE,
@@ -151,7 +149,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 );
                 feedViewHolder.btn_like_before.setVisibility(View.GONE);
                 feedViewHolder.btn_like_after.setVisibility(View.VISIBLE);
-                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.colorAccent);
+                setTextViewDrawableColor(feedViewHolder.tv_likes, R.color.colorAccent);
             } else {
                 feedViewHolder.tv_likes.setTextColor(
                         ContextCompat.getColor(
@@ -160,7 +158,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 );
                 feedViewHolder.btn_like_before.setVisibility(View.VISIBLE);
                 feedViewHolder.btn_like_after.setVisibility(View.GONE);
-                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.gray);
+                setTextViewDrawableColor(feedViewHolder.tv_likes, R.color.gray);
             }
 
             ((FeedViewHolder) holder).setOnBtnCommentClickListener(
@@ -438,7 +436,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void retryPageLoad();
     }
-    
+
     private void setTextViewDrawableColor(TextView textView, int color) {
         for (Drawable drawable : textView.getCompoundDrawables()) {
             if (drawable != null) {

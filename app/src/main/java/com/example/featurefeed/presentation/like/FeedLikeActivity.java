@@ -33,9 +33,9 @@ public class FeedLikeActivity extends AppCompatActivity
     private static final String FEED_ID = "feedId";
 
 
-    public static Intent getIntent(Context context, int feedId){
+    public static Intent getIntent(Context context, int feedId) {
         return new Intent(context, FeedLikeActivity.class)
-                    .putExtra(FEED_ID, feedId);
+                .putExtra(FEED_ID, feedId);
     }
 
     private LinearLayoutManager linearLayoutManager;
@@ -52,8 +52,6 @@ public class FeedLikeActivity extends AppCompatActivity
     private boolean isLastPage = false;
     private int currentPage = PAGE_START;
     private int totalPage = 0;
-
-
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +81,16 @@ public class FeedLikeActivity extends AppCompatActivity
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recycler_feed_like = (RecyclerView)findViewById(R.id.recycler_feed_likes);
+        recycler_feed_like = (RecyclerView) findViewById(R.id.recycler_feed_likes);
         recycler_feed_like.setLayoutManager(linearLayoutManager);
         recycler_feed_like.setHasFixedSize(true);
         recycler_feed_like.setAdapter(feedLikesAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh_likes);
+        swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_likes);
 
-        btn_back = (TextView)findViewById(R.id.btn_back);
+        btn_back = (TextView) findViewById(R.id.btn_back);
 
-        layout_no_like = (LinearLayout)findViewById(R.id.layout_no_like);
+        layout_no_like = (LinearLayout) findViewById(R.id.layout_no_like);
     }
 
     private void initAdapter() {
@@ -204,11 +202,9 @@ public class FeedLikeActivity extends AppCompatActivity
     }
 
 
-
-
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void loadNextPage() {

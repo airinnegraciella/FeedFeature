@@ -27,10 +27,9 @@ public class GetFeedPaginationUseCase extends BaseUseCase<GetFeed, ICallback<Fee
 
             @Override
             public void onSuccess(ResponseFeedPagination result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result.getFeedPagination());
-                }
-                else{
+                } else {
                     callback.onError(result.getMessage());
                 }
             }

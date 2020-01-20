@@ -28,10 +28,9 @@ public class GetFeedLikePaginationUseCase extends BaseUseCase<GetFeedLike, ICall
 
             @Override
             public void onSuccess(ResponseFeedLikesPagination result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result.getFeedLikePagination());
-                }
-                else{
+                } else {
                     callback.onError(result.getMessage());
                 }
             }

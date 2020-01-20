@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroupOverlay;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ import retrofit2.Retrofit;
 
 public class FeedCommentActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener, FeedCommentContract.View {
-    
+
     private final int PAGE_START = 1;
     private static final String FEED_ID = "feedId";
     private static final String POSITION_FEED = "positionFeed";
@@ -51,7 +52,7 @@ public class FeedCommentActivity extends AppCompatActivity
     public void applyDim(ViewGroup parent, float dimAmount) {
         ColorDrawable dim = new ColorDrawable(Color.BLACK);
         dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
-        dim.setAlpha((int)(255 * dimAmount));
+        dim.setAlpha((int) (255 * dimAmount));
 
         overlay = parent.getOverlay();
         overlay.add(dim);
@@ -62,10 +63,10 @@ public class FeedCommentActivity extends AppCompatActivity
         overlay.clear();
     }
 
-    public static Intent getIntent(Context context, int feedId, int positionFeed){
+    public static Intent getIntent(Context context, int feedId, int positionFeed) {
         return new Intent(context, FeedCommentActivity.class)
-                    .putExtra(FEED_ID, feedId)
-                    .putExtra(POSITION_FEED, positionFeed);
+                .putExtra(FEED_ID, feedId)
+                .putExtra(POSITION_FEED, positionFeed);
     }
 
     private LinearLayoutManager linearLayoutManager;
@@ -77,7 +78,7 @@ public class FeedCommentActivity extends AppCompatActivity
     FeedCommentsAdapter feedCommentsAdapter;
     LinearLayout layout_no_comment;
     TextView btn_back;
-    LinearLayout btn_comment;
+    ImageView btn_comment;
     EditText edt_comment;
     FeedCommentPresenterImpl feedCommentPresenter;
 
@@ -98,7 +99,7 @@ public class FeedCommentActivity extends AppCompatActivity
         feedCommentPresenter = new FeedCommentPresenterImpl(this,
                 new GetFeedCommentPaginationUseCase(new FeedRepositoryImpl(myAPI)),
                 new GetCurrentUserUseCase(new UserRepositoryImpl(spm)));
-        feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID,0),getIntent().getIntExtra(POSITION_FEED,0));
+        feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0), getIntent().getIntExtra(POSITION_FEED, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
@@ -116,19 +117,19 @@ public class FeedCommentActivity extends AppCompatActivity
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recycler_feed_comment = (RecyclerView)findViewById(R.id.recycler_feed_comments);
+        recycler_feed_comment = (RecyclerView) findViewById(R.id.recycler_feed_comments);
         recycler_feed_comment.setLayoutManager(linearLayoutManager);
         recycler_feed_comment.setHasFixedSize(true);
         recycler_feed_comment.setAdapter(feedCommentsAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh_comments);
+        swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_comments);
         swipe_to_refresh.setOnRefreshListener(this);
 
-        btn_back = (TextView)findViewById(R.id.btn_back);
-        edt_comment = (EditText)findViewById(R.id.edt_comment);
-        btn_comment = (LinearLayout) findViewById(R.id.btn_comment);
+        btn_back = (TextView) findViewById(R.id.btn_back);
+        edt_comment = (EditText) findViewById(R.id.edt_comment);
+        btn_comment = (ImageView) findViewById(R.id.btn_add_comment);
 
-        layout_no_comment = (LinearLayout)findViewById(R.id.layout_no_comment);
+        layout_no_comment = (LinearLayout) findViewById(R.id.layout_no_comment);
 
     }
 
@@ -154,7 +155,7 @@ public class FeedCommentActivity extends AppCompatActivity
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage ++;
+                currentPage++;
 
                 loadNextPage();
             }
@@ -208,11 +209,11 @@ public class FeedCommentActivity extends AppCompatActivity
 
     }
 
-    public int getLayout(){
+    public int getLayout() {
         return R.layout.activity_comments;
     }
 
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", getIntent().getIntExtra(POSITION_FEED, 0));
         returnIntent.putExtra("feedId", getIntent().getIntExtra(FEED_ID, 0));
@@ -230,7 +231,7 @@ public class FeedCommentActivity extends AppCompatActivity
     }
 
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
 /*

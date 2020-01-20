@@ -156,7 +156,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -172,7 +172,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void navigateToCommentList(int feedId, int position) {
-        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
+        startActivity(FeedCommentActivity.getIntent(HomeActivity.this, feedId, position));
     }
 
     @Override

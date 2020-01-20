@@ -27,10 +27,9 @@ public class GetFeedCommentPaginationUseCase extends BaseUseCase<GetFeedComment,
 
             @Override
             public void onSuccess(ResponseFeedCommentPagination result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result.getFeedCommentPagination());
-                }
-                else{
+                } else {
                     callback.onError(result.getMessage());
                 }
             }

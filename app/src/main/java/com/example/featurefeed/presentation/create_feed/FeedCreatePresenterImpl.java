@@ -1,9 +1,12 @@
 package com.example.featurefeed.presentation.create_feed;
 
-import com.example.featurefeed.domain.model.CreateFeed;
-import com.example.featurefeed.domain.usecase.CreateFeedUseCase;
+import android.content.Context;
+import android.content.Intent;
 
-public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter{
+import com.example.featurefeed.domain.usecase.CreateFeedUseCase;
+import com.example.main.core.utils.TakePhoto;
+
+public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
 
     private CreateFeedUseCase createFeedUseCase;
     private FeedCreateContract.View view;
@@ -15,6 +18,11 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter{
 
     @Override
     public void onCreate(int feedId, boolean isCreated, String feedPost, String feedImage) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data, TakePhoto takePhoto, Context context) {
 
     }
 

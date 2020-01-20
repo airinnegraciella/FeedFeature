@@ -9,11 +9,11 @@ import com.example.main.core.base.ICallback;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 
 public interface FeedRepository {
-    void createFeed(int makerId, String post, String image, ICallback<ResponseCreateFeed> callback );
+    void createFeed(int makerId, String post, String image, ICallback<ResponseCreateFeed> callback);
 
 //    void editFeed(int feedId, int makerId, String post, String image, ICallback<ResponseEditFeed> callback );
 
-    void getFeedPagination(int empId, int page, int limit, ICallback<ResponseFeedPagination> callback );
+    void getFeedPagination(int empId, int page, int limit, ICallback<ResponseFeedPagination> callback);
 
 //    void createFeedComment(int feedId, int makerId, String comment, String image, ICallback<ResponseCreateFeedComment> callback);
 

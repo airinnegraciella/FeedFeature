@@ -68,7 +68,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
 
             @Override
             public void onSuccess(FeedCommentPagination result) {
-                view.onAcceptLoadFeedCommentFirstPage(result.getFeed_comment_list(),result.getTotal_page());
+                view.onAcceptLoadFeedCommentFirstPage(result.getFeed_comment_list(), result.getTotal_page());
                 view.onStopLoad();
             }
 
@@ -96,7 +96,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
 
             @Override
             public void onSuccess(FeedCommentPagination result) {
-                view.onAcceptLoadFeedCommentNextPage(result.getFeed_comment_list(),result.getTotal_page());
+                view.onAcceptLoadFeedCommentNextPage(result.getFeed_comment_list(), result.getTotal_page());
             }
 
             @Override

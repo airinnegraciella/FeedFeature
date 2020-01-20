@@ -12,39 +12,38 @@ import io.reactivex.disposables.Disposable;
 public class CreateFeedUseCase extends BaseUseCase<CreateFeed, ICallback<Feed>> {
     private FeedRepository feedRepository;
 
-    public CreateFeedUseCase(FeedRepository feedRepository){
+    public CreateFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
 
     @Override
     public void execute(CreateFeed createFeed, final ICallback<Feed> callback) {
-        feedRepository.createFeed(createFeed.getMakerId(),createFeed.getPost(),createFeed.getImage()
+        feedRepository.createFeed(createFeed.getMakerId(), createFeed.getPost(), createFeed.getImage()
                 , new ICallback<ResponseCreateFeed>() {
-            @Override
-            public void onDisposableAcquired(Disposable disposable) {
-                callback.onDisposableAcquired(disposable);
-            }
+                    @Override
+                    public void onDisposableAcquired(Disposable disposable) {
+                        callback.onDisposableAcquired(disposable);
+                    }
 
-            @Override
-            public void onSuccess(ResponseCreateFeed response) {
-                if(response.getStatus().equalsIgnoreCase("Success")){
-                    callback.onSuccess(response.getFeed());
+                    @Override
+                    public void onSuccess(ResponseCreateFeed response) {
+                        if (response.getStatus().equalsIgnoreCase("Success")) {
+                            callback.onSuccess(response.getFeed());
 
-                }
-                else {
-                    callback.onError(response.getMessage());
-                }
-            }
+                        } else {
+                            callback.onError(response.getMessage());
+                        }
+                    }
 
-            @Override
-            public void onError(String error) {
-                callback.onError(error);
-            }
+                    @Override
+                    public void onError(String error) {
+                        callback.onError(error);
+                    }
 
-            @Override
-            public void onInputEmpty() {
-                callback.onInputEmpty();
-            }
-        });
+                    @Override
+                    public void onInputEmpty() {
+                        callback.onInputEmpty();
+                    }
+                });
     }
 }

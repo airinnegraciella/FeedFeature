@@ -5,7 +5,7 @@ import com.example.featurefeed.data.source.model.local.FeedComment;
 import java.util.List;
 
 public class FeedCommentPagination {
-    
+
     private String page;
     private String total_item;
     private int total_page;

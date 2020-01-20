@@ -17,7 +17,7 @@ public class FeedLike {
     @SerializedName("UpdatedDate")
     private String updatedDate;
 
-    public FeedLike(){
+    public FeedLike() {
 
     }
 

@@ -14,17 +14,17 @@ public class SharedPreferenceManager {
         this.editor = editor;
     }
 
-    public void saveSPString(String keySP,String value) {
+    public void saveSPString(String keySP, String value) {
         editor.putString(keySP, value);
         editor.commit();
     }
 
-    public void  saveSPInt(String keySP,int value) {
+    public void saveSPInt(String keySP, int value) {
         editor.putInt(keySP, value);
         editor.commit();
     }
 
-    public void  saveSPBoolean(String keySP,boolean value) {
+    public void saveSPBoolean(String keySP, boolean value) {
         editor.putBoolean(keySP, value);
         editor.commit();
     }
@@ -37,7 +37,7 @@ public class SharedPreferenceManager {
         return sp.getInt(Constant.SP_EMPLOYEE_ID, 0);
     }
 
-    public String getSPUserId(){
+    public String getSPUserId() {
         return sp.getString(Constant.SP_USER_ID, "");
     }
 

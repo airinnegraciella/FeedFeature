@@ -8,7 +8,7 @@ public class RetrofitClient {
     private static Retrofit ourInstance;
 
     public static Retrofit getInstance() {
-        if(ourInstance == null)
+        if (ourInstance == null)
             ourInstance = new Retrofit.Builder()
                     .baseUrl("http://hris.anagata.co.id/indexapi.php/")
                     .addConverterFactory(GsonConverterFactory.create())

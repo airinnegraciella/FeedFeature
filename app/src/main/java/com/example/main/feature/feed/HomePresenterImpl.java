@@ -75,7 +75,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(FeedPagination result) {
-                view.onAcceptLoadFeedFirstPage(result.getFeed_list(),result.getTotal_page());
+                view.onAcceptLoadFeedFirstPage(result.getFeed_list(), result.getTotal_page());
                 view.onStopRefresh();
             }
 
@@ -104,7 +104,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(FeedPagination result) {
-                view.onAcceptLoadFeedNextPage(result.getFeed_list(),result.getTotal_page());
+                view.onAcceptLoadFeedNextPage(result.getFeed_list(), result.getTotal_page());
             }
 
             @Override
@@ -132,7 +132,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
     @Override
     public void onClickBtnLike(int feedId, int isLiked, final int position) {
         view.onStartRefresh();
-        if(isLiked == 1){
+        if (isLiked == 1) {
             dislikeFeedUseCase.execute(new DislikeFeed(feedId, currentEmployeeId), new ICallback<ResponseDislikeFeed>() {
                 @Override
                 public void onDisposableAcquired(Disposable disposable) {
@@ -156,8 +156,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
                 }
             });
-        }
-        else{
+        } else {
             likeFeedUseCase.execute(new LikeFeed(feedId, currentEmployeeId), new ICallback<ResponseLikeFeed>() {
                 @Override
                 public void onDisposableAcquired(Disposable disposable) {

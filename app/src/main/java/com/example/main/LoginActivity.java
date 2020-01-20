@@ -28,8 +28,8 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static Intent getIntent(Context context){
-        return new Intent(context,LoginActivity.class);
+    public static Intent getIntent(Context context) {
+        return new Intent(context, LoginActivity.class);
     }
 
     IMyAPI myAPI;
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     @SuppressLint("CommitPrefEdits")
     private void initSP() {
         SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp,sp.edit());
+        spm = new SharedPreferenceManager(sp, sp.edit());
     }
 
     private void initRetrofit() {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validateLogin(final String email, String password) {
-        if(!email.isEmpty() && !password.isEmpty()){
+        if (!email.isEmpty() && !password.isEmpty()) {
             myAPI.login(email, password)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -89,26 +89,24 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onSuccess(ResponseLogin responseLogin) {
-                            if(responseLogin.getStatus().equalsIgnoreCase("Success")){
-                                spm.saveSPString(Constant.SP_EMAIL,email);
-                                spm.saveSPInt(Constant.SP_EMPLOYEE_ID,responseLogin.getEmployee().getEmployeeId());
-                                spm.saveSPBoolean(Constant.SP_IS_LOGGED_IN,true);
+                            if (responseLogin.getStatus().equalsIgnoreCase("Success")) {
+                                spm.saveSPString(Constant.SP_EMAIL, email);
+                                spm.saveSPInt(Constant.SP_EMPLOYEE_ID, responseLogin.getEmployee().getEmployeeId());
+                                spm.saveSPBoolean(Constant.SP_IS_LOGGED_IN, true);
                                 startActivity(HomeActivity.getIntent(LoginActivity.this));
-                            }
-                            else{
-                                Toast.makeText(LoginActivity.this,responseLogin.getMessage(),Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, responseLogin.getMessage(), Toast.LENGTH_LONG).show();
                             }
 
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
-        }
-        else{
+        } else {
             Toast.makeText(this, "Please enter email or password!", Toast.LENGTH_LONG).show();
         }
     }
@@ -156,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onRestart();
         //ketika user balik lagi ke activity ini, dari activity lain
     }
-
 
 
 }

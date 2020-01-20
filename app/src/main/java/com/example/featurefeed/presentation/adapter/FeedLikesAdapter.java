@@ -109,6 +109,7 @@ public class FeedLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void retryPageLoad();
     }
+
     @Override
     public int getItemViewType(int position) {
         if (position == feedLikeList.size() - 1 && isLoadingAdded) {
@@ -119,7 +120,7 @@ public class FeedLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class FeedLikePaginationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        CircularImageView iv_pp;
+        //        CircularImageView iv_pp;
         ImageView iv_pp;
         TextView tv_name, tv_updated_date;
 

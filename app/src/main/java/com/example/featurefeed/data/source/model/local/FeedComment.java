@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FeedComment  {
+public class FeedComment {
     @SerializedName("FeedCommentId")
     private int feedCommentId;
     @SerializedName("FeedId")
@@ -29,7 +29,7 @@ public class FeedComment  {
     @SerializedName("IsMine")
     private int isMine;
 
-    public FeedComment(){
+    public FeedComment() {
 
     }
 

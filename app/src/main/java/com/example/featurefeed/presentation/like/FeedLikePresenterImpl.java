@@ -47,7 +47,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
 
             @Override
             public void onSuccess(FeedLikePagination result) {
-                view.onAcceptLoadFeedLikeFirstPage(result.getFeed_like_list(),result.getTotal_page());
+                view.onAcceptLoadFeedLikeFirstPage(result.getFeed_like_list(), result.getTotal_page());
                 view.onStopLoad();
             }
 
@@ -75,7 +75,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
 
             @Override
             public void onSuccess(FeedLikePagination result) {
-                view.onAcceptLoadFeedLikeNextPage(result.getFeed_like_list(),result.getTotal_page());
+                view.onAcceptLoadFeedLikeNextPage(result.getFeed_like_list(), result.getTotal_page());
             }
 
             @Override

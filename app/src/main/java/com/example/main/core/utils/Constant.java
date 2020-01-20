@@ -29,7 +29,7 @@ public class Constant {
 
     private static final String BASE_URL = "http://hris.anagata.co.id/indexapi.php/";
 
-    public static String convertDateTimeToFullDateDay(String date){
+    public static String convertDateTimeToFullDateDay(String date) {
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
         try {
@@ -42,7 +42,7 @@ public class Constant {
         }
     }
 
-    public static String getImageAssetPath(String imageType, String image){
+    public static String getImageAssetPath(String imageType, String image) {
         return HOST + IMAGE_ASSET_PATH_SERVER + imageType + image;
     }
 

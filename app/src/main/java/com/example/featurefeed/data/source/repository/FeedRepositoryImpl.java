@@ -19,7 +19,7 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     private IMyAPI myAPI;
 
-    public FeedRepositoryImpl(IMyAPI myAPI){
+    public FeedRepositoryImpl(IMyAPI myAPI) {
         this.myAPI = myAPI;
     }
 
@@ -112,7 +112,7 @@ public class FeedRepositoryImpl implements FeedRepository {
                     public void onError(Throwable e) {
                         callback.onError(e.getMessage());
                     }
-        });
+                });
     }
 
     @Override
@@ -135,7 +135,7 @@ public class FeedRepositoryImpl implements FeedRepository {
                     public void onError(Throwable e) {
                         callback.onError(e.getMessage());
                     }
-        });
+                });
     }
 
     @Override
