@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.featurefeed.data.source.model.local.Feed;
 import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.DeleteFeedUseCase;
 import com.example.featurefeed.domain.usecase.DislikeFeedUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedPaginationUseCase;
 import com.example.featurefeed.domain.usecase.LikeFeedUseCase;
@@ -74,7 +75,8 @@ public class HomeActivity extends AppCompatActivity
                 new LikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
                 new DislikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
                 new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new GetFeedPaginationUseCase(new FeedRepositoryImpl(myAPI)));
+                new GetFeedPaginationUseCase(new FeedRepositoryImpl(myAPI)),
+                new DeleteFeedUseCase(new FeedRepositoryImpl(myAPI)));
         homePresenter.onCreate();
         refreshLayout.post(new Runnable() {
             @Override
@@ -196,6 +198,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void setTotalComment(int position, int totalComment) {
         feedAdapter.setTotalComment(position, totalComment);
+    }
+
+    @Override
+    public void onDeleteFeedSuccess(int position) {
+        feedAdapter.remove(position);
     }
 
     @Override
