@@ -15,19 +15,26 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true">
 
-        <activity android:name="com.example.main.LoginActivity">
+        <activity android:name="com.example.main.LoginActivity"
+            android:theme="@style/LoginTheme">
         </activity>
 
-        <activity android:name="com.example.main.feature.feed.HomeActivity">
+        <activity android:name="com.example.main.feature.feed.HomeActivity"
+            android:label="Feeds">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.featurefeed.presentation.like.FeedLikeActivity">
+        <activity android:name="com.example.featurefeed.presentation.like.FeedLikeActivity"
+            android:label="Likes">
         </activity>
-        <activity android:name="com.example.featurefeed.presentation.comment.FeedCommentActivity">
+        <activity android:name="com.example.featurefeed.presentation.comment.FeedCommentActivity"
+            android:label="Comments">
+        </activity>
+        <activity android:name="com.example.featurefeed.presentation.create_feed.FeedCreateActivity"
+            android:label="Create Post">
         </activity>
     </application>
 

@@ -17,21 +17,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.featurefeed.data.source.model.local.Feed;
+import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.DislikeFeedUseCase;
+import com.example.featurefeed.domain.usecase.GetFeedPaginationUseCase;
+import com.example.featurefeed.domain.usecase.LikeFeedUseCase;
 import com.example.featurefeed.presentation.adapter.FeedAdapter;
 import com.example.featurefeed.presentation.comment.FeedCommentActivity;
+import com.example.featurefeed.presentation.create_feed.FeedCreateActivity;
 import com.example.featurefeed.presentation.like.FeedLikeActivity;
 import com.example.main.LoginActivity;
 import com.example.main.R;
+import com.example.main.core.data.retrofit.IMyAPI;
+import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
+import com.example.main.core.domain.user.repository.UserRepositoryImpl;
+import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.main.core.utils.Constant;
 import com.example.main.pagination.PaginationScrollListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Retrofit;
 
 public class HomeActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener, HomeContract.View {
 
+    IMyAPI myAPI;
     RecyclerView recycler_feeds;
     SharedPreferenceManager spm;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -50,12 +63,18 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0f);
+        initAPI();
         initSP();
         initAdapter();
         initView();
         initListener();
         checkLogIn();
-        homePresenter = new HomePresenterImpl(this,spm);
+        homePresenter = new HomePresenterImpl(this,
+                new LikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
+                new DislikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
+                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
+                new GetFeedPaginationUseCase(new FeedRepositoryImpl(myAPI)));
         homePresenter.onCreate();
         refreshLayout.post(new Runnable() {
             @Override
@@ -66,15 +85,20 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    private void initAPI() {
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(IMyAPI.class);
+    }
+
     private void initView() {
         //View
-        recycler_feeds = (RecyclerView) findViewById(R.id.recycler_feeds);
+        recycler_feeds = findViewById(R.id.recycler_feeds);
         recycler_feeds.setHasFixedSize(true);
         recycler_feeds.setLayoutManager(linearLayoutManager);
         recycler_feeds.setAdapter(feedAdapter);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe);
-        buttonAdd = (FloatingActionButton) findViewById(R.id.btn_add_feed);
+        refreshLayout = findViewById(R.id.layout_swipe);
+        buttonAdd = findViewById(R.id.btn_add_feed);
     }
 
     private void initAdapter() {
@@ -91,9 +115,10 @@ public class HomeActivity extends AppCompatActivity
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                navigateToAddFeed();
             }
         });
+
         refreshLayout.setOnRefreshListener(this);
         recycler_feeds.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -134,7 +159,17 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void navigateToAddFeed() {
+        startActivity(FeedCreateActivity.getIntent(this, 0, false, "", "", 0));
+    }
+
+    @Override
+    public void navigateToEditFeed(int feedId, String feedPost, String feedImage, int position) {
+        startActivity(FeedCreateActivity.getIntent(this, feedId, true, feedPost, feedImage, position));
     }
 
     @Override
@@ -145,7 +180,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void navigateToCommentList(int feedId, int position) {
-        startActivity(FeedCommentActivity.getIntent(HomeActivity.this,feedId,position));
+        startActivity(FeedCommentActivity.getIntent(HomeActivity.this, feedId, position));
     }
 
     @Override
@@ -161,6 +196,17 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void setTotalComment(int position, int totalComment) {
         feedAdapter.setTotalComment(position, totalComment);
+    }
+
+    @Override
+    public void editFeed(int position, String newFeedPost, String newFeedImage) {
+        feedAdapter.editFeed(position, newFeedPost, newFeedImage);
+    }
+
+    @Override
+    public void addFeed(Feed newFeed) {
+        feedAdapter.add(newFeed);
+        recycler_feeds.scrollToPosition(0);
     }
 
     @Override

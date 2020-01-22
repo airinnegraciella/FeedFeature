@@ -6,30 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:drawableStart="@drawable/ic_arrow_back_black_24dp"
-                android:paddingHorizontal="16dp">
-
-            </TextView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Comment"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-
-            </TextView>
-        </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layout_no_comment"
         android:layout_width="match_parent"
@@ -50,7 +26,7 @@
             android:layout_height="32dp"
             android:contentDescription="Image"
             android:tint="@color/gray"
-            app:srcCompat="@drawable/ic_rss_feed_black_24dp" />
+            android:src="@drawable/ic_rss_feed_black_24dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -91,7 +67,7 @@
                 android:id="@+id/edt_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/btn_comment"
+                android:layout_toStartOf="@id/btn_add_comment"
                 android:background="@drawable/layout_rounded_gray"
                 android:hint="@string/txt_hint_comment"
                 android:importantForAutofill="no"
@@ -105,7 +81,7 @@
                 android:textSize="@dimen/font_size_form_text_input" />
 
             <ImageView
-                android:id="@+id/btn_comment"
+                android:id="@+id/btn_add_comment"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentEnd="true"
@@ -115,7 +91,7 @@
                 android:contentDescription="@string/image"
                 android:tint="@color/colorAccentSoft"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_send_black_24dp" />
+                android:src="@drawable/ic_send_black_24dp" />
         </RelativeLayout>
 
 </LinearLayout>

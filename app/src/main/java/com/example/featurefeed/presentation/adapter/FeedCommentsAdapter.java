@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM = 1;
     private static final int LOADING = 2;
 
@@ -162,7 +162,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class FeedCommentPaginationViewHolder extends RecyclerView.ViewHolder {
-//        CircularImageView iv_ic_profile;
+        //        CircularImageView iv_ic_profile;
         ImageView iv_pp, iv_image_comment;
         TextView tv_name, tv_updated_date, tv_comment;
 

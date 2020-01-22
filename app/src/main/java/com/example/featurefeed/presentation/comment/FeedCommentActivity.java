@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroupOverlay;
@@ -18,46 +19,41 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.text.TextWatcher;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.featurefeed.data.source.model.local.FeedComment;
+import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
+import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
 import com.example.main.R;
 import com.example.main.core.data.retrofit.IMyAPI;
 import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
-import com.example.featurefeed.data.source.model.local.FeedComment;
-import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
-import com.example.main.pagination.PaginationScrollListener;
+import com.example.main.core.domain.user.repository.UserRepositoryImpl;
+import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.main.core.utils.Constant;
+import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
+import java.util.Objects;
 
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class FeedCommentActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener {
-    
+public class FeedCommentActivity extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener, FeedCommentContract.View {
+
     private final int PAGE_START = 1;
     private static final String FEED_ID = "feedId";
     private static final String POSITION_FEED = "positionFeed";
     private ViewGroupOverlay overlay;
 
-    private int feedID;
-    private int positionFeed;
-
     public void applyDim(ViewGroup parent, float dimAmount) {
         ColorDrawable dim = new ColorDrawable(Color.BLACK);
         dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
-        dim.setAlpha((int)(255 * dimAmount));
+        dim.setAlpha((int) (255 * dimAmount));
 
         overlay = parent.getOverlay();
         overlay.add(dim);
@@ -68,25 +64,24 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
         overlay.clear();
     }
 
-    public static Intent getIntent(Context context, int feedId, int positionFeed){
+    public static Intent getIntent(Context context, int feedId, int positionFeed) {
         return new Intent(context, FeedCommentActivity.class)
-                    .putExtra(FEED_ID, feedId)
-                    .putExtra(POSITION_FEED, positionFeed);
+                .putExtra(FEED_ID, feedId)
+                .putExtra(POSITION_FEED, positionFeed);
     }
 
     private LinearLayoutManager linearLayoutManager;
+    private SharedPreferenceManager spm;
 
     RecyclerView recycler_feed_comment;
     IMyAPI myAPI;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    SharedPreferenceManager spm;
     SwipeRefreshLayout swipe_to_refresh;
     FeedCommentsAdapter feedCommentsAdapter;
     LinearLayout layout_no_comment;
-    TextView btn_back;
     ImageView btn_comment;
     EditText edt_comment;
-    private final int LIMIT = 5;
+    FeedCommentPresenterImpl feedCommentPresenter;
+
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private int currentPage = PAGE_START;
@@ -96,13 +91,16 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
-        feedID = getIntent().getIntExtra(FEED_ID, 0);
-        positionFeed = getIntent().getIntExtra(POSITION_FEED, 0);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        initAPI();
         initSP();
         initAdapter();
         initView();
         initListener();
-        initAPI();
+        feedCommentPresenter = new FeedCommentPresenterImpl(this,
+                new GetFeedCommentPaginationUseCase(new FeedRepositoryImpl(myAPI)),
+                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)));
+        feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0), getIntent().getIntExtra(POSITION_FEED, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
@@ -120,19 +118,18 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recycler_feed_comment = (RecyclerView)findViewById(R.id.recycler_feed_comments);
+        recycler_feed_comment = (RecyclerView) findViewById(R.id.recycler_feed_comments);
         recycler_feed_comment.setLayoutManager(linearLayoutManager);
         recycler_feed_comment.setHasFixedSize(true);
         recycler_feed_comment.setAdapter(feedCommentsAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh_comments);
+        swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_comments);
         swipe_to_refresh.setOnRefreshListener(this);
 
-        btn_back = (TextView)findViewById(R.id.btn_back);
-        edt_comment = (EditText)findViewById(R.id.edt_comment);
-        btn_comment = (ImageView)findViewById(R.id.btn_comment);
+        edt_comment = (EditText) findViewById(R.id.edt_comment);
+        btn_comment = (ImageView) findViewById(R.id.btn_add_comment);
 
-        layout_no_comment = (LinearLayout)findViewById(R.id.layout_no_comment);
+        layout_no_comment = (LinearLayout) findViewById(R.id.layout_no_comment);
 
     }
 
@@ -147,18 +144,12 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
     }
 
     private void initListener() {
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         swipe_to_refresh.setOnRefreshListener(this);
         recycler_feed_comment.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage ++;
+                currentPage++;
 
                 loadNextPage();
             }
@@ -212,11 +203,11 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
 
     }
 
-    public int getLayout(){
+    public int getLayout() {
         return R.layout.activity_comments;
     }
 
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", getIntent().getIntExtra(POSITION_FEED, 0));
         returnIntent.putExtra("feedId", getIntent().getIntExtra(FEED_ID, 0));
@@ -234,7 +225,7 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
     }
 
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
 /*
@@ -286,7 +277,7 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
 
  */
 
-
+    @Override
     public void onDeleteCommentSuccess(int position) {
         feedCommentsAdapter.remove(position);
     }
@@ -295,18 +286,22 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
         feedCommentsAdapter.editComment(position, newFeedComment, newFeedCommentImage);
     }
 
+    @Override
     public void retryPageLoad() {
         loadNextPage();
     }
 
+    @Override
     public void onStartLoad() {
         swipe_to_refresh.setRefreshing(true);
     }
 
+    @Override
     public void onStopLoad() {
         swipe_to_refresh.setRefreshing(false);
     }
 
+    @Override
     public void onAcceptLoadFeedCommentFirstPage(List<FeedComment> feedCommentList, int total_page) {
         if (feedCommentList.isEmpty()) {
             layout_no_comment.setVisibility(View.VISIBLE);
@@ -326,6 +321,7 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
+    @Override
     public void onAcceptLoadFeedCommentNextPage(List<FeedComment> feedCommentList, int total_page) {
         feedCommentsAdapter.removeLoadingFooter();
         isLoading = false;
@@ -342,15 +338,18 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
+    @Override
     public void onErrorLoadNextPage(String message) {
         feedCommentsAdapter.showRetry(true, message);
     }
 
+    @Override
     public void onErrorLoad(String errorMessage) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(errorMessage);
     }
 
+    @Override
     public void onRefresh() {
         loadFirstPage();
     }
@@ -364,74 +363,26 @@ public class FeedCommentActivity extends AppCompatActivity implements SwipeRefre
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
-                loadFirstPageFromServer(currentPage);
+                feedCommentPresenter.loadFirstPageFromServer(currentPage);
             }
         });
     }
 
-    private void loadFirstPageFromServer(int currentPage) {
-        onStartLoad();
-        compositeDisposable.clear();
-        myAPI.feed_comments(spm.getSPEmployeeId(),feedID,currentPage,LIMIT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedCommentPagination>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseFeedCommentPagination responseFeedCommentPagination) {
-                        onAcceptLoadFeedCommentFirstPage(responseFeedCommentPagination.getFeedCommentPagination().getFeed_comment_list(), responseFeedCommentPagination.getFeedCommentPagination().getTotal_page());
-                        onStopLoad();
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        onErrorLoad(e.getMessage());
-                        onStopLoad();
-                    }
-                });
-    }
-
 
     private void loadNextPage() {
-        loadNextPageFromServer(currentPage);
+        feedCommentPresenter.loadNextPageFromServer(currentPage);
     }
 
-    private void loadNextPageFromServer(int currentPage) {
-        compositeDisposable.clear();
-        myAPI.feed_comments(spm.getSPEmployeeId(),feedID,currentPage,LIMIT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ResponseFeedCommentPagination>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
 
-                    @Override
-                    public void onSuccess(ResponseFeedCommentPagination responseFeedCommentPagination) {
-                        onAcceptLoadFeedCommentNextPage(responseFeedCommentPagination.getFeedCommentPagination().getFeed_comment_list(), responseFeedCommentPagination.getFeedCommentPagination().getTotal_page());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        onErrorLoadNextPage(e.getMessage());
-                    }
-                });
-
-    }
-
-    private void onCommentSuccess(FeedComment feedComment) {
+    @Override
+    public void onCommentSuccess(FeedComment feedComment) {
         edt_comment.setText("");
         layout_no_comment.setVisibility(View.GONE);
         feedCommentsAdapter.addAtFirst(feedComment);
         recycler_feed_comment.scrollToPosition(0);
     }
 
+    @Override
     public void onCommentError(String error) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(error);

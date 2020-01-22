@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -86,10 +88,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 loadingVH.mErrorLayout.setVisibility(View.GONE);
                 loadingVH.mProgressBar.setVisibility(View.VISIBLE);
             }
-        }
-
-        else if (holder.getItemViewType() == ITEM) {
-            FeedViewHolder feedViewHolder = (FeedViewHolder) holder;
+        } else if (holder.getItemViewType() == ITEM) {
+            final FeedViewHolder feedViewHolder = (FeedViewHolder) holder;
             Glide.with(feedViewHolder.iv_pp.getContext())
                     .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_EMPLOYEE,
                             Objects.requireNonNull(feedList.get(position).getMakerImagePath())))
@@ -138,9 +138,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             if (feedList.get(position).getIsMine() == 1) {
-//                feedViewHolder.btn_option.setVisibility(View.VISIBLE);
+                feedViewHolder.btn_option.setVisibility(View.VISIBLE);
             } else {
-//                feedViewHolder.btn_option.setVisibility(View.GONE);
+                feedViewHolder.btn_option.setVisibility(View.GONE);
             }
 
             if (feedList.get(position).getIsLiked() == 1) {
@@ -151,7 +151,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 );
                 feedViewHolder.btn_like_before.setVisibility(View.GONE);
                 feedViewHolder.btn_like_after.setVisibility(View.VISIBLE);
-                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.colorAccent);
+                setTextViewDrawableColor(feedViewHolder.tv_likes, R.color.colorAccent);
             } else {
                 feedViewHolder.tv_likes.setTextColor(
                         ContextCompat.getColor(
@@ -160,7 +160,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 );
                 feedViewHolder.btn_like_before.setVisibility(View.VISIBLE);
                 feedViewHolder.btn_like_after.setVisibility(View.GONE);
-                setTextViewDrawableColor(feedViewHolder.tv_likes,R.color.gray);
+                setTextViewDrawableColor(feedViewHolder.tv_likes, R.color.gray);
             }
 
             ((FeedViewHolder) holder).setOnBtnCommentClickListener(
@@ -206,36 +206,42 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-/*
+
             ((FeedViewHolder) holder).setOnBtnOptionClickListener(
-                    () -> {
-                        PopupMenu popup = new PopupMenu(
-                                feedViewHolder.iv_ic_profile.getContext(),
-                                ((FeedViewHolder) holder).btn_option
-                        );
-                        popup.inflate(R.menu.item_option_menu);
-                        popup.setOnMenuItemClickListener(item -> {
-                            int itemId = item.getItemId();
-                            if (itemId == R.id.menu_option_edit) {
-                                clickListener.onClickEditFeed(
-                                        feedList.get(holder.getAdapterPosition()).getFeedId(),
-                                        feedList.get(holder.getAdapterPosition()).getPost(),
-                                        feedList.get(holder.getAdapterPosition()).getPostImagePath(),
-                                        holder.getAdapterPosition()
-                                );
-                            } else if (itemId == R.id.menu_option_delete) {
-                                clickListener.onClickDeleteFeed(
-                                        feedList.get(holder.getAdapterPosition()).getFeedId(),
-                                        holder.getAdapterPosition()
-                                );
-                            }
-                            return false;
-                        });
-                        popup.show();
+                    new IItemClickListener() {
+                        @Override
+                        public void onClick() {
+                            PopupMenu popup = new PopupMenu(
+                                    feedViewHolder.btn_option.getContext(),
+                                    ((FeedViewHolder) holder).btn_option
+                            );
+                            popup.inflate(R.menu.item_option_menu);
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    int itemId = item.getItemId();
+                                    if (itemId == R.id.menu_option_edit) {
+                                        clickListener.onClickEditFeed(
+                                                feedList.get(holder.getAdapterPosition()).getFeedId(),
+                                                feedList.get(holder.getAdapterPosition()).getPost(),
+                                                feedList.get(holder.getAdapterPosition()).getPostImagePath(),
+                                                holder.getAdapterPosition()
+                                        );
+                                    } else if (itemId == R.id.menu_option_delete) {
+                                        clickListener.onClickDeleteFeed(
+                                                feedList.get(holder.getAdapterPosition()).getFeedId(),
+                                                holder.getAdapterPosition()
+                                        );
+                                    }
+                                    return false;
+                                }
+                            });
+                            popup.show();
+                        }
                     }
             );
 
- */
+
 
             ((FeedViewHolder) holder).setOnBtnPostClickListener(
                     new IItemClickListener() {
@@ -276,7 +282,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class FeedViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_pp, iv_image;
+        ImageView iv_pp, iv_image, btn_option;
         TextView tv_name, tv_date, tv_caption, tv_likes, tv_comments;
         TextView btn_like_before, btn_like_after;
         LinearLayout btn_like, btn_comment, layout_total;
@@ -335,6 +341,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btn_like_before = (TextView) itemView.findViewById(R.id.btn_like_before);
             btn_like_after = (TextView) itemView.findViewById(R.id.btn_like_after);
             btn_comment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
+            btn_option = (ImageView) itemView.findViewById(R.id.btn_option);
             layout_total = (LinearLayout) itemView.findViewById(R.id.layout_total);
 
             iv_pp.setOnClickListener(new View.OnClickListener() {
@@ -361,7 +368,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onBtnImagePostClickListener.onClick();
                 }
             });
-//            btn_option.setOnClickListener(v -> onBtnOptionClickListener.onClick());
+            btn_option.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBtnOptionClickListener.onClick();
+                }
+            });
             tv_likes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -384,6 +396,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     onBtnCommentClickListener.onClick();
+                }
+            });
+            btn_option.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBtnOptionClickListener.onClick();
                 }
             });
         }
@@ -438,7 +456,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void retryPageLoad();
     }
-    
+
     private void setTextViewDrawableColor(TextView textView, int color) {
         for (Drawable drawable : textView.getCompoundDrawables()) {
             if (drawable != null) {

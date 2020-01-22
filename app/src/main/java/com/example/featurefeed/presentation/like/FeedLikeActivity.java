@@ -13,12 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.GetFeedLikePaginationUseCase;
 import com.example.main.R;
 import com.example.featurefeed.data.source.model.local.FeedLike;
 import com.example.featurefeed.presentation.adapter.FeedLikesAdapter;
+import com.example.main.core.data.retrofit.IMyAPI;
+import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Retrofit;
 
 public class FeedLikeActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedLikesAdapter.ClickListener, FeedLikeContract.View {
@@ -27,18 +34,18 @@ public class FeedLikeActivity extends AppCompatActivity
     private static final String FEED_ID = "feedId";
 
 
-    public static Intent getIntent(Context context, int feedId){
+    public static Intent getIntent(Context context, int feedId) {
         return new Intent(context, FeedLikeActivity.class)
-                    .putExtra(FEED_ID, feedId);
+                .putExtra(FEED_ID, feedId);
     }
 
     private LinearLayoutManager linearLayoutManager;
 
+    IMyAPI myAPI;
     RecyclerView recycler_feed_like;
     SwipeRefreshLayout swipe_to_refresh;
     FeedLikesAdapter feedLikesAdapter;
     LinearLayout layout_no_like;
-    TextView btn_back;
     FeedLikePresenterImpl feedLikePresenter;
 
     private boolean isLoading = false;
@@ -47,16 +54,17 @@ public class FeedLikeActivity extends AppCompatActivity
     private int totalPage = 0;
 
 
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
-        feedLikePresenter = new FeedLikePresenterImpl(this);
-        feedLikePresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0));
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        initAPI();
         initAdapter();
         initView();
         initListener();
+        feedLikePresenter = new FeedLikePresenterImpl(this,
+                new GetFeedLikePaginationUseCase(new FeedRepositoryImpl(myAPI)));
+        feedLikePresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
@@ -66,19 +74,28 @@ public class FeedLikeActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    private void initAPI() {
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(IMyAPI.class);
+    }
+
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recycler_feed_like = (RecyclerView)findViewById(R.id.recycler_feed_likes);
+        recycler_feed_like = (RecyclerView) findViewById(R.id.recycler_feed_likes);
         recycler_feed_like.setLayoutManager(linearLayoutManager);
         recycler_feed_like.setHasFixedSize(true);
         recycler_feed_like.setAdapter(feedLikesAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout)findViewById(R.id.swipe_to_refresh_likes);
+        swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_likes);
 
-        btn_back = (TextView)findViewById(R.id.btn_back);
-
-        layout_no_like = (LinearLayout)findViewById(R.id.layout_no_like);
+        layout_no_like = (LinearLayout) findViewById(R.id.layout_no_like);
     }
 
     private void initAdapter() {
@@ -86,12 +103,6 @@ public class FeedLikeActivity extends AppCompatActivity
     }
 
     private void initListener() {
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         swipe_to_refresh.setOnRefreshListener(this);
         recycler_feed_like.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -190,11 +201,9 @@ public class FeedLikeActivity extends AppCompatActivity
     }
 
 
-
-
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void loadNextPage() {

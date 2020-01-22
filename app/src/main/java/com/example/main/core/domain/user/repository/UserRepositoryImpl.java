@@ -4,10 +4,10 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
 import com.example.main.core.domain.user.model.CurrentUser;
 
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
     private final SharedPreferenceManager spm;
 
-    public UserRepositoryImpl(SharedPreferenceManager spm){
+    public UserRepositoryImpl(SharedPreferenceManager spm) {
         this.spm = spm;
     }
 
