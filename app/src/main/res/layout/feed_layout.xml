@@ -34,6 +34,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginHorizontal="16dp">
                     <TextView
@@ -51,6 +52,12 @@
                         tools:text="@tools:sample/date/ddmmyy"/>
 
                 </LinearLayout>
+                <ImageView
+                    android:id="@+id/btn_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_more_vert_black_24dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

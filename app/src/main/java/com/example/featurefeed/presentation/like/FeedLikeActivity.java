@@ -23,6 +23,7 @@ import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Retrofit;
 
@@ -45,7 +46,6 @@ public class FeedLikeActivity extends AppCompatActivity
     SwipeRefreshLayout swipe_to_refresh;
     FeedLikesAdapter feedLikesAdapter;
     LinearLayout layout_no_like;
-    TextView btn_back;
     FeedLikePresenterImpl feedLikePresenter;
 
     private boolean isLoading = false;
@@ -57,6 +57,7 @@ public class FeedLikeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         initAPI();
         initAdapter();
         initView();
@@ -71,6 +72,12 @@ public class FeedLikeActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void initAPI() {
@@ -88,8 +95,6 @@ public class FeedLikeActivity extends AppCompatActivity
 
         swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_likes);
 
-        btn_back = (TextView) findViewById(R.id.btn_back);
-
         layout_no_like = (LinearLayout) findViewById(R.id.layout_no_like);
     }
 
@@ -98,12 +103,6 @@ public class FeedLikeActivity extends AppCompatActivity
     }
 
     private void initListener() {
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         swipe_to_refresh.setOnRefreshListener(this);
         recycler_feed_like.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override

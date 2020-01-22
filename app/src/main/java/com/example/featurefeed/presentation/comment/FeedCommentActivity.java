@@ -38,6 +38,7 @@ import com.example.main.core.utils.Constant;
 import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Retrofit;
 
@@ -77,7 +78,6 @@ public class FeedCommentActivity extends AppCompatActivity
     SwipeRefreshLayout swipe_to_refresh;
     FeedCommentsAdapter feedCommentsAdapter;
     LinearLayout layout_no_comment;
-    TextView btn_back;
     ImageView btn_comment;
     EditText edt_comment;
     FeedCommentPresenterImpl feedCommentPresenter;
@@ -91,6 +91,7 @@ public class FeedCommentActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         initAPI();
         initSP();
         initAdapter();
@@ -125,7 +126,6 @@ public class FeedCommentActivity extends AppCompatActivity
         swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_comments);
         swipe_to_refresh.setOnRefreshListener(this);
 
-        btn_back = (TextView) findViewById(R.id.btn_back);
         edt_comment = (EditText) findViewById(R.id.edt_comment);
         btn_comment = (ImageView) findViewById(R.id.btn_add_comment);
 
@@ -144,12 +144,6 @@ public class FeedCommentActivity extends AppCompatActivity
     }
 
     private void initListener() {
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         swipe_to_refresh.setOnRefreshListener(this);
         recycler_feed_comment.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override

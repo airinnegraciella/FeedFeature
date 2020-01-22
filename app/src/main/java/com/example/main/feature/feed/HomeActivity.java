@@ -37,6 +37,7 @@ import com.example.main.pagination.PaginationScrollListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Retrofit;
 
@@ -62,6 +63,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0f);
         initAPI();
         initSP();
         initAdapter();
@@ -116,6 +118,7 @@ public class HomeActivity extends AppCompatActivity
                 navigateToAddFeed();
             }
         });
+
         refreshLayout.setOnRefreshListener(this);
         recycler_feeds.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -165,6 +168,11 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public void navigateToEditFeed(int feedId, String feedPost, String feedImage, int position) {
+        startActivity(FeedCreateActivity.getIntent(this, feedId, true, feedPost, feedImage, position));
+    }
+
+    @Override
     public void navigateToLikeList(int feedId) {
         startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
 
@@ -188,6 +196,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void setTotalComment(int position, int totalComment) {
         feedAdapter.setTotalComment(position, totalComment);
+    }
+
+    @Override
+    public void editFeed(int position, String newFeedPost, String newFeedImage) {
+        feedAdapter.editFeed(position, newFeedPost, newFeedImage);
     }
 
     @Override

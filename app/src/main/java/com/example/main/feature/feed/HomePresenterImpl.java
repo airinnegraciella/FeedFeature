@@ -120,6 +120,11 @@ public class HomePresenterImpl implements HomeContract.Presenter {
     }
 
     @Override
+    public void onAddFeedButtonClick() {
+        view.navigateToAddFeed();
+    }
+
+    @Override
     public void onClickTotalLike(int feedId) {
         view.navigateToLikeList(feedId);
     }
@@ -205,7 +210,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
     @Override
     public void onClickEditFeed(int feedId, String feedPost, String feedImage, int position) {
-
+        view.navigateToEditFeed(feedId, feedPost, feedImage, position);
     }
 
     @Override

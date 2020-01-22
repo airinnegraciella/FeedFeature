@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.featurefeed.data.source.model.local.Feed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
@@ -37,9 +38,9 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
     private int currentEmployeeId;
     private int feedId;
     private boolean isCreated;
-    private String postEdt;
-    private String imageName;
-    private String imageFileName;
+    private String postEdt = "";
+    private String imageName = "";
+    private String imageFileName = "";
 
     FeedCreatePresenterImpl(FeedCreateContract.View view, CreateFeedUseCase createFeedUseCase, GetCurrentUserUseCase getCurrentUserUseCase, EditFeedUseCase editFeedUseCase) {
         this.view = view;
@@ -69,10 +70,8 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
             } else {
                 view.setTitleActionBar("Create Post");
             }
-
-            getCurrentUser();
         }
-
+        getCurrentUser();
     }
 
     private void getCurrentUser() {
@@ -86,11 +85,12 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
             @Override
             public void onSuccess(CurrentUser result) {
                 currentEmployeeId = result.getEmployeeId();
+                view.onStopLoading();
             }
 
             @Override
             public void onError(String error) {
-
+                view.failMessage(error);
             }
 
             @Override

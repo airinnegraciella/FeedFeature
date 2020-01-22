@@ -3,12 +3,15 @@ package com.example.featurefeed.presentation.create_feed;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +38,7 @@ import com.example.main.core.utils.Constant;
 import com.example.main.core.utils.TakePhoto;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Retrofit;
 
@@ -59,7 +64,7 @@ public class FeedCreateActivity extends AppCompatActivity
 
     IMyAPI myAPI;
     TakePhoto takePhoto;
-    AlertDialog waitingDialog;
+    ProgressDialog waitingDialog;
     ProgressBar progress_bar_photo;
     FeedCreatePresenterImpl feedCreatePresenter;
     SharedPreferenceManager spm;
@@ -67,19 +72,14 @@ public class FeedCreateActivity extends AppCompatActivity
     RelativeLayout btn_camera, btn_gallery, btn_delete_image, layout_image_post;
     ImageView iv_image_post;
     EditText edt_post;
-    TextView btn_back;
 
-//    private int feedId;
-//    private boolean isCreated;
-//    private String feedPost;
-//    private String feedImage;
-//    private int positionFeed;
     private boolean isPostReady = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_feed);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         initAPI();
         initSP();
         initView();
@@ -95,6 +95,26 @@ public class FeedCreateActivity extends AppCompatActivity
                 getIntent().getStringExtra(FEED_IMAGE));
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.btn_post) {
+            feedCreatePresenter.onButtonPostClick(edt_post.getText().toString().trim());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initAPI() {
         //Init API
@@ -117,7 +137,6 @@ public class FeedCreateActivity extends AppCompatActivity
         progress_bar_photo = findViewById(R.id.progress_bar_photo);
         iv_image_post = findViewById(R.id.iv_image_post);
         layout_image_post = findViewById(R.id.layout_image_post);
-        btn_back = findViewById(R.id.btn_back);
     }
 
     private void iniListener() {
@@ -155,14 +174,8 @@ public class FeedCreateActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
+                feedCreatePresenter.isPostReady(s.toString().trim());
 
-            }
-        });
-
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 
@@ -189,9 +202,10 @@ public class FeedCreateActivity extends AppCompatActivity
 
     @Override
     public void onStartLoading() {
+        waitingDialog = new ProgressDialog(this );
         waitingDialog.setCancelable(false);
-        waitingDialog.show();
         waitingDialog.setMessage("Waiting...");
+        waitingDialog.show();
 
     }
 

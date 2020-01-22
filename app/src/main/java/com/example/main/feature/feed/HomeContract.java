@@ -21,6 +21,8 @@ public interface HomeContract {
 
         void navigateToAddFeed();
 
+        void navigateToEditFeed(int feedId, String feedPost, String feedImage, int position);
+
         void navigateToLikeList(int feedId);
 
         void navigateToCommentList(int feedId, int position);
@@ -30,6 +32,8 @@ public interface HomeContract {
         void setDislikeFeed(int position);
 
         void setTotalComment(int position, int totalComment);
+
+        void editFeed(int position, String newFeedPost, String newFeedImage);
 
         void addFeed(Feed newFeed);
 
@@ -42,6 +46,8 @@ public interface HomeContract {
         void loadFirstPageFromServer(int currentPage);
 
         void loadNextPageFromServer(int currentPage);
+
+        void onAddFeedButtonClick();
 
         void onClickTotalLike(int feedId);
 
