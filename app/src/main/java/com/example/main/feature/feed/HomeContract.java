@@ -33,6 +33,8 @@ public interface HomeContract {
 
         void setTotalComment(int position, int totalComment);
 
+        void onDeleteFeedSuccess(int position);
+
         void editFeed(int position, String newFeedPost, String newFeedImage);
 
         void addFeed(Feed newFeed);

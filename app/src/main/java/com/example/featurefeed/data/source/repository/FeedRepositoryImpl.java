@@ -1,6 +1,7 @@
 package com.example.featurefeed.data.source.repository;
 
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
@@ -175,6 +176,29 @@ public class FeedRepositoryImpl implements FeedRepository {
 
                     @Override
                     public void onSuccess(ResponseFeedLikesPagination response) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+    }
+
+    @Override
+    public void deleteFeed(int feedId, final ICallback<ResponseDeleteFeed> callback) {
+        myAPI.deleteFeed(feedId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseDeleteFeed>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseDeleteFeed response) {
                         callback.onSuccess(response);
                     }
 
