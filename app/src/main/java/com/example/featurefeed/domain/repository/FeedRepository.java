@@ -2,6 +2,7 @@ package com.example.featurefeed.domain.repository;
 
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
@@ -11,7 +12,7 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFee
 public interface FeedRepository {
     void createFeed(int makerId, String post, String image, ICallback<ResponseCreateFeed> callback);
 
-//    void editFeed(int feedId, int makerId, String post, String image, ICallback<ResponseEditFeed> callback );
+    void editFeed(int feedId, int makerId, String post, String image, ICallback<ResponseEditFeed> callback );
 
     void getFeedPagination(int empId, int page, int limit, ICallback<ResponseFeedPagination> callback);
 

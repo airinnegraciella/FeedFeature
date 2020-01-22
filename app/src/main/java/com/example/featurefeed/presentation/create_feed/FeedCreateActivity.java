@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
 import com.example.featurefeed.domain.usecase.CreateFeedUseCase;
+import com.example.featurefeed.domain.usecase.EditFeedUseCase;
 import com.example.main.R;
 import com.example.main.core.data.retrofit.IMyAPI;
 import com.example.main.core.data.retrofit.RetrofitClient;
@@ -85,7 +86,8 @@ public class FeedCreateActivity extends AppCompatActivity
         iniListener();
         feedCreatePresenter = new FeedCreatePresenterImpl(this,
                 new CreateFeedUseCase(new FeedRepositoryImpl(myAPI)),
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)));
+                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
+                new EditFeedUseCase(new FeedRepositoryImpl(myAPI)));
         feedCreatePresenter.onCreate(
                 getIntent().getIntExtra(FEED_ID, 0),
                 getIntent().getBooleanExtra(IS_CREATED, false),
@@ -283,7 +285,7 @@ public class FeedCreateActivity extends AppCompatActivity
     @Override
     public void onErrorUploadPhoto(String message) {
         onStopUploadPhoto();
-        Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override

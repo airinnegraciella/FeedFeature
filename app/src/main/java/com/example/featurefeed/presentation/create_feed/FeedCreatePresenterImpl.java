@@ -5,15 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.example.featurefeed.data.source.model.local.Feed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
+import com.example.featurefeed.domain.model.CreateFeed;
+import com.example.featurefeed.domain.model.EditFeed;
 import com.example.featurefeed.domain.usecase.CreateFeedUseCase;
+import com.example.featurefeed.domain.usecase.EditFeedUseCase;
 import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
 import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.main.core.utils.Constant;
 import com.example.main.core.utils.TakePhoto;
 
+import java.io.IOException;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
 
@@ -21,6 +33,7 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
     private FeedCreateContract.View view;
     private CompositeDisposable compositeDisposable;
     private GetCurrentUserUseCase getCurrentUserUseCase;
+    private EditFeedUseCase editFeedUseCase;
     private int currentEmployeeId;
     private int feedId;
     private boolean isCreated;
@@ -28,10 +41,11 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
     private String imageName;
     private String imageFileName;
 
-    public FeedCreatePresenterImpl( FeedCreateContract.View view, CreateFeedUseCase createFeedUseCase, GetCurrentUserUseCase getCurrentUserUseCase) {
+    FeedCreatePresenterImpl(FeedCreateContract.View view, CreateFeedUseCase createFeedUseCase, GetCurrentUserUseCase getCurrentUserUseCase, EditFeedUseCase editFeedUseCase) {
         this.view = view;
         this.createFeedUseCase = createFeedUseCase;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
+        this.editFeedUseCase = editFeedUseCase;
     }
 
     @Override
@@ -103,8 +117,7 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
                     selectedImageUri = data.getData();
 //                    saveImageToDirectory(context, selectedImageUri, "$imageFileName.jpg");
                 }
-            }
-            else if (requestCode == Constant.CAMERA_REQUEST_CODE) {
+            } else if (requestCode == Constant.CAMERA_REQUEST_CODE) {
 //                saveImageToDirectory(context,
 //                        takePhoto.getmCurrentPhotoUri()!!
 //                        , takePhoto.getmCurrentPhotoName()!!
@@ -114,10 +127,53 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
     }
 
     @Override
-    public void onButtonPostClick(String post) {
+    public void onButtonPostClick(final String post) {
         view.onStartLoading();
         if (isCreated) {
+            editFeedUseCase.execute(new EditFeed(feedId, currentEmployeeId, post, imageName), new ICallback<ResponseEditFeed>() {
+                @Override
+                public void onDisposableAcquired(Disposable disposable) {
+                    compositeDisposable.add(disposable);
+                }
 
+                @Override
+                public void onSuccess(ResponseEditFeed result) {
+                    view.onSuccessEditPost(post, imageName);
+                }
+
+                @Override
+                public void onError(String error) {
+                    view.failMessage(error);
+                }
+
+                @Override
+                public void onInputEmpty() {
+                    view.failMessage("Please fill note.");
+                }
+            });
+        }
+        else {
+            createFeedUseCase.execute(new CreateFeed(currentEmployeeId, post, imageName), new ICallback<Feed>() {
+                @Override
+                public void onDisposableAcquired(Disposable disposable) {
+                    compositeDisposable.add(disposable);
+                }
+
+                @Override
+                public void onSuccess(Feed result) {
+                    view.onSuccessAddPost(feedId, post, imageName);
+                }
+
+                @Override
+                public void onError(String error) {
+                    view.failMessage(error);
+                }
+
+                @Override
+                public void onInputEmpty() {
+                    view.failMessage("Please fill note.");
+                }
+            });
         }
     }
 

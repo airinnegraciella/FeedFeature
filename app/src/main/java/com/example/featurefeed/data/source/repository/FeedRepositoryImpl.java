@@ -2,6 +2,7 @@ package com.example.featurefeed.data.source.repository;
 
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
@@ -36,6 +37,29 @@ public class FeedRepositoryImpl implements FeedRepository {
 
                     @Override
                     public void onSuccess(ResponseCreateFeed response) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+    }
+
+    @Override
+    public void editFeed(int feedId, int makerId, String post, String image, final ICallback<ResponseEditFeed> callback) {
+        myAPI.editFeed(feedId, makerId, post, image)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseEditFeed>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseEditFeed response) {
                         callback.onSuccess(response);
                     }
 
