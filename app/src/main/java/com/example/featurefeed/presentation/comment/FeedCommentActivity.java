@@ -26,6 +26,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
 import com.example.main.R;
@@ -99,7 +100,8 @@ public class FeedCommentActivity extends AppCompatActivity
         initListener();
         feedCommentPresenter = new FeedCommentPresenterImpl(this,
                 new GetFeedCommentPaginationUseCase(new FeedRepositoryImpl(myAPI)),
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)));
+                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
+                new CreateFeedCommentUseCase(new FeedRepositoryImpl(myAPI)));
         feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0), getIntent().getIntExtra(POSITION_FEED, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
@@ -191,15 +193,15 @@ public class FeedCommentActivity extends AppCompatActivity
 
             }
         });
-/*
+
         btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                feedCommentPresenter.onBtnCommentClick(edt_comment.text.toString().trim());
+                feedCommentPresenter.onBtnCommentClick(edt_comment.getText().toString().trim());
             }
         });
 
- */
+
 
     }
 
@@ -347,6 +349,11 @@ public class FeedCommentActivity extends AppCompatActivity
     public void onErrorLoad(String errorMessage) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(errorMessage);
+    }
+
+    @Override
+    public void navigateToEditFeed(int feedCommentId, String feedComment, int position) {
+
     }
 
     @Override

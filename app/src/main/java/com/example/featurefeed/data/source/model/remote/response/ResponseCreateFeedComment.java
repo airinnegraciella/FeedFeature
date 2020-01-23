@@ -1,15 +1,15 @@
 package com.example.featurefeed.data.source.model.remote.response;
 
-public class ResponseDislikeFeed {
+import com.example.featurefeed.data.source.model.local.FeedComment;
+import com.google.gson.annotations.SerializedName;
+
+public class ResponseCreateFeedComment {
+
     private String status;
     private String message;
-    private String result;
 
-    public ResponseDislikeFeed(String status, String message, String result) {
-        this.status = status;
-        this.message = message;
-        this.result = result;
-    }
+    @SerializedName("result")
+    private FeedComment feedComment;
 
     public String getStatus() {
         return status;
@@ -27,13 +27,11 @@ public class ResponseDislikeFeed {
         this.message = message;
     }
 
-    public String getResult() {
-        return result;
+    public FeedComment getFeedComment() {
+        return feedComment;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setFeedComment(FeedComment feedComment) {
+        this.feedComment = feedComment;
     }
-
-
 }
