@@ -1,7 +1,11 @@
 package com.example.featurefeed.presentation.comment;
 
+import com.example.featurefeed.data.source.model.local.FeedComment;
+import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.FeedCommentPagination;
+import com.example.featurefeed.domain.model.CreateFeedComment;
 import com.example.featurefeed.domain.model.GetFeedComment;
+import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
@@ -17,16 +21,21 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
 
     private GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase;
     private GetCurrentUserUseCase getCurrentUserUseCase;
+    private CreateFeedCommentUseCase createFeedCommentUseCase;
 
     private int feedId;
     private int positionFeed;
     private int currentEmployeeId = 0;
     private final int LIMIT = 5;
 
-    FeedCommentPresenterImpl(FeedCommentContract.View view, GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase, GetCurrentUserUseCase getCurrentUserUseCase) {
+    FeedCommentPresenterImpl(FeedCommentContract.View view,
+                             GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase,
+                             GetCurrentUserUseCase getCurrentUserUseCase,
+                             CreateFeedCommentUseCase createFeedCommentUseCase) {
         this.view = view;
         this.getFeedCommentPaginationUseCase = getFeedCommentPaginationUseCase;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
+        this.createFeedCommentUseCase = createFeedCommentUseCase;
     }
 
     @Override
@@ -109,5 +118,43 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void onBtnCommentClick(String comment) {
+        view.onStartLoad();
+        createFeedCommentUseCase.execute(new CreateFeedComment(feedId, currentEmployeeId, comment, ""), new ICallback<ResponseCreateFeedComment>() {
+            @Override
+            public void onDisposableAcquired(Disposable disposable) {
+                compositeDisposable.add(disposable);
+            }
+
+            @Override
+            public void onSuccess(ResponseCreateFeedComment result) {
+                view.onCommentSuccess(result.getFeedComment());
+                view.onStopLoad();
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onCommentError(error);
+                view.onStopLoad();
+            }
+
+            @Override
+            public void onInputEmpty() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onClickEditComment(int feedCommentId, String feedComment, String feedCommentImage, int position) {
+        view.navigateToEditFeed(feedCommentId, feedComment, position);
+    }
+
+    @Override
+    public void onClickDeleteComment(int feedCommentId, int position) {
+
     }
 }

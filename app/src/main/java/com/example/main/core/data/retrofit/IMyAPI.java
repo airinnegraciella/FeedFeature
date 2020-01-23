@@ -1,6 +1,7 @@
 package com.example.main.core.data.retrofit;
 
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
@@ -100,6 +101,15 @@ public interface IMyAPI {
     @POST("feed/deleteFeed")
     Single<ResponseDeleteFeed> deleteFeed(
             @Field("feedId") int feedId
+    );
+
+    @FormUrlEncoded
+    @POST("feed/createFeedComment")
+    Single<ResponseCreateFeedComment> createFeedComment(
+            @Field("feedId") int feedId,
+            @Field("makerId") int makerId,
+            @Field("comment") String comment,
+            @Field("image") String image
     );
 
 }

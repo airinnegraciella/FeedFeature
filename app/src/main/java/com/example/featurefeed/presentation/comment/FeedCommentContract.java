@@ -19,6 +19,8 @@ public interface FeedCommentContract {
 
         void onErrorLoad(String errorMessage);
 
+        void navigateToEditFeed(int feedCommentId, String feedComment, int position);
+
         void onCommentSuccess(FeedComment feedComment);
 
         void onCommentError(String error);
@@ -34,6 +36,12 @@ public interface FeedCommentContract {
         void loadFirstPageFromServer(int currentPage);
 
         void loadNextPageFromServer(int currentPage);
+
+        void onBtnCommentClick(String comment);
+
+        void onClickEditComment(int feedCommentId, String feedComment, String feedCommentImage, int position);
+
+        void onClickDeleteComment(int feedCommentId, int position);
 
     }
 }
