@@ -31,6 +31,7 @@ import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
 import com.example.featurefeed.domain.model.EditFeedComment;
 import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
+import com.example.featurefeed.domain.usecase.DeleteFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
 import com.example.featurefeed.presentation.edit_comment.EditFeedCommentActivity;
@@ -110,7 +111,8 @@ public class FeedCommentActivity extends AppCompatActivity
         feedCommentPresenter = new FeedCommentPresenterImpl(this,
                 new GetFeedCommentPaginationUseCase(new FeedRepositoryImpl(myAPI)),
                 new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new CreateFeedCommentUseCase(new FeedRepositoryImpl(myAPI)));
+                new CreateFeedCommentUseCase(new FeedRepositoryImpl(myAPI)),
+                new DeleteFeedCommentUseCase(new FeedRepositoryImpl(myAPI)));
         feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0), getIntent().getIntExtra(POSITION_FEED, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override

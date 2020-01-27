@@ -3,6 +3,7 @@ package com.example.featurefeed.domain.repository;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
@@ -37,7 +38,7 @@ public interface FeedRepository {
 
     void deleteFeed(int feedId,  ICallback<ResponseDeleteFeed> callback);
 
-//    void deleteFeedComment(int feedCommentId,  ICallback<ResponseDeleteFeedComment> callback);
+    void deleteFeedComment(int feedCommentId,  ICallback<ResponseDeleteFeedComment> callback);
 
 //    void getFeed(int feedId, int employeeId,  ICallback<ResponseGetFeed> callback);
 }
