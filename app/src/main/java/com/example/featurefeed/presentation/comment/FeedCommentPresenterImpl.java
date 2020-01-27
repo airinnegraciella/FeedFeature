@@ -5,10 +5,13 @@ import android.content.Intent;
 
 import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
+import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.FeedCommentPagination;
 import com.example.featurefeed.domain.model.CreateFeedComment;
 import com.example.featurefeed.domain.model.GetFeedComment;
 import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
+import com.example.featurefeed.domain.usecase.DeleteFeedCommentUseCase;
+import com.example.featurefeed.domain.usecase.DeleteFeedUseCase;
 import com.example.featurefeed.domain.usecase.EditFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.main.core.base.ICallback;
@@ -26,6 +29,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     private GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase;
     private GetCurrentUserUseCase getCurrentUserUseCase;
     private CreateFeedCommentUseCase createFeedCommentUseCase;
+    private DeleteFeedCommentUseCase deleteFeedCommentUseCase;
 
     private int feedId;
     private int positionFeed;
@@ -35,11 +39,13 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     FeedCommentPresenterImpl(FeedCommentContract.View view,
                              GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase,
                              GetCurrentUserUseCase getCurrentUserUseCase,
-                             CreateFeedCommentUseCase createFeedCommentUseCase) {
+                             CreateFeedCommentUseCase createFeedCommentUseCase,
+                             DeleteFeedCommentUseCase deleteFeedCommentUseCase) {
         this.view = view;
         this.getFeedCommentPaginationUseCase = getFeedCommentPaginationUseCase;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
         this.createFeedCommentUseCase = createFeedCommentUseCase;
+        this.deleteFeedCommentUseCase = deleteFeedCommentUseCase;
     }
 
     @Override
@@ -158,8 +164,31 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     }
 
     @Override
-    public void onClickDeleteComment(int feedCommentId, int position) {
-
+    public void onClickDeleteComment(int feedCommentId, final int position) {
+        view.onStartLoad();
+        deleteFeedCommentUseCase.execute(feedCommentId, new ICallback<ResponseDeleteFeedComment>() {
+            @Override
+            public void onDisposableAcquired(Disposable disposable) {
+                compositeDisposable.add(disposable);
+            }
+    
+            @Override
+            public void onSuccess(ResponseDeleteFeedComment result) {
+                view.onDeleteCommentSuccess(position);
+                view.onStopLoad();
+            }
+    
+            @Override
+            public void onError(String error) {
+                view.showMessage("$error#$feedCommentId");
+                view.onStopLoad();
+            }
+    
+            @Override
+            public void onInputEmpty() {
+        
+            }
+        });
     }
 
     @Override

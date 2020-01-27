@@ -3,6 +3,7 @@ package com.example.featurefeed.data.source.repository;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
@@ -255,5 +256,29 @@ public class FeedRepositoryImpl implements FeedRepository {
                         callback.onError(e.getMessage());
                     }
                 });
+    }
+    
+    @Override
+    public void deleteFeedComment(int feedCommentId, final ICallback<ResponseDeleteFeedComment> callback) {
+        myAPI.deleteFeedComment(feedCommentId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseDeleteFeedComment>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+    
+                    @Override
+                    public void onSuccess(ResponseDeleteFeedComment response) {
+                        callback.onSuccess(response);
+                    }
+    
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+        
     }
 }

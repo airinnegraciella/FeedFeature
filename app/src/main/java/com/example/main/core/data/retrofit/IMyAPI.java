@@ -5,6 +5,7 @@ import androidx.annotation.StringDef;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
@@ -122,6 +123,12 @@ public interface IMyAPI {
             @Field("makerId") int makerId,
             @Field("comment") String comment,
             @Field("image") String image
+    );
+    
+    @FormUrlEncoded
+    @POST("feed/deleteFeedComment")
+    Single<ResponseDeleteFeedComment> deleteFeedComment(
+            @Field("feedCommentId") int feedCommentId
     );
 
 }
