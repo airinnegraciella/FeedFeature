@@ -126,6 +126,8 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
             );
 
+             */
+
             ((FeedCommentPaginationViewHolder) holder).setOnLayoutCommentClickListener(
                     new IItemClickListener() {
                         @Override
@@ -141,8 +143,6 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     }
             );
-
-             */
 
         }
     }
@@ -250,7 +250,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public interface ClickListener {
 //        void onClickEmp(int empId);
 
-//        void onClickLayoutComment(int feedCommentId, String feedComment, String feedCommentImage, int position);
+        void onClickLayoutComment(int feedCommentId, String feedComment, String feedCommentImage, int position);
 
         void retryPageLoad();
     }

@@ -1,10 +1,13 @@
 package com.example.main.core.data.retrofit;
 
+import androidx.annotation.StringDef;
+
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
@@ -107,6 +110,15 @@ public interface IMyAPI {
     @POST("feed/createFeedComment")
     Single<ResponseCreateFeedComment> createFeedComment(
             @Field("feedId") int feedId,
+            @Field("makerId") int makerId,
+            @Field("comment") String comment,
+            @Field("image") String image
+    );
+
+    @FormUrlEncoded
+    @POST("feed/editFeedComment")
+    Single<ResponseEditFeedComment> editFeedComment(
+            @Field("feedCommentId") int feedCommentId,
             @Field("makerId") int makerId,
             @Field("comment") String comment,
             @Field("image") String image

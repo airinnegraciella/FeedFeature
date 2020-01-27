@@ -10,12 +10,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroupOverlay;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +29,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
+import com.example.featurefeed.domain.model.EditFeedComment;
 import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
+import com.example.featurefeed.presentation.edit_comment.EditFeedCommentActivity;
 import com.example.main.R;
 import com.example.main.core.data.retrofit.IMyAPI;
 import com.example.main.core.data.retrofit.RetrofitClient;
@@ -42,6 +47,10 @@ import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Retrofit;
+
+import static com.example.main.R.*;
+import static com.example.main.R.layout.*;
+import static com.example.main.R.layout.comments_layout;
 
 public class FeedCommentActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener, FeedCommentContract.View {
@@ -78,7 +87,7 @@ public class FeedCommentActivity extends AppCompatActivity
     IMyAPI myAPI;
     SwipeRefreshLayout swipe_to_refresh;
     FeedCommentsAdapter feedCommentsAdapter;
-    LinearLayout layout_no_comment;
+    LinearLayout layout_no_comment, layout_feed_comment;
     ImageView btn_comment;
     EditText edt_comment;
     FeedCommentPresenterImpl feedCommentPresenter;
@@ -91,7 +100,7 @@ public class FeedCommentActivity extends AppCompatActivity
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
+        setContentView(activity_comments);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         initAPI();
         initSP();
@@ -120,18 +129,19 @@ public class FeedCommentActivity extends AppCompatActivity
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recycler_feed_comment = (RecyclerView) findViewById(R.id.recycler_feed_comments);
+        recycler_feed_comment = (RecyclerView) findViewById(id.recycler_feed_comments);
         recycler_feed_comment.setLayoutManager(linearLayoutManager);
         recycler_feed_comment.setHasFixedSize(true);
         recycler_feed_comment.setAdapter(feedCommentsAdapter);
 
-        swipe_to_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh_comments);
+        swipe_to_refresh = (SwipeRefreshLayout) findViewById(id.swipe_to_refresh_comments);
         swipe_to_refresh.setOnRefreshListener(this);
 
         edt_comment = (EditText) findViewById(R.id.edt_comment);
         btn_comment = (ImageView) findViewById(R.id.btn_add_comment);
 
         layout_no_comment = (LinearLayout) findViewById(R.id.layout_no_comment);
+        layout_feed_comment = findViewById(R.id.layout_feed_comment);
 
     }
 
@@ -206,7 +216,7 @@ public class FeedCommentActivity extends AppCompatActivity
     }
 
     public int getLayout() {
-        return R.layout.activity_comments;
+        return activity_comments;
     }
 
     public boolean onSupportNavigateUp() {
@@ -230,60 +240,69 @@ public class FeedCommentActivity extends AppCompatActivity
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-/*
-    public void onClickLayoutComment(int feedCommentId, String feedComment, String feedCommentImage, int position) {
+
+    @SuppressLint("ResourceType")
+    public void onClickLayoutComment(final int feedCommentId, final String feedComment, final String feedCommentImage, final int position) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View customView = inflater.inflate(R.layout.popup_menu_feed_comment, null);
+        View customView = inflater.inflate(popup_menu_feed_comment, null);
 
-        PopupWindow mPopupWindow = new PopupWindow(
+        final PopupWindow mPopupWindow = new PopupWindow(
                 customView,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        /*
-        LinearLayout btnEdit = customView.findViewById(R.id.btn_edit);
-        LinearLayout btnDelete = customView.findViewById(R.id.btn_delete);
 
-        btnEdit.setOnClickListener {
-            mPopupWindow.dismiss()
-            feedCommentPresenter.onClickEditComment(
-                    feedCommentId,
-                    feedComment!!,
-                    feedCommentImage!!,
-                    position
-            )
-        }
+        LinearLayout btnEdit = customView.findViewById(id.btn_edit);
+        LinearLayout btnDelete = customView.findViewById(id.btn_delete);
 
-        btnDelete.setOnClickListener {
-            mPopupWindow.dismiss()
-            feedCommentPresenter.onClickDeleteComment(
-                    feedCommentId,
-                    position
-            )
-        }
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                feedCommentPresenter.onClickEditComment(
+                        feedCommentId,
+                        feedComment,
+                        feedCommentImage,
+                        position
+                );
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                feedCommentPresenter.onClickDeleteComment(
+                        feedCommentId,
+                        position
+                );
+            }
+        });
 
 
-        ViewGroup root = window.decorView.rootView;
-
-//        mPopupWindow.setOnDismissListener();
-        clearDim(root);
-//        mPopupWindow.setOnDismissListener { clearDim(root) }
+        final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                clearDim(root);
+            }
+        });
 
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(true);
 
         applyDim(root, 0.5f);
-        mPopupWindow.showAtLocation(layout_feed_comments, Gravity.CENTER, 0, 0);
+        mPopupWindow.showAtLocation(layout_feed_comment, Gravity.CENTER, 0, 0);
     }
 
- */
 
     @Override
     public void onDeleteCommentSuccess(int position) {
         feedCommentsAdapter.remove(position);
     }
 
+    @Override
     public void editComment(int position, String newFeedComment, String newFeedCommentImage) {
         feedCommentsAdapter.editComment(position, newFeedComment, newFeedCommentImage);
     }
@@ -353,6 +372,7 @@ public class FeedCommentActivity extends AppCompatActivity
 
     @Override
     public void navigateToEditFeed(int feedCommentId, String feedComment, int position) {
+        startActivity(EditFeedCommentActivity.getIntent(this, feedCommentId, feedComment, position));
 
     }
 
@@ -393,5 +413,9 @@ public class FeedCommentActivity extends AppCompatActivity
     public void onCommentError(String error) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(error);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        feedCommentPresenter.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_feed_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_bg_shadow_layout_top"
+    android:padding="@dimen/padding_layout">
+
+    <EditText
+        android:id="@+id/edt_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_rounded_gray"
+        android:hint="@string/txt_hint_comment"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:maxHeight="200dp"
+        android:minHeight="@dimen/input_form_height"
+        android:padding="@dimen/padding_edit_text"
+        android:textColor="@color/dark_blue"
+        android:textColorHint="@color/hint_color"
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/font_size_form_text_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="akfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamfakfmakmf afmakmfkamf afmkamf" />
+
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:background="@drawable/gradient_rounded_primary_button"
+        android:enabled="false"
+        android:stateListAnimator="@null"
+        android:text="@string/txt_button_update"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_comment" />
+</androidx.constraintlayout.widget.ConstraintLayout>
