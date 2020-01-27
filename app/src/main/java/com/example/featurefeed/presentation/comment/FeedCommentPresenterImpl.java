@@ -1,11 +1,15 @@
 package com.example.featurefeed.presentation.comment;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.FeedCommentPagination;
 import com.example.featurefeed.domain.model.CreateFeedComment;
 import com.example.featurefeed.domain.model.GetFeedComment;
 import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
+import com.example.featurefeed.domain.usecase.EditFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
@@ -156,5 +160,17 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     @Override
     public void onClickDeleteComment(int feedCommentId, int position) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                int position = data.getIntExtra("positionKey", 0);
+                String newComment = data.getStringExtra("newComment");
+
+                view.editComment(position, newComment, "");
+            }
+        }
     }
 }

@@ -36,6 +36,9 @@
         <activity android:name="com.example.featurefeed.presentation.create_feed.FeedCreateActivity"
             android:label="Create Post">
         </activity>
+        <activity android:name="com.example.featurefeed.presentation.edit_comment.EditFeedCommentActivity"
+            android:label="Edit Comment">
+        </activity>
     </application>
 
 </manifest>

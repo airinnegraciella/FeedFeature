@@ -13,5 +13,8 @@
     <string name="txt_camera">Camera</string>
     <string name="txt_gallery">Gallery</string>
     <string name="txt_btn_post">Post</string>
+    <string name="txt_button_update">Update</string>
     <string name="image">Image</string>
+    <string name="txt_button_edit">Edit</string>
+    <string name="txt_button_delete">Delete</string>
 </resources>

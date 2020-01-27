@@ -39,7 +39,7 @@
                     android:background="@color/lighter_gray">
                     <TextView
                         android:id="@+id/tv_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         tools:text="Full Name"/>

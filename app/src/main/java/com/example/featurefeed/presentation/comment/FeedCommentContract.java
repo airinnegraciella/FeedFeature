@@ -1,5 +1,7 @@
 package com.example.featurefeed.presentation.comment;
 
+import android.content.Intent;
+
 import com.example.featurefeed.data.source.model.local.FeedComment;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public interface FeedCommentContract {
         void onDeleteCommentSuccess(int position);
 
         void showMessage(String message);
+
+        void editComment(int position, String newFeedComment, String newFeedCommentImage);
     }
 
     interface Presenter {
@@ -42,6 +46,8 @@ public interface FeedCommentContract {
         void onClickEditComment(int feedCommentId, String feedComment, String feedCommentImage, int position);
 
         void onClickDeleteComment(int feedCommentId, int position);
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
 
     }
 }

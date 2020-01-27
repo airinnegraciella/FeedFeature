@@ -5,6 +5,7 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseCreateF
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
@@ -108,6 +109,29 @@ public class FeedRepositoryImpl implements FeedRepository {
 
                     @Override
                     public void onSuccess(ResponseCreateFeedComment response) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+    }
+
+    @Override
+    public void editFeedComment(int feedCommentId, int makerId, String comment, String image, final ICallback<ResponseEditFeedComment> callback) {
+        myAPI.editFeedComment(feedCommentId, makerId, comment, image)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseEditFeedComment>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseEditFeedComment response) {
                         callback.onSuccess(response);
                     }
 
