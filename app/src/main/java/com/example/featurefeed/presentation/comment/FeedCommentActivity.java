@@ -217,10 +217,6 @@ public class FeedCommentActivity extends AppCompatActivity
 
     }
 
-    public int getLayout() {
-        return activity_comments;
-    }
-
     public boolean onSupportNavigateUp() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", getIntent().getIntExtra(POSITION_FEED, 0));

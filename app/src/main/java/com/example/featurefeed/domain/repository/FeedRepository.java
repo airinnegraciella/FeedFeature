@@ -7,6 +7,8 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteF
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
+import com.example.featurefeed.data.source.model.remote.response.ResponseGetFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseTotalFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
@@ -34,11 +36,11 @@ public interface FeedRepository {
 
 //    void uploadFeedImage(MultipartBody.Part file, ICallback<ResponseFeedUploadImage> callback);
 
-//    void getTotalFeedComment(int feedId, ICallback<ResponseTotalFeedComment> callback);
+    void getTotalFeedComment(int feedId, ICallback<ResponseTotalFeedComment> callback);
 
     void deleteFeed(int feedId,  ICallback<ResponseDeleteFeed> callback);
 
     void deleteFeedComment(int feedCommentId,  ICallback<ResponseDeleteFeedComment> callback);
 
-//    void getFeed(int feedId, int employeeId,  ICallback<ResponseGetFeed> callback);
+    void getFeed(int feedId, int employeeId,  ICallback<ResponseGetFeed> callback);
 }

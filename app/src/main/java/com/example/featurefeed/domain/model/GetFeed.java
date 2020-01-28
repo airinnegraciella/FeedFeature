@@ -1,37 +1,28 @@
 package com.example.featurefeed.domain.model;
 
 public class GetFeed {
-    private int empId;
-    private int page;
-    private int limit;
 
-    public GetFeed(int empId, int page, int limit) {
-        this.empId = empId;
-        this.page = page;
-        this.limit = limit;
+    private int feedId;
+    private int employeeId;
+    
+    public GetFeed(int feedId, int employeeId) {
+        this.feedId = feedId;
+        this.employeeId = employeeId;
     }
-
-    public int getEmpId() {
-        return empId;
+    
+    public int getFeedId() {
+        return feedId;
     }
-
-    public void setEmpId(int empId) {
-        this.empId = empId;
+    
+    public void setFeedId(int feedId) {
+        this.feedId = feedId;
     }
-
-    public int getPage() {
-        return page;
+    
+    public int getEmployeeId() {
+        return employeeId;
     }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
+    
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 }

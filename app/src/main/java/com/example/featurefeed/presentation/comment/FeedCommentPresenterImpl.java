@@ -3,16 +3,13 @@ package com.example.featurefeed.presentation.comment;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.FeedCommentPagination;
 import com.example.featurefeed.domain.model.CreateFeedComment;
-import com.example.featurefeed.domain.model.GetFeedComment;
+import com.example.featurefeed.domain.model.GetFeedCommentPagination;
 import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.DeleteFeedCommentUseCase;
-import com.example.featurefeed.domain.usecase.DeleteFeedUseCase;
-import com.example.featurefeed.domain.usecase.EditFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
@@ -79,7 +76,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     public void loadFirstPageFromServer(int currentPage) {
         view.onStartLoad();
         compositeDisposable.clear();
-        getFeedCommentPaginationUseCase.execute(new GetFeedComment(currentEmployeeId, feedId, currentPage, LIMIT), new ICallback<FeedCommentPagination>() {
+        getFeedCommentPaginationUseCase.execute(new GetFeedCommentPagination(currentEmployeeId, feedId, currentPage, LIMIT), new ICallback<FeedCommentPagination>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
@@ -107,7 +104,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     @Override
     public void loadNextPageFromServer(int currentPage) {
         compositeDisposable.clear();
-        getFeedCommentPaginationUseCase.execute(new GetFeedComment(currentEmployeeId, feedId, currentPage, LIMIT), new ICallback<FeedCommentPagination>() {
+        getFeedCommentPaginationUseCase.execute(new GetFeedCommentPagination(currentEmployeeId, feedId, currentPage, LIMIT), new ICallback<FeedCommentPagination>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);

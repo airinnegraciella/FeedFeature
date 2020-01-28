@@ -1,19 +1,12 @@
 package com.example.featurefeed.presentation.like;
 
 import com.example.featurefeed.data.source.model.remote.response.like.FeedLikePagination;
-import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
-import com.example.featurefeed.domain.model.GetFeedLike;
+import com.example.featurefeed.domain.model.GetFeedLikePagination;
 import com.example.featurefeed.domain.usecase.GetFeedLikePaginationUseCase;
 import com.example.main.core.base.ICallback;
-import com.example.main.core.data.retrofit.IMyAPI;
-import com.example.main.core.data.retrofit.RetrofitClient;
 
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
 
@@ -39,7 +32,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
     public void loadFirstPageFromServer(int currentPage) {
         view.onStartLoad();
         compositeDisposable.clear();
-        getFeedLikePaginationUseCase.execute(new GetFeedLike(feedID, currentPage, LIMIT), new ICallback<FeedLikePagination>() {
+        getFeedLikePaginationUseCase.execute(new GetFeedLikePagination(feedID, currentPage, LIMIT), new ICallback<FeedLikePagination>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
@@ -67,7 +60,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
     @Override
     public void loadNextPageFromServer(int currentPage) {
         compositeDisposable.clear();
-        getFeedLikePaginationUseCase.execute(new GetFeedLike(feedID, currentPage, LIMIT), new ICallback<FeedLikePagination>() {
+        getFeedLikePaginationUseCase.execute(new GetFeedLikePagination(feedID, currentPage, LIMIT), new ICallback<FeedLikePagination>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);

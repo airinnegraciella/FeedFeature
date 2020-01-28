@@ -7,7 +7,9 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteF
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
+import com.example.featurefeed.data.source.model.remote.response.ResponseGetFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseTotalFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
@@ -234,7 +236,31 @@ public class FeedRepositoryImpl implements FeedRepository {
                     }
                 });
     }
-
+    
+    @Override
+    public void getTotalFeedComment(int feedId, final ICallback<ResponseTotalFeedComment> callback) {
+        myAPI.getTotalFeedComment(feedId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseTotalFeedComment>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+    
+                    @Override
+                    public void onSuccess(ResponseTotalFeedComment response) {
+                        callback.onSuccess(response);
+                    }
+    
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+        
+    }
+    
     @Override
     public void deleteFeed(int feedId, final ICallback<ResponseDeleteFeed> callback) {
         myAPI.deleteFeed(feedId)
@@ -271,6 +297,30 @@ public class FeedRepositoryImpl implements FeedRepository {
     
                     @Override
                     public void onSuccess(ResponseDeleteFeedComment response) {
+                        callback.onSuccess(response);
+                    }
+    
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getMessage());
+                    }
+                });
+        
+    }
+    
+    @Override
+    public void getFeed(int feedId, int employeeId, final ICallback<ResponseGetFeed> callback) {
+        myAPI.getFeed(feedId, employeeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseGetFeed>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onDisposableAcquired(d);
+                    }
+    
+                    @Override
+                    public void onSuccess(ResponseGetFeed response) {
                         callback.onSuccess(response);
                     }
     

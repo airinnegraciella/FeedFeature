@@ -9,7 +9,9 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteF
 import com.example.featurefeed.data.source.model.remote.response.ResponseDislikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseEditFeedComment;
+import com.example.featurefeed.data.source.model.remote.response.ResponseGetFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
+import com.example.featurefeed.data.source.model.remote.response.ResponseTotalFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
@@ -129,6 +131,19 @@ public interface IMyAPI {
     @POST("feed/deleteFeedComment")
     Single<ResponseDeleteFeedComment> deleteFeedComment(
             @Field("feedCommentId") int feedCommentId
+    );
+    
+    @FormUrlEncoded
+    @POST("feed/getTotalFeedComment")
+    Single<ResponseTotalFeedComment> getTotalFeedComment(
+            @Field("feedId") int feedId
+    );
+    
+    @FormUrlEncoded
+    @POST("feed/getFeed")
+    Single<ResponseGetFeed> getFeed(
+            @Field("feedId") int feedId,
+            @Field("employeeId") int employeeId
     );
 
 }

@@ -1,24 +1,14 @@
 package com.example.featurefeed.domain.model;
 
-public class GetFeedComment {
-    private int employeeId;
+public class GetFeedLikePagination {
     private int feedId;
     private int page;
     private int limit;
 
-    public GetFeedComment(int employeeId, int feedId, int page, int limit) {
-        this.employeeId = employeeId;
+    public GetFeedLikePagination(int feedId, int page, int limit) {
         this.feedId = feedId;
         this.page = page;
         this.limit = limit;
-    }
-
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
     }
 
     public int getFeedId() {

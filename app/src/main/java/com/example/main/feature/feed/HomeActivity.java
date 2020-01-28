@@ -21,6 +21,8 @@ import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
 import com.example.featurefeed.domain.usecase.DeleteFeedUseCase;
 import com.example.featurefeed.domain.usecase.DislikeFeedUseCase;
 import com.example.featurefeed.domain.usecase.GetFeedPaginationUseCase;
+import com.example.featurefeed.domain.usecase.GetFeedUseCase;
+import com.example.featurefeed.domain.usecase.GetTotalFeedCommentUseCase;
 import com.example.featurefeed.domain.usecase.LikeFeedUseCase;
 import com.example.featurefeed.presentation.adapter.FeedAdapter;
 import com.example.featurefeed.presentation.comment.FeedCommentActivity;
@@ -44,7 +46,7 @@ import retrofit2.Retrofit;
 
 public class HomeActivity extends AppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener, HomeContract.View {
-
+    
     IMyAPI myAPI;
     RecyclerView recycler_feeds;
     SharedPreferenceManager spm;
@@ -55,11 +57,11 @@ public class HomeActivity extends AppCompatActivity
     HomePresenterImpl homePresenter;
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
-
+    
     public static Intent getIntent(Context context) {
         return new Intent(context, HomeActivity.class);
     }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,9 @@ public class HomeActivity extends AppCompatActivity
                 new DislikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
                 new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
                 new GetFeedPaginationUseCase(new FeedRepositoryImpl(myAPI)),
-                new DeleteFeedUseCase(new FeedRepositoryImpl(myAPI)));
+                new DeleteFeedUseCase(new FeedRepositoryImpl(myAPI)),
+                new GetTotalFeedCommentUseCase(new FeedRepositoryImpl(myAPI)),
+                new GetFeedUseCase(new FeedRepositoryImpl(myAPI)));
         homePresenter.onCreate();
         refreshLayout.post(new Runnable() {
             @Override
@@ -84,35 +88,35 @@ public class HomeActivity extends AppCompatActivity
                 loadFirstPage();
             }
         });
-
+        
     }
-
+    
     private void initAPI() {
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(IMyAPI.class);
     }
-
+    
     private void initView() {
         //View
         recycler_feeds = findViewById(R.id.recycler_feeds);
         recycler_feeds.setHasFixedSize(true);
         recycler_feeds.setLayoutManager(linearLayoutManager);
         recycler_feeds.setAdapter(feedAdapter);
-
+        
         refreshLayout = findViewById(R.id.layout_swipe);
         buttonAdd = findViewById(R.id.btn_add_feed);
     }
-
+    
     private void initAdapter() {
         feedAdapter = new FeedAdapter(HomeActivity.this);
     }
-
+    
     @SuppressLint("CommitPrefEdits")
     private void initSP() {
         SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
         spm = new SharedPreferenceManager(sp, sp.edit());
     }
-
+    
     private void initListener() {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +124,7 @@ public class HomeActivity extends AppCompatActivity
                 navigateToAddFeed();
             }
         });
-
+        
         refreshLayout.setOnRefreshListener(this);
         recycler_feeds.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -129,99 +133,99 @@ public class HomeActivity extends AppCompatActivity
                 currentPage++;
                 loadNextPage();
             }
-
+            
             @Override
             public int getTotalPageCount() {
                 return totalPage;
             }
-
+            
             @Override
             public boolean isLastPage() {
                 return isLastPage;
             }
-
+            
             @Override
             public boolean isLoading() {
                 return isLoading;
             }
         });
-
-
+        
+        
     }
-
+    
     @Override
     public void onStartRefresh() {
         refreshLayout.setRefreshing(true);
     }
-
+    
     @Override
     public void onStopRefresh() {
         refreshLayout.setRefreshing(false);
     }
-
+    
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
+    
     @Override
     public void navigateToAddFeed() {
         startActivity(FeedCreateActivity.getIntent(this, 0, false, "", "", 0));
     }
-
+    
     @Override
     public void navigateToEditFeed(int feedId, String feedPost, String feedImage, int position) {
         startActivity(FeedCreateActivity.getIntent(this, feedId, true, feedPost, feedImage, position));
     }
-
+    
     @Override
     public void navigateToLikeList(int feedId) {
         startActivity(FeedLikeActivity.getIntent(HomeActivity.this, feedId));
-
+        
     }
-
+    
     @Override
     public void navigateToCommentList(int feedId, int position) {
         startActivity(FeedCommentActivity.getIntent(HomeActivity.this, feedId, position));
     }
-
+    
     @Override
     public void setLikeFeed(int position) {
         feedAdapter.setLikeFeed(position);
     }
-
+    
     @Override
     public void setDislikeFeed(int position) {
         feedAdapter.setDisLikeFeed(position);
     }
-
+    
     @Override
     public void setTotalComment(int position, int totalComment) {
         feedAdapter.setTotalComment(position, totalComment);
     }
-
+    
     @Override
     public void onDeleteFeedSuccess(int position) {
         feedAdapter.remove(position);
     }
-
+    
     @Override
     public void editFeed(int position, String newFeedPost, String newFeedImage) {
         feedAdapter.editFeed(position, newFeedPost, newFeedImage);
     }
-
+    
     @Override
     public void addFeed(Feed newFeed) {
         feedAdapter.add(newFeed);
         recycler_feeds.scrollToPosition(0);
     }
-
+    
     @Override
     public void onAcceptLoadFeedFirstPage(List<Feed> feedList, int total_page) {
         feedAdapter.addAll(feedList);
-
+        
         totalPage = total_page;
-
+        
         if (currentPage < totalPage) {
             feedAdapter.addLoadingFooter();
             isLastPage = false;
@@ -229,16 +233,16 @@ public class HomeActivity extends AppCompatActivity
             isLastPage = true;
         }
     }
-
+    
     @Override
     public void onAcceptLoadFeedNextPage(List<Feed> feed_list, int total_page) {
         feedAdapter.removeLoadingFooter();
         isLoading = false;
-
+        
         feedAdapter.addAll(feed_list);
-
+        
         totalPage = total_page;
-
+        
         if (currentPage != totalPage) {
             feedAdapter.addLoadingFooter();
             isLastPage = false;
@@ -246,14 +250,13 @@ public class HomeActivity extends AppCompatActivity
             isLastPage = true;
         }
     }
-
-
+    
     private void loadFirstPage() {
         feedAdapter.resetIsLoadingAdded();
         feedAdapter.getFeedList().clear();
         feedAdapter.notifyDataSetChanged();
         currentPage = 1;
-
+        
         refreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -261,30 +264,28 @@ public class HomeActivity extends AppCompatActivity
             }
         });
     }
-
+    
     private void loadNextPage() {
         homePresenter.loadNextPageFromServer(currentPage);
     }
-
+    
     @Override
     public void onErrorLoadNextPage(String message) {
         feedAdapter.showRetry(true, message);
     }
-
-
+    
     private void checkLogIn() {
         if (!spm.isLoggedIn()) {
             logout();
         }
     }
-
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
-
+    
     private void logout() {
         spm.saveSPString(Constant.SP_EMAIL, "");
         spm.saveSPInt(Constant.SP_EMPLOYEE_ID, 0);
@@ -293,7 +294,7 @@ public class HomeActivity extends AppCompatActivity
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.btn_logout) {
@@ -302,58 +303,57 @@ public class HomeActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
+    
     @Override
     public void onRefresh() {
         loadFirstPage();
     }
-
-
+    
     @Override
     public void onClickTotalLike(int feedId) {
         homePresenter.onClickTotalLike(feedId);
     }
-
+    
     @Override
     public void onClickTotalComment(int feedId, int position) {
         homePresenter.onClickTotalComment(feedId, position);
     }
-
+    
     @Override
     public void onClickBtnLike(int feedId, int isLiked, int position) {
         homePresenter.onClickBtnLike(feedId, isLiked, position);
     }
-
+    
     @Override
     public void onClickBtnComment(int feedId, int position) {
         homePresenter.onClickBtnComment(feedId, position);
     }
-
+    
     @Override
     public void onClickEmp(int empId) {
         homePresenter.onClickEmp(empId);
     }
-
+    
     @Override
     public void onClickImagePost(String imageName) {
         homePresenter.onClickImagePost(imageName);
     }
-
+    
     @Override
     public void onClickPost(Feed feed) {
         homePresenter.onClickPost(feed);
     }
-
+    
     @Override
     public void onClickEditFeed(int feedId, String feedPost, String feedImage, int position) {
         homePresenter.onClickEditFeed(feedId, feedPost, feedImage, position);
     }
-
+    
     @Override
     public void onClickDeleteFeed(int feedId, int position) {
         homePresenter.onClickDeleteFeed(feedId, position);
     }
-
+    
     @Override
     public void retryPageLoad() {
         homePresenter.loadNextPageFromServer(currentPage);

@@ -1,16 +1,15 @@
 package com.example.featurefeed.domain.usecase;
 
-import com.example.featurefeed.data.source.model.local.FeedLike;
 import com.example.featurefeed.data.source.model.remote.response.like.FeedLikePagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
-import com.example.featurefeed.domain.model.GetFeedLike;
+import com.example.featurefeed.domain.model.GetFeedLikePagination;
 import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
 
 import io.reactivex.disposables.Disposable;
 
-public class GetFeedLikePaginationUseCase extends BaseUseCase<GetFeedLike, ICallback<FeedLikePagination>> {
+public class GetFeedLikePaginationUseCase extends BaseUseCase<GetFeedLikePagination, ICallback<FeedLikePagination>> {
 
     private FeedRepository feedRepository;
 
@@ -19,8 +18,8 @@ public class GetFeedLikePaginationUseCase extends BaseUseCase<GetFeedLike, ICall
     }
 
     @Override
-    public void execute(GetFeedLike getFeedLike, final ICallback<FeedLikePagination> callback) {
-        feedRepository.getFeedLikePagination(getFeedLike.getFeedId(), getFeedLike.getPage(), getFeedLike.getLimit(), new ICallback<ResponseFeedLikesPagination>() {
+    public void execute(GetFeedLikePagination getFeedLikePagination, final ICallback<FeedLikePagination> callback) {
+        feedRepository.getFeedLikePagination(getFeedLikePagination.getFeedId(), getFeedLikePagination.getPage(), getFeedLikePagination.getLimit(), new ICallback<ResponseFeedLikesPagination>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
