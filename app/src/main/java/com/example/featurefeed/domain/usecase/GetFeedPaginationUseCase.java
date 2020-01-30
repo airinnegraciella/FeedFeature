@@ -7,12 +7,15 @@ import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class GetFeedPaginationUseCase extends BaseUseCase<GetFeed, ICallback<FeedPagination>> {
 
     private FeedRepository feedRepository;
 
+    @Inject
     public GetFeedPaginationUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }

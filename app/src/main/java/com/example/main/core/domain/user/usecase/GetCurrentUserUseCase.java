@@ -5,11 +5,14 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
 import com.example.main.core.domain.user.repository.UserRepository;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class GetCurrentUserUseCase extends BaseUseCase<String, ICallback<CurrentUser>> {
     UserRepository userRepository;
 
+    @Inject
     public GetCurrentUserUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

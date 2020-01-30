@@ -6,11 +6,14 @@ import com.example.featurefeed.domain.model.LikeFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFeed;
 import com.example.featurefeed.domain.repository.FeedRepository;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLikeFeed>> {
     private final FeedRepository feedRepository;
 
+    @Inject
     public LikeFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }

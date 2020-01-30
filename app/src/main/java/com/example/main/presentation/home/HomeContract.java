@@ -1,4 +1,4 @@
-package com.example.main.feature.feed;
+package com.example.main.presentation.home;
 
 import com.example.featurefeed.data.source.model.local.Feed;
 
@@ -26,6 +26,8 @@ public interface HomeContract {
         void navigateToLikeList(int feedId);
 
         void navigateToCommentList(int feedId, int position);
+        
+        void navigateToLoginPage();
 
         void setLikeFeed(int position);
 
@@ -68,5 +70,7 @@ public interface HomeContract {
         void onClickEditFeed(int feedId, String feedPost, String feedImage, int position);
 
         void onClickDeleteFeed(int feedId, int position);
+        
+        void onClickLogout();
     }
 }

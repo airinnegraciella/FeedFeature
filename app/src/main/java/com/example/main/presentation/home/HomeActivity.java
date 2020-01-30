@@ -1,4 +1,4 @@
-package com.example.main.feature.feed;
+package com.example.main.presentation.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,12 +26,12 @@ import com.example.featurefeed.presentation.adapter.FeedAdapter;
 import com.example.featurefeed.presentation.comment.FeedCommentActivity;
 import com.example.featurefeed.presentation.create_feed.FeedCreateActivity;
 import com.example.featurefeed.presentation.like.FeedLikeActivity;
-import com.example.main.LoginActivity;
+import com.example.main.presentation.login.LoginActivity;
 import com.example.main.R;
 import com.example.main.core.data.retrofit.IMyAPI;
 import com.example.main.core.data.retrofit.RetrofitClient;
 import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.main.core.domain.user.repository.UserRepositoryImpl;
+import com.example.main.core.data.source.user.repository.UserRepositoryImpl;
 import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.main.core.utils.Constant;
 import com.example.main.pagination.PaginationScrollListener;
@@ -40,19 +40,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Retrofit;
 
-public class HomeActivity extends AppCompatActivity
+public class HomeActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener, HomeContract.View {
-
-    IMyAPI myAPI;
+    
+    @Inject
+    FeedAdapter feedAdapter;
+    @Inject
+    HomePresenterImpl homePresenter;
     RecyclerView recycler_feeds;
-    SharedPreferenceManager spm;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     SwipeRefreshLayout refreshLayout;
     FloatingActionButton buttonAdd;
-    FeedAdapter feedAdapter;
-    HomePresenterImpl homePresenter;
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
 
@@ -65,18 +68,8 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0f);
-        initAPI();
-        initSP();
-        initAdapter();
         initView();
         initListener();
-        checkLogIn();
-        homePresenter = new HomePresenterImpl(this,
-                new LikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
-                new DislikeFeedUseCase(new FeedRepositoryImpl(myAPI)),
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new GetFeedPaginationUseCase(new FeedRepositoryImpl(myAPI)),
-                new DeleteFeedUseCase(new FeedRepositoryImpl(myAPI)));
         homePresenter.onCreate();
         refreshLayout.post(new Runnable() {
             @Override
@@ -86,12 +79,7 @@ public class HomeActivity extends AppCompatActivity
         });
 
     }
-
-    private void initAPI() {
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
-    }
-
+    
     private void initView() {
         //View
         recycler_feeds = findViewById(R.id.recycler_feeds);
@@ -101,16 +89,6 @@ public class HomeActivity extends AppCompatActivity
 
         refreshLayout = findViewById(R.id.layout_swipe);
         buttonAdd = findViewById(R.id.btn_add_feed);
-    }
-
-    private void initAdapter() {
-        feedAdapter = new FeedAdapter(HomeActivity.this);
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private void initSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp, sp.edit());
     }
 
     private void initListener() {
@@ -184,7 +162,22 @@ public class HomeActivity extends AppCompatActivity
     public void navigateToCommentList(int feedId, int position) {
         startActivity(FeedCommentActivity.getIntent(HomeActivity.this, feedId, position));
     }
-
+    
+    @Override
+    public void navigateToLoginPage() {
+        startActivity(LoginActivity.getIntent(this).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        /*
+        spm.saveSPString(Constant.SP_EMAIL, "");
+        spm.saveSPInt(Constant.SP_EMPLOYEE_ID, 0);
+        spm.saveSPBoolean(Constant.SP_IS_LOGGED_IN, false);
+        Intent loginIntent = LoginActivity.getIntent(this);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+        
+         */
+        
+    }
+    
     @Override
     public void setLikeFeed(int position) {
         feedAdapter.setLikeFeed(position);
@@ -271,14 +264,6 @@ public class HomeActivity extends AppCompatActivity
         feedAdapter.showRetry(true, message);
     }
 
-
-    private void checkLogIn() {
-        if (!spm.isLoggedIn()) {
-            logout();
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -286,12 +271,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void logout() {
-        spm.saveSPString(Constant.SP_EMAIL, "");
-        spm.saveSPInt(Constant.SP_EMPLOYEE_ID, 0);
-        spm.saveSPBoolean(Constant.SP_IS_LOGGED_IN, false);
-        Intent loginIntent = LoginActivity.getIntent(this);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(loginIntent);
+        homePresenter.onClickLogout();
     }
 
     @Override

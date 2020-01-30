@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,41 +18,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.featurefeed.data.source.model.local.FeedComment;
-import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
-import com.example.featurefeed.domain.model.EditFeedComment;
-import com.example.featurefeed.domain.usecase.CreateFeedCommentUseCase;
-import com.example.featurefeed.domain.usecase.DeleteFeedCommentUseCase;
-import com.example.featurefeed.domain.usecase.GetFeedCommentPaginationUseCase;
 import com.example.featurefeed.presentation.adapter.FeedCommentsAdapter;
 import com.example.featurefeed.presentation.edit_comment.EditFeedCommentActivity;
 import com.example.main.R;
-import com.example.main.core.data.retrofit.IMyAPI;
-import com.example.main.core.data.retrofit.RetrofitClient;
-import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.main.core.domain.user.repository.UserRepositoryImpl;
-import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
-import com.example.main.core.utils.Constant;
 import com.example.main.pagination.PaginationScrollListener;
 
 import java.util.List;
 import java.util.Objects;
 
-import retrofit2.Retrofit;
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.example.main.R.*;
 import static com.example.main.R.layout.*;
-import static com.example.main.R.layout.comments_layout;
 
-public class FeedCommentActivity extends AppCompatActivity
+public class FeedCommentActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener, FeedCommentContract.View {
 
     private final int PAGE_START = 1;
@@ -82,16 +69,16 @@ public class FeedCommentActivity extends AppCompatActivity
     }
 
     private LinearLayoutManager linearLayoutManager;
-    private SharedPreferenceManager spm;
-
-    RecyclerView recycler_feed_comment;
-    IMyAPI myAPI;
-    SwipeRefreshLayout swipe_to_refresh;
+    
+    @Inject
     FeedCommentsAdapter feedCommentsAdapter;
+    @Inject
+    FeedCommentPresenterImpl feedCommentPresenter;
+    RecyclerView recycler_feed_comment;
+    SwipeRefreshLayout swipe_to_refresh;
     LinearLayout layout_no_comment, layout_feed_comment;
     ImageView btn_comment;
     EditText edt_comment;
-    FeedCommentPresenterImpl feedCommentPresenter;
 
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -103,16 +90,9 @@ public class FeedCommentActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(activity_comments);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        initAPI();
-        initSP();
         initAdapter();
         initView();
         initListener();
-        feedCommentPresenter = new FeedCommentPresenterImpl(this,
-                new GetFeedCommentPaginationUseCase(new FeedRepositoryImpl(myAPI)),
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new CreateFeedCommentUseCase(new FeedRepositoryImpl(myAPI)),
-                new DeleteFeedCommentUseCase(new FeedRepositoryImpl(myAPI)));
         feedCommentPresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0), getIntent().getIntExtra(POSITION_FEED, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
@@ -120,12 +100,6 @@ public class FeedCommentActivity extends AppCompatActivity
                 loadFirstPage();
             }
         });
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private void initSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp, sp.edit());
     }
 
     private void initView() {
@@ -149,12 +123,6 @@ public class FeedCommentActivity extends AppCompatActivity
 
     private void initAdapter() {
         feedCommentsAdapter = new FeedCommentsAdapter(FeedCommentActivity.this);
-    }
-
-    private void initAPI() {
-        //Init API
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
     }
 
     private void initListener() {

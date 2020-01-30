@@ -20,6 +20,8 @@ import com.example.main.core.utils.TakePhoto;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
@@ -30,11 +32,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
 
-    private CreateFeedUseCase createFeedUseCase;
     private FeedCreateContract.View view;
     private CompositeDisposable compositeDisposable;
+    
     private GetCurrentUserUseCase getCurrentUserUseCase;
+    private CreateFeedUseCase createFeedUseCase;
     private EditFeedUseCase editFeedUseCase;
+    
     private int currentEmployeeId;
     private int feedId;
     private boolean isCreated;
@@ -42,6 +46,7 @@ public class FeedCreatePresenterImpl implements FeedCreateContract.Presenter {
     private String imageName = "";
     private String imageFileName = "";
 
+    @Inject
     FeedCreatePresenterImpl(FeedCreateContract.View view, CreateFeedUseCase createFeedUseCase, GetCurrentUserUseCase getCurrentUserUseCase, EditFeedUseCase editFeedUseCase) {
         this.view = view;
         this.createFeedUseCase = createFeedUseCase;

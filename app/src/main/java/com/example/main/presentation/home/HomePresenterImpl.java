@@ -1,4 +1,4 @@
-package com.example.main.feature.feed;
+package com.example.main.presentation.home;
 
 import com.example.featurefeed.data.source.model.local.Feed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
@@ -16,13 +16,15 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
 import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class HomePresenterImpl implements HomeContract.Presenter {
 
     private HomeContract.View view;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
 
     private LikeFeedUseCase likeFeedUseCase;
     private DislikeFeedUseCase dislikeFeedUseCase;
@@ -33,6 +35,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
     private int currentEmployeeId = 0;
     private final int LIMIT = 5;
 
+    @Inject
     HomePresenterImpl(HomeContract.View view,
                       LikeFeedUseCase likeFeedUseCase,
                       DislikeFeedUseCase dislikeFeedUseCase,
@@ -49,6 +52,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
     @Override
     public void onCreate() {
+        compositeDisposable = new CompositeDisposable();
         getCurrentUserUseCase.execute("", new ICallback<CurrentUser>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
@@ -249,5 +253,10 @@ public class HomePresenterImpl implements HomeContract.Presenter {
 
             }
         });
+    }
+    
+    @Override
+    public void onClickLogout() {
+        view.navigateToLoginPage();
     }
 }

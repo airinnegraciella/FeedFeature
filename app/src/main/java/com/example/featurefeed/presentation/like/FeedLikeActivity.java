@@ -25,9 +25,12 @@ import com.example.main.pagination.PaginationScrollListener;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Retrofit;
 
-public class FeedLikeActivity extends AppCompatActivity
+public class FeedLikeActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedLikesAdapter.ClickListener, FeedLikeContract.View {
 
     private final int PAGE_START = 1;
@@ -40,13 +43,14 @@ public class FeedLikeActivity extends AppCompatActivity
     }
 
     private LinearLayoutManager linearLayoutManager;
-
-    IMyAPI myAPI;
+    
+    @Inject
+    FeedLikesAdapter feedLikesAdapter;
+    @Inject
+    FeedLikePresenterImpl feedLikePresenter;
     RecyclerView recycler_feed_like;
     SwipeRefreshLayout swipe_to_refresh;
-    FeedLikesAdapter feedLikesAdapter;
     LinearLayout layout_no_like;
-    FeedLikePresenterImpl feedLikePresenter;
 
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -58,12 +62,9 @@ public class FeedLikeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        initAPI();
         initAdapter();
         initView();
         initListener();
-        feedLikePresenter = new FeedLikePresenterImpl(this,
-                new GetFeedLikePaginationUseCase(new FeedRepositoryImpl(myAPI)));
         feedLikePresenter.onCreate(getIntent().getIntExtra(FEED_ID, 0));
         swipe_to_refresh.post(new Runnable() {
             @Override
@@ -79,12 +80,7 @@ public class FeedLikeActivity extends AppCompatActivity
         finish();
         return true;
     }
-
-    private void initAPI() {
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
-    }
-
+    
     private void initView() {
 
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);

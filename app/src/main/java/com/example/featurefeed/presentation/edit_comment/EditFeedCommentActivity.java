@@ -1,11 +1,9 @@
 package com.example.featurefeed.presentation.edit_comment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,23 +13,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
-import com.example.featurefeed.domain.usecase.EditFeedCommentUseCase;
 import com.example.main.R;
-import com.example.main.core.data.retrofit.IMyAPI;
-import com.example.main.core.data.retrofit.RetrofitClient;
-import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.main.core.domain.user.repository.UserRepositoryImpl;
-import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
-import com.example.main.core.utils.Constant;
 
 import java.util.Objects;
 
-import retrofit2.Retrofit;
+import javax.inject.Inject;
 
-public class EditFeedCommentActivity extends AppCompatActivity implements EditFeedCommentContract.View {
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class EditFeedCommentActivity extends DaggerAppCompatActivity implements EditFeedCommentContract.View {
 
     private static final String FEED_COMMENT_ID = "feedCommentId";
     private static final String FEED_COMMENT = "feedComment";
@@ -45,10 +36,9 @@ public class EditFeedCommentActivity extends AppCompatActivity implements EditFe
                 .putExtra(POSITION_FEED_COMMENT, positionFeedComment);
     }
 
-    IMyAPI myAPI;
     ProgressDialog waitingDialog;
+    @Inject
     EditFeedCommentPresenterImpl editFeedCommentPresenter;
-    SharedPreferenceManager spm;
 
     EditText edt_comment;
     Button btn_update;
@@ -58,29 +48,12 @@ public class EditFeedCommentActivity extends AppCompatActivity implements EditFe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_feed_comment);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        initAPI();
-        initSP();
         initView();
         iniListener();
-        editFeedCommentPresenter = new EditFeedCommentPresenterImpl(this,
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new EditFeedCommentUseCase(new FeedRepositoryImpl(myAPI)));
         editFeedCommentPresenter.onCreate(
                 getIntent().getIntExtra(FEED_COMMENT_ID, 0),
                 getIntent().getStringExtra(FEED_COMMENT)
         );
-    }
-
-    private void initAPI() {
-        //Init API
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private void initSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp, sp.edit());
     }
 
     private void initView() {

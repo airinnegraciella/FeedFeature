@@ -18,6 +18,8 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
 import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -36,6 +38,7 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
     private int currentEmployeeId = 0;
     private final int LIMIT = 5;
 
+    @Inject
     FeedCommentPresenterImpl(FeedCommentContract.View view,
                              GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase,
                              GetCurrentUserUseCase getCurrentUserUseCase,

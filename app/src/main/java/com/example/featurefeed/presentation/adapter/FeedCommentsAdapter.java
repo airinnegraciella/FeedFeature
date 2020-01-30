@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM = 1;
     private static final int LOADING = 2;
@@ -35,7 +37,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private String errorMsg;
 
-
+    @Inject
     public FeedCommentsAdapter(ClickListener clickListener) {
         this.clickListener = clickListener;
         feedCommentList = new ArrayList<>();

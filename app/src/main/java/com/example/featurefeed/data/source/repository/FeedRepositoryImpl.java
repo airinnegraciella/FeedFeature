@@ -15,6 +15,8 @@ import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.ICallback;
 import com.example.main.core.data.retrofit.IMyAPI;
 
+import javax.inject.Inject;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -23,7 +25,8 @@ import io.reactivex.schedulers.Schedulers;
 public class FeedRepositoryImpl implements FeedRepository {
 
     private IMyAPI myAPI;
-
+    
+    @Inject
     public FeedRepositoryImpl(IMyAPI myAPI) {
         this.myAPI = myAPI;
     }

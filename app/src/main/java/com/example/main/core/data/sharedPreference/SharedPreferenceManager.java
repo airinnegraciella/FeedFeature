@@ -4,11 +4,14 @@ import android.content.SharedPreferences;
 
 import com.example.main.core.utils.Constant;
 
+import javax.inject.Inject;
+
 public class SharedPreferenceManager {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
+    @Inject
     public SharedPreferenceManager(SharedPreferences sp, SharedPreferences.Editor editor) {
         this.sp = sp;
         this.editor = editor;

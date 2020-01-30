@@ -8,6 +8,8 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.data.retrofit.IMyAPI;
 import com.example.main.core.data.retrofit.RetrofitClient;
 
+import javax.inject.Inject;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -25,6 +27,7 @@ public class FeedLikePresenterImpl implements FeedLikeContract.Presenter {
     private int feedID;
     private final int LIMIT = 5;
 
+    @Inject
     FeedLikePresenterImpl(FeedLikeContract.View view, GetFeedLikePaginationUseCase getFeedLikePaginationUseCase) {
         this.view = view;
         this.getFeedLikePaginationUseCase = getFeedLikePaginationUseCase;

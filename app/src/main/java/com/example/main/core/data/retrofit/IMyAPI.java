@@ -1,7 +1,5 @@
 package com.example.main.core.data.retrofit;
 
-import androidx.annotation.StringDef;
-
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeed;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseDeleteFeed;
@@ -13,7 +11,7 @@ import com.example.featurefeed.data.source.model.remote.response.ResponseLikeFee
 import com.example.featurefeed.data.source.model.remote.response.feed.ResponseFeedPagination;
 import com.example.featurefeed.data.source.model.remote.response.comment.ResponseFeedCommentPagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
-import com.example.featurefeed.data.source.model.remote.response.ResponseLogin;
+import com.example.main.core.data.source.user.model.remote.ResponseLogin;
 
 import io.reactivex.Single;
 import retrofit2.http.Field;

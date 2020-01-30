@@ -1,4 +1,4 @@
-package com.example.featurefeed.data.source.model.remote.response;
+package com.example.main.core.data.source.user.model.remote;
 
 import com.example.main.core.data.source.user.model.local.Employee;
 import com.google.gson.annotations.SerializedName;

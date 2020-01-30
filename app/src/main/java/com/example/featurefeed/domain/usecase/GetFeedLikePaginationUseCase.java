@@ -1,6 +1,5 @@
 package com.example.featurefeed.domain.usecase;
 
-import com.example.featurefeed.data.source.model.local.FeedLike;
 import com.example.featurefeed.data.source.model.remote.response.like.FeedLikePagination;
 import com.example.featurefeed.data.source.model.remote.response.like.ResponseFeedLikesPagination;
 import com.example.featurefeed.domain.model.GetFeedLike;
@@ -8,12 +7,15 @@ import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class GetFeedLikePaginationUseCase extends BaseUseCase<GetFeedLike, ICallback<FeedLikePagination>> {
 
     private FeedRepository feedRepository;
 
+    @Inject
     public GetFeedLikePaginationUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
