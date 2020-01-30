@@ -48,6 +48,10 @@ import retrofit2.Retrofit;
 public class HomeActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedAdapter.ClickListener, HomeContract.View {
     
+    public static Intent getIntent(Context context) {
+        return new Intent(context, HomeActivity.class);
+    }
+    
     @Inject
     FeedAdapter feedAdapter;
     @Inject
@@ -60,9 +64,6 @@ public class HomeActivity extends DaggerAppCompatActivity
     boolean isLoading = false, isLastPage = false;
     int totalPage = 0, currentPage = 1;
     
-    public static Intent getIntent(Context context) {
-        return new Intent(context, HomeActivity.class);
-    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

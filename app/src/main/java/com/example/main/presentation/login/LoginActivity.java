@@ -39,9 +39,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
     
     EditText edtEmail;
     EditText edtPassword;
-    
     Button btnSignin;
-    
     ProgressDialog waitingDialog;
     
     
