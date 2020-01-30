@@ -3,7 +3,7 @@ package com.example.main.core.data.source.user.model.local;
 import com.google.gson.annotations.SerializedName;
 
 public class Employee {
-
+    
     @SerializedName("EmployeeId")
     private int employeeId;
     @SerializedName("EmployeeNumber")

@@ -29,7 +29,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Retrofit;
 
 public class LoginActivity extends DaggerAppCompatActivity implements LoginContract.View {
-
+    
     public static Intent getIntent(Context context) {
         return new Intent(context, LoginActivity.class);
     }
@@ -39,12 +39,12 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
     
     EditText edtEmail;
     EditText edtPassword;
-
+    
     Button btnSignin;
     
     ProgressDialog waitingDialog;
     
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
         initListener();
         loginPresenter.onCreate();
     }
-
+    
     private void initListener() {
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +64,8 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
             }
         });
     }
-
-
+    
+    
     private void initView() {
         edtEmail = findViewById(R.id.et_email);
         edtPassword = findViewById(R.id.et_password);
@@ -77,7 +77,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
     public void onStartLogin() {
         btnSignin.setEnabled(false);
         
-        waitingDialog = new ProgressDialog(this );
+        waitingDialog = new ProgressDialog(this);
         waitingDialog.setCancelable(false);
         waitingDialog.setMessage("Logging In...");
         waitingDialog.show();
@@ -86,31 +86,31 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
     
     @Override
     public void onInputEmpty() {
-        if (waitingDialog.isShowing()){
+        if (waitingDialog.isShowing()) {
             waitingDialog.dismiss();
         }
-    
+        
         btnSignin.setEnabled(true);
         Toast.makeText(this, "Please enter your email and password.", Toast.LENGTH_LONG).show();
-    
+        
     }
     
     @Override
     public void failLogin(String message) {
-        if (waitingDialog.isShowing()){
+        if (waitingDialog.isShowing()) {
             waitingDialog.dismiss();
         }
-    
+        
         btnSignin.setEnabled(true);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
     
     @Override
     public void successLogin() {
-        if (waitingDialog.isShowing()){
+        if (waitingDialog.isShowing()) {
             waitingDialog.dismiss();
         }
-    
+        
         btnSignin.setEnabled(true);
         startActivity(HomeActivity.getIntent(this).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         
@@ -121,32 +121,32 @@ public class LoginActivity extends DaggerAppCompatActivity implements LoginContr
         super.onStart();
         //ketika user interface terlihat oleh user
     }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
         //ketika di foreground
     }
-
+    
     @Override
     protected void onPause() {
         super.onPause();
         //ketika kembali ke background
     }
-
+    
     @Override
     protected void onStop() {
         super.onStop();
         //ketika user interface tidak terlihat oleh user
         //i.e : pindah activity
     }
-
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //destroy instance activity
     }
-
+    
     @Override
     protected void onRestart() {
         super.onRestart();

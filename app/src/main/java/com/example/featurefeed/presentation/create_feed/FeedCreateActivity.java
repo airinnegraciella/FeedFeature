@@ -33,13 +33,12 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class FeedCreateActivity extends DaggerAppCompatActivity
         implements FeedCreateContract.View {
-
     private final static String FEED_ID = "feedId";
     private final static String IS_CREATED = "isCreated";
     private final static String FEED_POST = "feedPost";
     private final static String FEED_IMAGE = "feedImage";
     private final static String POSITION_FEED = "positionFeed";
-
+    
     public static Intent getIntent(Context context, int feedId, boolean isCreated,
                                    String feedPost, String feedImage,
                                    int positionFeed) {
@@ -50,19 +49,20 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
                 .putExtra(FEED_IMAGE, feedImage)
                 .putExtra(POSITION_FEED, positionFeed);
     }
-
+    
+    @Inject
+    FeedCreatePresenterImpl feedCreatePresenter;
+    
     TakePhoto takePhoto;
     ProgressDialog waitingDialog;
     ProgressBar progress_bar_photo;
-    @Inject
-    FeedCreatePresenterImpl feedCreatePresenter;
-
+    
     RelativeLayout btn_camera, btn_gallery, btn_delete_image, layout_image_post;
     ImageView iv_image_post;
     EditText edt_post;
-
+    
     private boolean isPostReady = false;
-
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,19 +76,19 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
                 getIntent().getStringExtra(FEED_POST),
                 getIntent().getStringExtra(FEED_IMAGE));
     }
-
+    
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_post, menu);
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.btn_post) {
@@ -97,7 +97,7 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
+    
     private void initView() {
         btn_camera = findViewById(R.id.btn_camera);
         btn_gallery = findViewById(R.id.btn_gallery);
@@ -107,7 +107,7 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
         iv_image_post = findViewById(R.id.iv_image_post);
         layout_image_post = findViewById(R.id.layout_image_post);
     }
-
+    
     private void iniListener() {
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,51 +115,51 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
                 feedCreatePresenter.onButtonCameraClick();
             }
         });
-
+        
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 feedCreatePresenter.onButtonGalleryClick();
             }
         });
-
+        
         btn_delete_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 feedCreatePresenter.onButtonDeleteImageClick();
             }
         });
-
+        
         edt_post.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            
             }
-
+            
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 feedCreatePresenter.isPostReady(s.toString().trim());
             }
-
+            
             @Override
             public void afterTextChanged(Editable s) {
                 feedCreatePresenter.isPostReady(s.toString().trim());
-
+                
             }
         });
-
+        
     }
-
+    
     @Override
     public void setTitleActionBar(String title) {
         getSupportActionBar().setTitle(title);
     }
-
+    
     @Override
     public void setPostFeed(String post) {
         edt_post.setText(post);
     }
-
+    
     @Override
     public void setPostImage(String imageName) {
         Glide.with(this)
@@ -168,31 +168,31 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
                 .placeholder(R.drawable.ic_image_gray_24dp)
                 .into(iv_image_post);
     }
-
+    
     @Override
     public void onStartLoading() {
-        waitingDialog = new ProgressDialog(this );
+        waitingDialog = new ProgressDialog(this);
         waitingDialog.setCancelable(false);
         waitingDialog.setMessage("Waiting...");
         waitingDialog.show();
-
+        
     }
-
+    
     @Override
     public void onStopLoading() {
         if (waitingDialog.isShowing()) {
             waitingDialog.dismiss();
         }
-
+        
     }
-
+    
     @Override
     public void failMessage(String message) {
         onStopLoading();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
+        
     }
-
+    
     private Intent getReturnIntent(int positionKey, int feedId, String feedPost, String feedImage) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", positionKey);
@@ -201,16 +201,16 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
         returnIntent.putExtra("feedImage", feedImage);
         return returnIntent;
     }
-
+    
     @Override
     public void onSuccessEditPost(String feedPost, String feedImage) {
         onStopLoading();
         Toast.makeText(this, "Post successfully edited", Toast.LENGTH_LONG).show();
         setResult(Activity.RESULT_OK, getReturnIntent(getIntent().getIntExtra(POSITION_FEED, 0), getIntent().getIntExtra(FEED_ID, 0), feedPost, feedImage));
         finish();
-
+        
     }
-
+    
     @Override
     public void onSuccessAddPost(int feedId, String feedPost, String feedImage) {
         onStopLoading();
@@ -218,7 +218,7 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
         setResult(Activity.RESULT_OK, getReturnIntent(getIntent().getIntExtra(POSITION_FEED, 0), feedId, feedPost, feedImage));
         finish();
     }
-
+    
     @Override
     public void pickFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -228,86 +228,86 @@ public class FeedCreateActivity extends DaggerAppCompatActivity
         mimeTypes.add("image/png");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         startActivityForResult(intent, Constant.GALLERY_REQUEST_CODE);
-
+        
     }
-
+    
     @Override
     public void launchIntentTakePhoto(String imageName) {
         takePhoto.dispatchTakePictureIntent(this, this, Constant.CAMERA_REQUEST_CODE, imageName);
     }
-
+    
     @Override
     public void onStartUploadPhoto() {
         if (progress_bar_photo.getVisibility() != View.VISIBLE) {
             progress_bar_photo.setVisibility(View.VISIBLE);
         }
-
+        
         btn_camera.setEnabled(false);
         btn_gallery.setEnabled(false);
     }
-
+    
     @Override
     public void onStopUploadPhoto() {
         if (progress_bar_photo.getVisibility() != View.GONE) {
             progress_bar_photo.setVisibility(View.GONE);
         }
-
+        
         btn_camera.setEnabled(true);
         btn_gallery.setEnabled(true);
     }
-
+    
     @Override
     public void onSuccessUploadPhoto(String imageName) {
         Glide.with(this)
                 .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_FEED, imageName))
                 .placeholder(R.drawable.ic_image_gray_24dp)
                 .into(iv_image_post);
-
+        
     }
-
+    
     @Override
     public void onErrorUploadPhoto(String message) {
         onStopUploadPhoto();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
+    
     @Override
     public void navigateToImageSlider(ArrayList<String> photoList, int index) {
-
+    
     }
-
+    
     @Override
     public void setImagePostGone() {
         iv_image_post.setVisibility(View.GONE);
         btn_delete_image.setVisibility(View.GONE);
-
+        
     }
-
+    
     @Override
     public void setImagePostVisible() {
         iv_image_post.setVisibility(View.VISIBLE);
         btn_delete_image.setVisibility(View.VISIBLE);
-
+        
     }
-
+    
     @Override
     public void setLayoutImagePostGone() {
         layout_image_post.setVisibility(View.GONE);
-
+        
     }
-
+    
     @Override
     public void setLayoutImagePostVisible() {
         layout_image_post.setVisibility(View.VISIBLE);
-
+        
     }
-
+    
     @Override
     public void setPostReady() {
         isPostReady = true;
         invalidateOptionsMenu();
     }
-
+    
     @Override
     public void setPostNotReady() {
         isPostReady = false;

@@ -16,7 +16,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @ApplicationScope
-@Component(modules ={
+@Component(modules = {
         AndroidSupportInjectionModule.class,
         ApplicationModule.class, SharedPreferenceModule.class,
         FeedRepositoryModule.class, ServiceModule.class,
@@ -24,5 +24,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
 public interface ApplicationComponent extends AndroidInjector<FeedApplication> {
     
     @Component.Builder
-    abstract class Builder extends AndroidInjector.Builder<FeedApplication> {}
+    abstract class Builder extends AndroidInjector.Builder<FeedApplication> {
+    }
 }

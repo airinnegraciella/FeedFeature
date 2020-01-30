@@ -32,24 +32,23 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private static final int ITEM = 1;
     private static final int LOADING = 2;
-
+    
     private List<Feed> feedList;
     private ClickListener clickListener;
-
+    
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
-
+    
     private String errorMsg;
-
+    
     @Inject
     public FeedAdapter(ClickListener clickListener) {
         this.clickListener = clickListener;
         feedList = new ArrayList<>();
     }
-
+    
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -63,7 +62,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         return holder;
     }
-
+    
     @Override
     public int getItemViewType(int position) {
         if (position == feedList.size() - 1 && isLoadingAdded) {
@@ -72,21 +71,21 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return ITEM;
         }
     }
-
+    
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == LOADING) {
             LoadingVH loadingVH = (LoadingVH) holder;
-
+            
             if (retryPageLoad) {
                 loadingVH.mErrorLayout.setVisibility(View.VISIBLE);
                 loadingVH.mProgressBar.setVisibility(View.GONE);
-
+                
                 loadingVH.mErrorTxt.setText(
                         errorMsg != null ?
                                 errorMsg :
                                 "An unexpected error occurred");
-
+                
             } else {
                 loadingVH.mErrorLayout.setVisibility(View.GONE);
                 loadingVH.mProgressBar.setVisibility(View.VISIBLE);
@@ -97,13 +96,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_EMPLOYEE,
                             Objects.requireNonNull(feedList.get(position).getMakerImagePath())))
                     .into(feedViewHolder.iv_pp);
-
+            
             CircularProgressDrawable circularProgressDrawable =
                     new CircularProgressDrawable(feedViewHolder.iv_image.getContext());
             circularProgressDrawable.setStrokeWidth(5f);
             circularProgressDrawable.setCenterRadius(30f);
             circularProgressDrawable.start();
-
+            
             if (Objects.requireNonNull(feedList.get(position).getPostImagePath()).isEmpty()) {
                 feedViewHolder.iv_image.setVisibility(View.GONE);
             } else {
@@ -114,24 +113,24 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .placeholder(circularProgressDrawable)
                         .into(feedViewHolder.iv_image);
             }
-
+            
             feedViewHolder.tv_name.setText(feedList.get(position).getMakerName());
             feedViewHolder.tv_date.setText(
                     Constant.convertDateTimeToFullDateDay(Objects.requireNonNull(feedList.get(position).getUpdatedDate()))
             );
-
+            
             if (Objects.requireNonNull(feedList.get(position).getPost()).isEmpty()) {
                 feedViewHolder.tv_caption.setVisibility(View.GONE);
             } else {
                 feedViewHolder.tv_caption.setVisibility(View.VISIBLE);
                 feedViewHolder.tv_caption.setText(feedList.get(position).getPost());
             }
-
+            
             if (feedList.get(position).getTotalLike() == 0 && feedList.get(position).getTotalComment() == 0) {
                 feedViewHolder.layout_total.setVisibility(View.GONE);
             } else {
                 feedViewHolder.layout_total.setVisibility(View.VISIBLE);
-
+                
                 feedViewHolder.tv_likes.setText(
                         setTotalLikeString(feedList.get(position).getTotalLike())
                 );
@@ -139,13 +138,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         setTotalCommentString(feedList.get(position).getTotalComment())
                 );
             }
-
+            
             if (feedList.get(position).getIsMine() == 1) {
                 feedViewHolder.btn_option.setVisibility(View.VISIBLE);
             } else {
                 feedViewHolder.btn_option.setVisibility(View.GONE);
             }
-
+            
             if (feedList.get(position).getIsLiked() == 1) {
                 feedViewHolder.tv_likes.setTextColor(
                         ContextCompat.getColor(
@@ -165,7 +164,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 feedViewHolder.btn_like_after.setVisibility(View.GONE);
                 setTextViewDrawableColor(feedViewHolder.tv_likes, R.color.gray);
             }
-
+            
             ((FeedViewHolder) holder).setOnBtnCommentClickListener(
                     new IItemClickListener() {
                         @Override
@@ -176,7 +175,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnEmpClickListener(
                     new IItemClickListener() {
                         @Override
@@ -186,7 +185,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnImagePostClickListener(
                     new IItemClickListener() {
                         @Override
@@ -196,7 +195,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnLikeClickListener(
                     new IItemClickListener() {
                         @Override
@@ -209,7 +208,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnOptionClickListener(
                     new IItemClickListener() {
                         @Override
@@ -243,9 +242,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
-
-
+            
+            
             ((FeedViewHolder) holder).setOnBtnPostClickListener(
                     new IItemClickListener() {
                         @Override
@@ -255,7 +253,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnTotalCommentClickListener(
                     new IItemClickListener() {
                         @Override
@@ -266,7 +264,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     }
             );
-
+            
             ((FeedViewHolder) holder).setOnBtnTotalLikeClickListener(
                     new IItemClickListener() {
                         @Override
@@ -278,18 +276,18 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             );
         }
     }
-
+    
     @Override
     public int getItemCount() {
         return feedList.size();
     }
-
+    
     class FeedViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_pp, iv_image, btn_option;
         TextView tv_name, tv_date, tv_caption, tv_likes, tv_comments;
         TextView btn_like_before, btn_like_after;
         LinearLayout btn_like, btn_comment, layout_total;
-
+        
         IItemClickListener onBtnTotalLikeClickListener;
         IItemClickListener onBtnTotalCommentClickListener;
         IItemClickListener onBtnLikeClickListener;
@@ -298,39 +296,39 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         IItemClickListener onBtnImagePostClickListener;
         IItemClickListener onBtnPostClickListener;
         IItemClickListener onBtnOptionClickListener;
-
+        
         public void setOnBtnTotalLikeClickListener(IItemClickListener onBtnTotalLikeClickListener) {
             this.onBtnTotalLikeClickListener = onBtnTotalLikeClickListener;
         }
-
+        
         public void setOnBtnTotalCommentClickListener(IItemClickListener onBtnTotalCommentClickListener) {
             this.onBtnTotalCommentClickListener = onBtnTotalCommentClickListener;
         }
-
+        
         public void setOnBtnLikeClickListener(IItemClickListener onBtnLikeClickListener) {
             this.onBtnLikeClickListener = onBtnLikeClickListener;
         }
-
+        
         public void setOnBtnCommentClickListener(IItemClickListener onBtnCommentClickListener) {
             this.onBtnCommentClickListener = onBtnCommentClickListener;
         }
-
+        
         public void setOnBtnEmpClickListener(IItemClickListener onBtnEmpClickListener) {
             this.onBtnEmpClickListener = onBtnEmpClickListener;
         }
-
+        
         public void setOnBtnImagePostClickListener(IItemClickListener onBtnImagePostClickListener) {
             this.onBtnImagePostClickListener = onBtnImagePostClickListener;
         }
-
+        
         public void setOnBtnPostClickListener(IItemClickListener onBtnPostClickListener) {
             this.onBtnPostClickListener = onBtnPostClickListener;
         }
-
+        
         public void setOnBtnOptionClickListener(IItemClickListener onBtnOptionClickListener) {
             this.onBtnOptionClickListener = onBtnOptionClickListener;
         }
-
+        
         FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_pp = (ImageView) itemView.findViewById(R.id.iv_pp);
@@ -346,7 +344,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btn_comment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
             btn_option = (ImageView) itemView.findViewById(R.id.btn_option);
             layout_total = (LinearLayout) itemView.findViewById(R.id.layout_total);
-
+            
             iv_pp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -409,25 +407,25 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
-
+    
     class LoadingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         ProgressBar mProgressBar;
         ImageButton mRetryBtn;
         TextView mErrorTxt;
         LinearLayout mErrorLayout;
-
+        
         LoadingVH(View itemView) {
             super(itemView);
-
+            
             mProgressBar = itemView.findViewById(R.id.loadmore_progress);
             mRetryBtn = itemView.findViewById(R.id.loadmore_retry);
             mErrorTxt = itemView.findViewById(R.id.loadmore_errortxt);
             mErrorLayout = itemView.findViewById(R.id.loadmore_errorlayout);
-
+            
             mRetryBtn.setOnClickListener(this);
             mErrorLayout.setOnClickListener(this);
         }
-
+        
         @Override
         public void onClick(View view) {
             int id = view.getId();
@@ -437,29 +435,29 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
     }
-
+    
     public interface ClickListener {
         void onClickTotalLike(int feedId);
-
+        
         void onClickTotalComment(int feedId, int position);
-
+        
         void onClickBtnLike(int feedId, int isLiked, int position);
-
+        
         void onClickBtnComment(int feedId, int position);
-
+        
         void onClickEmp(int empId);
-
+        
         void onClickImagePost(String imageName);
-
+        
         void onClickPost(Feed feed);
-
+        
         void onClickEditFeed(int feedId, String feedPost, String feedImage, int position);
-
+        
         void onClickDeleteFeed(int feedId, int position);
-
+        
         void retryPageLoad();
     }
-
+    
     private void setTextViewDrawableColor(TextView textView, int color) {
         for (Drawable drawable : textView.getCompoundDrawables()) {
             if (drawable != null) {
@@ -467,111 +465,111 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
     }
-
-
+    
+    
     private String setTotalLikeString(int total) {
         if (total <= 0) return "";
         else if (total <= 1) return total + " Like";
         else return total + " Likes";
     }
-
+    
     private String setTotalCommentString(int total) {
         if (total <= 0) return "";
         else if (total <= 1) return total + " Comment";
         else return total + " Comments";
     }
-
+    
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
         notifyItemChanged(feedList.size() - 1);
-
+        
         if (errorMsg != null) this.errorMsg = errorMsg;
     }
-
+    
     public List<Feed> getFeedList() {
         return feedList;
     }
-
+    
     public void addAtFirst(Feed feed) {
         feedList.add(0, feed);
         notifyItemInserted(0);
     }
-
+    
     public void add(Feed feed) {
         feedList.add(feed);
         notifyItemInserted(feedList.size() - 1);
     }
-
+    
     public void addAll(List<Feed> feedList) {
         for (Feed feed : feedList) {
             add(feed);
         }
     }
-
+    
     public void remove(int position) {
         if (position > -1) {
             feedList.remove(position);
             notifyItemRemoved(position);
         }
     }
-
+    
     public void addLoadingFooter() {
         isLoadingAdded = true;
         add(new Feed());
     }
-
+    
     public void resetIsLoadingAdded() {
         isLoadingAdded = false;
     }
-
+    
     public void removeLoadingFooter() {
         isLoadingAdded = false;
-
+        
         int position = feedList.size() - 1;
         Feed feed = getItem(position);
-
+        
         if (feed != null) {
             feedList.remove(position);
             notifyItemRemoved(position);
         }
     }
-
+    
     public Feed getItem(int position) {
         return feedList.get(position);
     }
-
+    
     public void setLikeFeed(int position) {
         Feed feed = getItem(position);
-
+        
         if (feed != null) {
             feedList.get(position).setIsLiked(1);
             feedList.get(position).setTotalLike(feedList.get(position).getTotalLike() + 1);
             notifyItemChanged(position);
         }
     }
-
+    
     public void setDisLikeFeed(int position) {
         Feed feed = getItem(position);
-
+        
         if (feed != null) {
             feedList.get(position).setIsLiked(0);
             feedList.get(position).setTotalLike(feedList.get(position).getTotalLike() - 1);
             notifyItemChanged(position);
         }
     }
-
+    
     public void setTotalComment(int position, int totalComment) {
         Feed feed = getItem(position);
-
+        
         if (feed != null) {
             feedList.get(position).setTotalComment(totalComment);
             notifyItemChanged(position);
         }
     }
-
+    
     public void editFeed(int position, String newFeedPost, String newFeedImage) {
         Feed feed = getItem(position);
-
+        
         if (feed != null) {
             feedList.get(position).setPost(newFeedPost);
             feedList.get(position).setPostImagePath(newFeedImage);

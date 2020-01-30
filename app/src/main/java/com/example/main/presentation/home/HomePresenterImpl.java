@@ -22,19 +22,19 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class HomePresenterImpl implements HomeContract.Presenter {
-
+    
     private HomeContract.View view;
     private CompositeDisposable compositeDisposable;
-
+    
     private LikeFeedUseCase likeFeedUseCase;
     private DislikeFeedUseCase dislikeFeedUseCase;
     private GetCurrentUserUseCase getCurrentUserUseCase;
     private GetFeedPaginationUseCase getFeedPaginationUseCase;
     private DeleteFeedUseCase deleteFeedUseCase;
-
+    
     private int currentEmployeeId = 0;
     private final int LIMIT = 5;
-
+    
     @Inject
     HomePresenterImpl(HomeContract.View view,
                       LikeFeedUseCase likeFeedUseCase,
@@ -49,33 +49,33 @@ public class HomePresenterImpl implements HomeContract.Presenter {
         this.getFeedPaginationUseCase = getFeedPaginationUseCase;
         this.deleteFeedUseCase = deleteFeedUseCase;
     }
-
+    
     @Override
     public void onCreate() {
         compositeDisposable = new CompositeDisposable();
         getCurrentUserUseCase.execute("", new ICallback<CurrentUser>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
-
+            
             }
-
+            
             @Override
             public void onSuccess(CurrentUser result) {
                 currentEmployeeId = result.getEmployeeId();
             }
-
+            
             @Override
             public void onError(String error) {
                 view.showMessage(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void loadFirstPageFromServer(int currentPage) {
         view.onStartRefresh();
@@ -85,27 +85,27 @@ public class HomePresenterImpl implements HomeContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(FeedPagination result) {
                 view.onAcceptLoadFeedFirstPage(result.getFeed_list(), result.getTotal_page());
                 view.onStopRefresh();
             }
-
+            
             @Override
             public void onError(String error) {
                 view.showMessage(error);
                 view.onStopRefresh();
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
-
+        
     }
-
+    
     @Override
     public void loadNextPageFromServer(int currentPage) {
         compositeDisposable.clear();
@@ -114,39 +114,39 @@ public class HomePresenterImpl implements HomeContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(FeedPagination result) {
                 view.onAcceptLoadFeedNextPage(result.getFeed_list(), result.getTotal_page());
             }
-
+            
             @Override
             public void onError(String error) {
                 view.onErrorLoadNextPage(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void onAddFeedButtonClick() {
         view.navigateToAddFeed();
     }
-
+    
     @Override
     public void onClickTotalLike(int feedId) {
         view.navigateToLikeList(feedId);
     }
-
+    
     @Override
     public void onClickTotalComment(int feedId, int position) {
         view.navigateToCommentList(feedId, position);
     }
-
+    
     @Override
     public void onClickBtnLike(int feedId, int isLiked, final int position) {
         view.onStartRefresh();
@@ -156,22 +156,22 @@ public class HomePresenterImpl implements HomeContract.Presenter {
                 public void onDisposableAcquired(Disposable disposable) {
                     compositeDisposable.add(disposable);
                 }
-
+                
                 @Override
                 public void onSuccess(ResponseDislikeFeed result) {
                     view.setDislikeFeed(position);
                     view.onStopRefresh();
                 }
-
+                
                 @Override
                 public void onError(String error) {
                     view.showMessage(error);
                     view.onStopRefresh();
                 }
-
+                
                 @Override
                 public void onInputEmpty() {
-
+                
                 }
             });
         } else {
@@ -180,77 +180,77 @@ public class HomePresenterImpl implements HomeContract.Presenter {
                 public void onDisposableAcquired(Disposable disposable) {
                     compositeDisposable.add(disposable);
                 }
-
+                
                 @Override
                 public void onSuccess(ResponseLikeFeed result) {
                     view.setLikeFeed(position);
                     view.onStopRefresh();
                 }
-
+                
                 @Override
                 public void onError(String error) {
                     view.showMessage(error);
                     view.onStopRefresh();
                 }
-
+                
                 @Override
                 public void onInputEmpty() {
-
+                
                 }
             });
         }
     }
-
+    
     @Override
     public void onClickBtnComment(int feedId, int position) {
         view.navigateToCommentList(feedId, position);
     }
-
+    
     @Override
     public void onClickEmp(int empId) {
-
+    
     }
-
+    
     @Override
     public void onClickImagePost(String imageName) {
-
+    
     }
-
+    
     @Override
     public void onClickPost(Feed feed) {
-
+    
     }
-
+    
     @Override
     public void onClickEditFeed(int feedId, String feedPost, String feedImage, int position) {
         view.navigateToEditFeed(feedId, feedPost, feedImage, position);
     }
-
+    
     @Override
     public void onClickDeleteFeed(final int feedId, final int position) {
         view.onStartRefresh();
-
+        
         deleteFeedUseCase.execute(feedId, new ICallback<ResponseDeleteFeed>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseDeleteFeed result) {
                 view.onDeleteFeedSuccess(position);
                 view.onStopRefresh();
             }
-
+            
             @Override
             public void onError(String error) {
-                view.showMessage(error+" #"+feedId);
+                view.showMessage(error + " #" + feedId);
                 view.onStopRefresh();
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }

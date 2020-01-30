@@ -22,35 +22,33 @@ public class LoginUseCase extends BaseUseCase<LoginUser, ICallback<ResponseLogin
     
     @Override
     public void execute(final LoginUser loginUser, final ICallback<ResponseLogin> callback) {
-        if(loginUser.getUserId().isEmpty() || loginUser.getPassword().isEmpty()){
+        if (loginUser.getUserId().isEmpty() || loginUser.getPassword().isEmpty()) {
             callback.onInputEmpty();
-        }
-        else{
+        } else {
             loginRepository.validateLogin(loginUser.getUserId(), loginUser.getPassword(), new ICallback<ResponseLogin>() {
                 @Override
                 public void onDisposableAcquired(Disposable disposable) {
                     callback.onDisposableAcquired(disposable);
                 }
-    
+                
                 @Override
                 public void onSuccess(ResponseLogin result) {
-                    if(result.getStatus().equalsIgnoreCase("Success")){
+                    if (result.getStatus().equalsIgnoreCase("Success")) {
                         loginRepository.setCurrentUserLogin(new CurrentUser(loginUser.getUserId(), result.getEmployee().getEmployeeId()));
                         callback.onSuccess(result);
-                    }
-                    else{
+                    } else {
                         callback.onError(result.getMessage());
                     }
                 }
-    
+                
                 @Override
                 public void onError(String error) {
                     callback.onError(error);
                 }
-    
+                
                 @Override
                 public void onInputEmpty() {
-        
+                
                 }
             });
         }

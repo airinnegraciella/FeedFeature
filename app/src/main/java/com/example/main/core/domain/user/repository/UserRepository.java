@@ -5,7 +5,7 @@ import com.example.main.core.domain.user.model.CurrentUser;
 
 public interface UserRepository {
 //    void getCurrentServerDateTime(ICallback<ResponseServerDateTime> callback);
-
+    
     void getCurrentUserLogin(ICallback<CurrentUser> callback);
 
 //    void getEmployeeById(int employeeId , ICallback<ResponseEmployeeById> callback);

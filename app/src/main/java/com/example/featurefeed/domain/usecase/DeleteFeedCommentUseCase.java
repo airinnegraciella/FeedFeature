@@ -25,22 +25,21 @@ public class DeleteFeedCommentUseCase extends BaseUseCase<Integer, ICallback<Res
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-    
+            
             @Override
             public void onSuccess(ResponseDeleteFeedComment result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result);
-                }
-                else{
+                } else {
                     callback.onError(result.getMessage());
                 }
             }
-    
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-    
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();

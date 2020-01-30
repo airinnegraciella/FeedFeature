@@ -25,7 +25,7 @@ public interface IMyAPI {
             @Field("userId") String email,
             @Field("password") String password
     );
-
+    
     @FormUrlEncoded
     @POST("feed/getFeedPagination")
     Single<ResponseFeedPagination> feed(
@@ -33,7 +33,7 @@ public interface IMyAPI {
             @Field("limit") int limit,
             @Field("empId") int empId
     );
-
+    
     @FormUrlEncoded
     @POST("feed/getFeedLikePagination")
     Single<ResponseFeedLikesPagination> feed_likes(
@@ -41,7 +41,7 @@ public interface IMyAPI {
             @Field("page") int page,
             @Field("limit") int limit
     );
-
+    
     @FormUrlEncoded
     @POST("feed/getFeedCommentPagination")
     Single<ResponseFeedCommentPagination> feed_comments(
@@ -50,21 +50,21 @@ public interface IMyAPI {
             @Field("page") int page,
             @Field("limit") int limit
     );
-
+    
     @FormUrlEncoded
     @POST("feed/likeFeed")
     Single<ResponseLikeFeed> likeFeed(
             @Field("feedId") int feedId,
             @Field("employeeId") int employeeId
     );
-
+    
     @FormUrlEncoded
     @POST("feed/dislikeFeed")
     Single<ResponseDislikeFeed> dislikeFeed(
             @Field("feedId") int feedId,
             @Field("employeeId") int employeeId
     );
-
+    
     @FormUrlEncoded
     @POST("feed/createFeed")
     Single<ResponseCreateFeed> createFeed(
@@ -72,7 +72,7 @@ public interface IMyAPI {
             @Field("post") String post,
             @Field("image") String image
     );
-
+    
     @FormUrlEncoded
     @POST("feed/getFeedCommentPagination")
     Single<ResponseFeedCommentPagination> getFeedCommentPagination(
@@ -81,7 +81,7 @@ public interface IMyAPI {
             @Field("page") int page,
             @Field("limit") int limit
     );
-
+    
     @FormUrlEncoded
     @POST("feed/getFeedLikePagination")
     Single<ResponseFeedLikesPagination> getFeedLikePagination(
@@ -89,7 +89,7 @@ public interface IMyAPI {
             @Field("page") int page,
             @Field("limit") int limit
     );
-
+    
     @FormUrlEncoded
     @POST("feed/editFeed")
     Single<ResponseEditFeed> editFeed(
@@ -98,13 +98,13 @@ public interface IMyAPI {
             @Field("post") String post,
             @Field("image") String image
     );
-
+    
     @FormUrlEncoded
     @POST("feed/deleteFeed")
     Single<ResponseDeleteFeed> deleteFeed(
             @Field("feedId") int feedId
     );
-
+    
     @FormUrlEncoded
     @POST("feed/createFeedComment")
     Single<ResponseCreateFeedComment> createFeedComment(
@@ -113,7 +113,7 @@ public interface IMyAPI {
             @Field("comment") String comment,
             @Field("image") String image
     );
-
+    
     @FormUrlEncoded
     @POST("feed/editFeedComment")
     Single<ResponseEditFeedComment> editFeedComment(
@@ -128,5 +128,5 @@ public interface IMyAPI {
     Single<ResponseDeleteFeedComment> deleteFeedComment(
             @Field("feedCommentId") int feedCommentId
     );
-
+    
 }

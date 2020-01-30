@@ -28,21 +28,21 @@ import javax.inject.Inject;
 public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM = 1;
     private static final int LOADING = 2;
-
+    
     private List<FeedComment> feedCommentList;
     private ClickListener clickListener;
-
+    
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
-
+    
     private String errorMsg;
-
+    
     @Inject
     public FeedCommentsAdapter(ClickListener clickListener) {
         this.clickListener = clickListener;
         feedCommentList = new ArrayList<>();
     }
-
+    
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,39 +56,39 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         return holder;
     }
-
+    
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == LOADING) {
             LoadingVH loadingVH = (LoadingVH) holder;
-
+            
             if (retryPageLoad) {
                 loadingVH.mErrorLayout.setVisibility(View.VISIBLE);
                 loadingVH.mProgressBar.setVisibility(View.GONE);
-
+                
                 loadingVH.mErrorTxt.setText(
                         errorMsg != null ?
                                 errorMsg :
                                 "An unexpected error occurred");
-
+                
             } else {
                 loadingVH.mErrorLayout.setVisibility(View.GONE);
                 loadingVH.mProgressBar.setVisibility(View.VISIBLE);
             }
         } else if (holder.getItemViewType() == ITEM) {
             FeedCommentPaginationViewHolder feedCommentPaginationViewHolder = (FeedCommentPaginationViewHolder) holder;
-
+            
             Glide.with(feedCommentPaginationViewHolder.iv_pp.getContext())
                     .load(Constant.getImageAssetPath(Constant.IMAGE_TYPE_EMPLOYEE,
                             Objects.requireNonNull(feedCommentList.get(position).getMakerImagePath())))
                     .into(feedCommentPaginationViewHolder.iv_pp);
-
+            
             CircularProgressDrawable circularProgressDrawable =
                     new CircularProgressDrawable(feedCommentPaginationViewHolder.iv_image_comment.getContext());
             circularProgressDrawable.setStrokeWidth(5f);
             circularProgressDrawable.setCenterRadius(30f);
             circularProgressDrawable.start();
-
+            
             if (Objects.requireNonNull(feedCommentList.get(position).getCommentImagePath()).equalsIgnoreCase("")) {
                 feedCommentPaginationViewHolder.iv_image_comment.setVisibility(View.GONE);
             } else {
@@ -99,12 +99,12 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         .placeholder(circularProgressDrawable)
                         .into(feedCommentPaginationViewHolder.iv_image_comment);
             }
-
+            
             feedCommentPaginationViewHolder.tv_name.setText(feedCommentList.get(position).getMakerName());
             feedCommentPaginationViewHolder.tv_updated_date.setText(
                     Constant.convertDateTimeToFullDateDay(Objects.requireNonNull(feedCommentList.get(position).getUpdatedDate()))
             );
-
+            
             feedCommentPaginationViewHolder.tv_comment.setText(feedCommentList.get(position).getComment());
 
             /*
@@ -129,7 +129,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             );
 
              */
-
+            
             ((FeedCommentPaginationViewHolder) holder).setOnLayoutCommentClickListener(
                     new IItemClickListener() {
                         @Override
@@ -145,15 +145,15 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     }
             );
-
+            
         }
     }
-
+    
     @Override
     public int getItemCount() {
         return feedCommentList.size();
     }
-
+    
     @Override
     public int getItemViewType(int position) {
         if (position == feedCommentList.size() - 1 && isLoadingAdded) {
@@ -162,42 +162,42 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return ITEM;
         }
     }
-
+    
     class FeedCommentPaginationViewHolder extends RecyclerView.ViewHolder {
         //        CircularImageView iv_ic_profile;
         ImageView iv_pp, iv_image_comment;
         TextView tv_name, tv_updated_date, tv_comment;
-
+        
         LinearLayout layout_comment;
-
+        
         IItemClickListener onBtnEmpClickListener;
         IItemClickListener onBtnImagePostClickListener;
-
+        
         IItemClickListener onLayoutCommentClickListener;
-
+        
         public void setOnBtnEmpClickListener(IItemClickListener onBtnEmpClickListener) {
             this.onBtnEmpClickListener = onBtnEmpClickListener;
         }
-
+        
         public void setOnBtnImagePostClickListener(IItemClickListener onBtnImagePostClickListener) {
             this.onBtnImagePostClickListener = onBtnImagePostClickListener;
         }
-
+        
         public void setOnLayoutCommentClickListener(IItemClickListener onLayoutCommentClickListener) {
             this.onLayoutCommentClickListener = onLayoutCommentClickListener;
         }
-
+        
         FeedCommentPaginationViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            
             iv_pp = itemView.findViewById(R.id.iv_pp);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_updated_date = itemView.findViewById(R.id.tv_updated_date);
             tv_comment = itemView.findViewById(R.id.tv_comment);
             iv_image_comment = itemView.findViewById(R.id.iv_image_comment);
-
+            
             layout_comment = itemView.findViewById(R.id.layout_comment);
-
+            
             iv_pp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,7 +210,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     onBtnEmpClickListener.onClick();
                 }
             });
-
+            
             layout_comment.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -220,25 +220,25 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
     }
-
+    
     class LoadingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         ProgressBar mProgressBar;
         ImageButton mRetryBtn;
         TextView mErrorTxt;
         LinearLayout mErrorLayout;
-
+        
         LoadingVH(View itemView) {
             super(itemView);
-
+            
             mProgressBar = itemView.findViewById(R.id.loadmore_progress);
             mRetryBtn = itemView.findViewById(R.id.loadmore_retry);
             mErrorTxt = itemView.findViewById(R.id.loadmore_errortxt);
             mErrorLayout = itemView.findViewById(R.id.loadmore_errorlayout);
-
+            
             mRetryBtn.setOnClickListener(this);
             mErrorLayout.setOnClickListener(this);
         }
-
+        
         @Override
         public void onClick(View view) {
             int id = view.getId();
@@ -248,77 +248,77 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
     }
-
+    
     public interface ClickListener {
 //        void onClickEmp(int empId);
-
+        
         void onClickLayoutComment(int feedCommentId, String feedComment, String feedCommentImage, int position);
-
+        
         void retryPageLoad();
     }
-
+    
     public List<FeedComment> getNotificationList() {
         return feedCommentList;
     }
-
+    
     public void addAtFirst(FeedComment feedComment) {
         feedCommentList.add(0, feedComment);
         notifyItemInserted(0);
     }
-
+    
     public void add(FeedComment feedComment) {
         feedCommentList.add(feedComment);
         notifyItemInserted(feedCommentList.size() - 1);
     }
-
+    
     public void addAll(List<FeedComment> feedCommentList) {
         for (FeedComment feedComment : feedCommentList) {
             add(feedComment);
         }
     }
-
+    
     public void remove(int position) {
         if (position > -1) {
             feedCommentList.remove(position);
             notifyItemRemoved(position);
         }
     }
-
+    
     public void addLoadingFooter() {
         isLoadingAdded = true;
         add(new FeedComment());
     }
-
+    
     public void resetIsLoadingAdded() {
         isLoadingAdded = false;
     }
-
+    
     public void removeLoadingFooter() {
         isLoadingAdded = false;
-
+        
         int position = feedCommentList.size() - 1;
         FeedComment feedComment = getItem(position);
-
+        
         if (feedComment != null) {
             feedCommentList.remove(position);
             notifyItemRemoved(position);
         }
     }
-
+    
     public FeedComment getItem(int position) {
         return feedCommentList.get(position);
     }
-
+    
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
         notifyItemChanged(feedCommentList.size() - 1);
-
+        
         if (errorMsg != null) this.errorMsg = errorMsg;
     }
-
+    
     public void editComment(int position, String newFeedComment, String newFeedCommentImage) {
         FeedComment feedComment = getItem(position);
-
+        
         if (feedComment != null) {
             feedCommentList.get(position).setComment(newFeedComment);
             feedCommentList.get(position).setCommentImagePath(newFeedCommentImage);

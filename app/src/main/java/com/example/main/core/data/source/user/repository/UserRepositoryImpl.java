@@ -14,10 +14,10 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl(SharedPreferenceManager spm) {
         this.spm = spm;
     }
-
+    
     @Override
     public void getCurrentUserLogin(ICallback<CurrentUser> callback) {
         callback.onSuccess(new CurrentUser(spm.getSPUserId(), spm.getSPEmployeeId()));
     }
-
+    
 }

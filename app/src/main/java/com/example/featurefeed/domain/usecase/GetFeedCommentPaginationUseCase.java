@@ -12,14 +12,13 @@ import javax.inject.Inject;
 import io.reactivex.disposables.Disposable;
 
 public class GetFeedCommentPaginationUseCase extends BaseUseCase<GetFeedComment, ICallback<FeedCommentPagination>> {
-
     private FeedRepository feedRepository;
-
+    
     @Inject
     public GetFeedCommentPaginationUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(GetFeedComment getFeedComment, final ICallback<FeedCommentPagination> callback) {
         feedRepository.getFeedCommentPagination(getFeedComment.getEmployeeId(), getFeedComment.getFeedId(), getFeedComment.getPage(), getFeedComment.getLimit(), new ICallback<ResponseFeedCommentPagination>() {
@@ -27,7 +26,7 @@ public class GetFeedCommentPaginationUseCase extends BaseUseCase<GetFeedComment,
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseFeedCommentPagination result) {
                 if (result.getStatus().equalsIgnoreCase("Success")) {
@@ -36,12 +35,12 @@ public class GetFeedCommentPaginationUseCase extends BaseUseCase<GetFeedComment,
                     callback.onError(result.getMessage());
                 }
             }
-
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();

@@ -42,50 +42,50 @@ import static com.example.main.R.layout.*;
 
 public class FeedCommentActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, FeedCommentsAdapter.ClickListener, FeedCommentContract.View {
-
     private final int PAGE_START = 1;
     private static final String FEED_ID = "feedId";
     private static final String POSITION_FEED = "positionFeed";
     private ViewGroupOverlay overlay;
-
+    
     public void applyDim(ViewGroup parent, float dimAmount) {
         ColorDrawable dim = new ColorDrawable(Color.BLACK);
         dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
         dim.setAlpha((int) (255 * dimAmount));
-
+        
         overlay = parent.getOverlay();
         overlay.add(dim);
     }
-
+    
     public void clearDim(ViewGroup parent) {
         overlay = parent.getOverlay();
         overlay.clear();
     }
-
+    
     public static Intent getIntent(Context context, int feedId, int positionFeed) {
         return new Intent(context, FeedCommentActivity.class)
                 .putExtra(FEED_ID, feedId)
                 .putExtra(POSITION_FEED, positionFeed);
     }
-
+    
     private LinearLayoutManager linearLayoutManager;
     
     @Inject
     FeedCommentsAdapter feedCommentsAdapter;
     @Inject
     FeedCommentPresenterImpl feedCommentPresenter;
+    
     RecyclerView recycler_feed_comment;
     SwipeRefreshLayout swipe_to_refresh;
     LinearLayout layout_no_comment, layout_feed_comment;
     ImageView btn_comment;
     EditText edt_comment;
-
+    
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private int currentPage = PAGE_START;
     private int totalPage = 0;
-
-
+    
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activity_comments);
@@ -101,30 +101,30 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
             }
         });
     }
-
+    
     private void initView() {
-
+        
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recycler_feed_comment = (RecyclerView) findViewById(id.recycler_feed_comments);
         recycler_feed_comment.setLayoutManager(linearLayoutManager);
         recycler_feed_comment.setHasFixedSize(true);
         recycler_feed_comment.setAdapter(feedCommentsAdapter);
-
+        
         swipe_to_refresh = (SwipeRefreshLayout) findViewById(id.swipe_to_refresh_comments);
         swipe_to_refresh.setOnRefreshListener(this);
-
+        
         edt_comment = (EditText) findViewById(R.id.edt_comment);
         btn_comment = (ImageView) findViewById(R.id.btn_add_comment);
-
+        
         layout_no_comment = (LinearLayout) findViewById(R.id.layout_no_comment);
         layout_feed_comment = findViewById(R.id.layout_feed_comment);
-
+        
     }
-
+    
     private void initAdapter() {
         feedCommentsAdapter = new FeedCommentsAdapter(FeedCommentActivity.this);
     }
-
+    
     private void initListener() {
         swipe_to_refresh.setOnRefreshListener(this);
         recycler_feed_comment.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
@@ -132,33 +132,33 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage++;
-
+                
                 loadNextPage();
             }
-
+            
             @Override
             public int getTotalPageCount() {
                 return totalPage;
             }
-
+            
             @Override
             public boolean isLastPage() {
                 return isLastPage;
             }
-
+            
             @Override
             public boolean isLoading() {
                 return isLoading;
             }
-
+            
         });
-
+        
         edt_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            
             }
-
+            
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()) {
@@ -167,28 +167,27 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
                     btn_comment.setVisibility(View.GONE);
                 }
             }
-
+            
             @Override
             public void afterTextChanged(Editable s) {
-
+            
             }
         });
-
+        
         btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 feedCommentPresenter.onBtnCommentClick(edt_comment.getText().toString().trim());
             }
         });
-
-
-
+        
+        
     }
-
+    
     public int getLayout() {
         return activity_comments;
     }
-
+    
     public boolean onSupportNavigateUp() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", getIntent().getIntExtra(POSITION_FEED, 0));
@@ -197,7 +196,7 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
         finish();
         return true;
     }
-
+    
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("positionKey", getIntent().getIntExtra(POSITION_FEED, 0));
@@ -205,27 +204,27 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
-
+    
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
-
+    
+    
     @SuppressLint("ResourceType")
     public void onClickLayoutComment(final int feedCommentId, final String feedComment, final String feedCommentImage, final int position) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        
         View customView = inflater.inflate(popup_menu_feed_comment, null);
-
+        
         final PopupWindow mPopupWindow = new PopupWindow(
                 customView,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-
+        
         LinearLayout btnEdit = customView.findViewById(id.btn_edit);
         LinearLayout btnDelete = customView.findViewById(id.btn_delete);
-
+        
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +237,7 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
                 );
             }
         });
-
+        
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,8 +248,8 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
                 );
             }
         });
-
-
+        
+        
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -258,40 +257,40 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
                 clearDim(root);
             }
         });
-
+        
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(true);
-
+        
         applyDim(root, 0.5f);
         mPopupWindow.showAtLocation(layout_feed_comment, Gravity.CENTER, 0, 0);
     }
-
-
+    
+    
     @Override
     public void onDeleteCommentSuccess(int position) {
         feedCommentsAdapter.remove(position);
     }
-
+    
     @Override
     public void editComment(int position, String newFeedComment, String newFeedCommentImage) {
         feedCommentsAdapter.editComment(position, newFeedComment, newFeedCommentImage);
     }
-
+    
     @Override
     public void retryPageLoad() {
         loadNextPage();
     }
-
+    
     @Override
     public void onStartLoad() {
         swipe_to_refresh.setRefreshing(true);
     }
-
+    
     @Override
     public void onStopLoad() {
         swipe_to_refresh.setRefreshing(false);
     }
-
+    
     @Override
     public void onAcceptLoadFeedCommentFirstPage(List<FeedComment> feedCommentList, int total_page) {
         if (feedCommentList.isEmpty()) {
@@ -299,11 +298,11 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
         } else {
             layout_no_comment.setVisibility(View.GONE);
         }
-
+        
         feedCommentsAdapter.addAll(feedCommentList);
-
+        
         totalPage = total_page;
-
+        
         if (currentPage < totalPage) {
             feedCommentsAdapter.addLoadingFooter();
             isLastPage = false;
@@ -311,16 +310,16 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
             isLastPage = true;
         }
     }
-
+    
     @Override
     public void onAcceptLoadFeedCommentNextPage(List<FeedComment> feedCommentList, int total_page) {
         feedCommentsAdapter.removeLoadingFooter();
         isLoading = false;
-
+        
         feedCommentsAdapter.addAll(feedCommentList);
-
+        
         totalPage = total_page;
-
+        
         if (currentPage != totalPage) {
             feedCommentsAdapter.addLoadingFooter();
             isLastPage = false;
@@ -328,35 +327,35 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
             isLastPage = true;
         }
     }
-
+    
     @Override
     public void onErrorLoadNextPage(String message) {
         feedCommentsAdapter.showRetry(true, message);
     }
-
+    
     @Override
     public void onErrorLoad(String errorMessage) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(errorMessage);
     }
-
+    
     @Override
     public void navigateToEditFeed(int feedCommentId, String feedComment, int position) {
         startActivity(EditFeedCommentActivity.getIntent(this, feedCommentId, feedComment, position));
-
+        
     }
-
+    
     @Override
     public void onRefresh() {
         loadFirstPage();
     }
-
+    
     private void loadFirstPage() {
         feedCommentsAdapter.resetIsLoadingAdded();
         feedCommentsAdapter.getNotificationList().clear();
         feedCommentsAdapter.notifyDataSetChanged();
         currentPage = PAGE_START;
-
+        
         swipe_to_refresh.post(new Runnable() {
             @Override
             public void run() {
@@ -364,13 +363,13 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
             }
         });
     }
-
-
+    
+    
     private void loadNextPage() {
         feedCommentPresenter.loadNextPageFromServer(currentPage);
     }
-
-
+    
+    
     @Override
     public void onCommentSuccess(FeedComment feedComment) {
         edt_comment.setText("");
@@ -378,13 +377,13 @@ public class FeedCommentActivity extends DaggerAppCompatActivity
         feedCommentsAdapter.addAtFirst(feedComment);
         recycler_feed_comment.scrollToPosition(0);
     }
-
+    
     @Override
     public void onCommentError(String error) {
         swipe_to_refresh.setRefreshing(false);
         showMessage(error);
     }
-
+    
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         feedCommentPresenter.onActivityResult(requestCode, resultCode, data);
     }

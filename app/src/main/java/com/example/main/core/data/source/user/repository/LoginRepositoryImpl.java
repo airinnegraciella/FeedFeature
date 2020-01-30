@@ -36,18 +36,18 @@ public class LoginRepositoryImpl implements LoginRepository {
                     public void onSubscribe(Disposable d) {
                         callback.onDisposableAcquired(d);
                     }
-                
+                    
                     @Override
                     public void onSuccess(ResponseLogin response) {
                         callback.onSuccess(response);
                     }
-                
+                    
                     @Override
                     public void onError(Throwable e) {
                         callback.onError(e.getMessage());
                     }
                 });
-            
+        
     }
     
     @Override

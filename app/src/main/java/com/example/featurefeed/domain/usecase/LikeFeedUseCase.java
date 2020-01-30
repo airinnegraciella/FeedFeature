@@ -11,13 +11,13 @@ import javax.inject.Inject;
 import io.reactivex.disposables.Disposable;
 
 public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLikeFeed>> {
-    private final FeedRepository feedRepository;
-
+    private FeedRepository feedRepository;
+    
     @Inject
     public LikeFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(LikeFeed params, final ICallback<ResponseLikeFeed> callback) {
         feedRepository.likeFeed(params.getFeedId(), params.getEmployeeId(), new ICallback<ResponseLikeFeed>() {
@@ -25,7 +25,7 @@ public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLik
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseLikeFeed result) {
                 if (result.getStatus().equalsIgnoreCase("Success")) {
@@ -34,12 +34,12 @@ public class LikeFeedUseCase extends BaseUseCase<LikeFeed, ICallback<ResponseLik
                     callback.onError(result.getMessage());
                 }
             }
-
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();

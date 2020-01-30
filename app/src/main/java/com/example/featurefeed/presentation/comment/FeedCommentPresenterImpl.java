@@ -24,20 +24,19 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
-
     private FeedCommentContract.View view;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
+    private CompositeDisposable compositeDisposable;
+    
     private GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase;
     private GetCurrentUserUseCase getCurrentUserUseCase;
     private CreateFeedCommentUseCase createFeedCommentUseCase;
     private DeleteFeedCommentUseCase deleteFeedCommentUseCase;
-
+    
     private int feedId;
     private int positionFeed;
     private int currentEmployeeId = 0;
     private final int LIMIT = 5;
-
+    
     @Inject
     FeedCommentPresenterImpl(FeedCommentContract.View view,
                              GetFeedCommentPaginationUseCase getFeedCommentPaginationUseCase,
@@ -50,34 +49,35 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
         this.createFeedCommentUseCase = createFeedCommentUseCase;
         this.deleteFeedCommentUseCase = deleteFeedCommentUseCase;
     }
-
+    
     @Override
     public void onCreate(int feedId, int positionFeed) {
+        compositeDisposable = new CompositeDisposable();
         this.feedId = feedId;
         this.positionFeed = positionFeed;
         getCurrentUserUseCase.execute("", new ICallback<CurrentUser>() {
             @Override
             public void onDisposableAcquired(Disposable disposable) {
-
+            
             }
-
+            
             @Override
             public void onSuccess(CurrentUser result) {
                 currentEmployeeId = result.getEmployeeId();
             }
-
+            
             @Override
             public void onError(String error) {
-
+            
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void loadFirstPageFromServer(int currentPage) {
         view.onStartLoad();
@@ -87,26 +87,26 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(FeedCommentPagination result) {
                 view.onAcceptLoadFeedCommentFirstPage(result.getFeed_comment_list(), result.getTotal_page());
                 view.onStopLoad();
             }
-
+            
             @Override
             public void onError(String error) {
                 view.onErrorLoad(error);
                 view.onStopLoad();
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void loadNextPageFromServer(int currentPage) {
         compositeDisposable.clear();
@@ -115,24 +115,24 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(FeedCommentPagination result) {
                 view.onAcceptLoadFeedCommentNextPage(result.getFeed_comment_list(), result.getTotal_page());
             }
-
+            
             @Override
             public void onError(String error) {
                 view.onErrorLoadNextPage(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void onBtnCommentClick(String comment) {
         view.onStartLoad();
@@ -141,31 +141,31 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseCreateFeedComment result) {
                 view.onCommentSuccess(result.getFeedComment());
                 view.onStopLoad();
             }
-
+            
             @Override
             public void onError(String error) {
                 view.onCommentError(error);
                 view.onStopLoad();
             }
-
+            
             @Override
             public void onInputEmpty() {
-
+            
             }
         });
     }
-
+    
     @Override
     public void onClickEditComment(int feedCommentId, String feedComment, String feedCommentImage, int position) {
         view.navigateToEditFeed(feedCommentId, feedComment, position);
     }
-
+    
     @Override
     public void onClickDeleteComment(int feedCommentId, final int position) {
         view.onStartLoad();
@@ -174,33 +174,33 @@ public class FeedCommentPresenterImpl implements FeedCommentContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-    
+            
             @Override
             public void onSuccess(ResponseDeleteFeedComment result) {
                 view.onDeleteCommentSuccess(position);
                 view.onStopLoad();
             }
-    
+            
             @Override
             public void onError(String error) {
                 view.showMessage("$error#$feedCommentId");
                 view.onStopLoad();
             }
-    
+            
             @Override
             public void onInputEmpty() {
-        
+            
             }
         });
     }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 int position = data.getIntExtra("positionKey", 0);
                 String newComment = data.getStringExtra("newComment");
-
+                
                 view.editComment(position, newComment, "");
             }
         }

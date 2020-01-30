@@ -1,7 +1,6 @@
 package com.example.featurefeed.data.source.model.remote.response;
 
 public class ResponseDeleteFeedComment {
-    
     private String status;
     private String message;
     private String result;

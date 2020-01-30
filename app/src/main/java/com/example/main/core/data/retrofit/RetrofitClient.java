@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit ourInstance;
-
+    
     public static Retrofit getInstance() {
         if (ourInstance == null)
             ourInstance = new Retrofit.Builder()
@@ -26,7 +26,7 @@ public class RetrofitClient {
                     .build();
         return ourInstance;
     }
-
+    
     private RetrofitClient() {
     }
 }

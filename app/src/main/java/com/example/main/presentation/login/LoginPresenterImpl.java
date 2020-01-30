@@ -31,23 +31,23 @@ public class LoginPresenterImpl implements LoginContract.Presenter {
             public void onDisposableAcquired(Disposable disposable) {
                 compositeDisposable.add(disposable);
             }
-    
+            
             @Override
             public void onSuccess(ResponseLogin result) {
                 view.successLogin();
             }
-    
+            
             @Override
             public void onError(String error) {
                 view.failLogin(error);
             }
-    
+            
             @Override
             public void onInputEmpty() {
                 view.onInputEmpty();
             }
         });
-    
+        
     }
     
     @Override

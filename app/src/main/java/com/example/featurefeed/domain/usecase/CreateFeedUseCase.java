@@ -13,12 +13,12 @@ import io.reactivex.disposables.Disposable;
 
 public class CreateFeedUseCase extends BaseUseCase<CreateFeed, ICallback<Feed>> {
     private FeedRepository feedRepository;
-
+    
     @Inject
     public CreateFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(CreateFeed createFeed, final ICallback<Feed> callback) {
         feedRepository.createFeed(createFeed.getMakerId(), createFeed.getPost(), createFeed.getImage()
@@ -27,22 +27,22 @@ public class CreateFeedUseCase extends BaseUseCase<CreateFeed, ICallback<Feed>> 
                     public void onDisposableAcquired(Disposable disposable) {
                         callback.onDisposableAcquired(disposable);
                     }
-
+                    
                     @Override
                     public void onSuccess(ResponseCreateFeed response) {
                         if (response.getStatus().equalsIgnoreCase("Success")) {
                             callback.onSuccess(response.getFeed());
-
+                            
                         } else {
                             callback.onError(response.getMessage());
                         }
                     }
-
+                    
                     @Override
                     public void onError(String error) {
                         callback.onError(error);
                     }
-
+                    
                     @Override
                     public void onInputEmpty() {
                         callback.onInputEmpty();

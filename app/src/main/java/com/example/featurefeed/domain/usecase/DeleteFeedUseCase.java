@@ -11,12 +11,12 @@ import io.reactivex.disposables.Disposable;
 
 public class DeleteFeedUseCase extends BaseUseCase<Integer, ICallback<ResponseDeleteFeed>> {
     private FeedRepository feedRepository;
-
+    
     @Inject
     public DeleteFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(Integer integer, final ICallback<ResponseDeleteFeed> callback) {
         feedRepository.deleteFeed(integer, new ICallback<ResponseDeleteFeed>() {
@@ -24,22 +24,21 @@ public class DeleteFeedUseCase extends BaseUseCase<Integer, ICallback<ResponseDe
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseDeleteFeed result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result);
-                }
-                else{
+                } else {
                     callback.onError(result.getMessage());
                 }
             }
-
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();

@@ -12,12 +12,12 @@ import io.reactivex.disposables.Disposable;
 
 public class EditFeedCommentUseCase extends BaseUseCase<EditFeedComment, ICallback<ResponseEditFeedComment>> {
     private FeedRepository feedRepository;
-
+    
     @Inject
     public EditFeedCommentUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(EditFeedComment editFeedComment, final ICallback<ResponseEditFeedComment> callback) {
         feedRepository.editFeedComment(editFeedComment.getFeedCommentId(), editFeedComment.getMakerId(), editFeedComment.getComment(), editFeedComment.getImage(), new ICallback<ResponseEditFeedComment>() {
@@ -25,22 +25,21 @@ public class EditFeedCommentUseCase extends BaseUseCase<EditFeedComment, ICallba
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseEditFeedComment result) {
-                if(result.getStatus().equalsIgnoreCase("Success")){
+                if (result.getStatus().equalsIgnoreCase("Success")) {
                     callback.onSuccess(result);
-                }
-                else {
+                } else {
                     callback.onError(result.getMessage());
                 }
             }
-
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();

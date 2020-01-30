@@ -12,12 +12,12 @@ import io.reactivex.disposables.Disposable;
 
 public class DislikeFeedUseCase extends BaseUseCase<DislikeFeed, ICallback<ResponseDislikeFeed>> {
     FeedRepository feedRepository;
-
+    
     @Inject
     public DislikeFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
-
+    
     @Override
     public void execute(DislikeFeed params, final ICallback<ResponseDislikeFeed> callback) {
         feedRepository.dislikeFeed(params.getFeedId(), params.getEmployeeId(), (ICallback<ResponseDislikeFeed>) (new ICallback<ResponseDislikeFeed>() {
@@ -25,7 +25,7 @@ public class DislikeFeedUseCase extends BaseUseCase<DislikeFeed, ICallback<Respo
             public void onDisposableAcquired(Disposable disposable) {
                 callback.onDisposableAcquired(disposable);
             }
-
+            
             @Override
             public void onSuccess(ResponseDislikeFeed result) {
                 if (result.getStatus().equalsIgnoreCase("Success")) {
@@ -33,14 +33,14 @@ public class DislikeFeedUseCase extends BaseUseCase<DislikeFeed, ICallback<Respo
                 } else {
                     callback.onError(result.getMessage());
                 }
-
+                
             }
-
+            
             @Override
             public void onError(String error) {
                 callback.onError(error);
             }
-
+            
             @Override
             public void onInputEmpty() {
                 callback.onInputEmpty();
