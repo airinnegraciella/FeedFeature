@@ -1,11 +1,12 @@
 package com.example.featurefeed.domain.usecase;
 
-import com.example.featurefeed.data.source.model.local.FeedComment;
 import com.example.featurefeed.data.source.model.remote.response.ResponseCreateFeedComment;
 import com.example.featurefeed.domain.model.CreateFeedComment;
 import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
+
+import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
@@ -13,6 +14,7 @@ public class CreateFeedCommentUseCase extends BaseUseCase<CreateFeedComment, ICa
 
     private FeedRepository feedRepository;
 
+    @Inject
     public CreateFeedCommentUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }

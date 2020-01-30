@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ITEM = 1;
@@ -42,6 +44,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private String errorMsg;
 
+    @Inject
     public FeedAdapter(ClickListener clickListener) {
         this.clickListener = clickListener;
         feedList = new ArrayList<>();

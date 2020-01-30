@@ -7,6 +7,8 @@ import com.example.main.core.base.ICallback;
 import com.example.main.core.domain.user.model.CurrentUser;
 import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -21,6 +23,7 @@ public class EditFeedCommentPresenterImpl implements EditFeedCommentContract.Pre
     private int currentEmployeeId = 0;
     private int feedCommentId = 0;
 
+    @Inject
     public EditFeedCommentPresenterImpl(EditFeedCommentContract.View view, GetCurrentUserUseCase getCurrentUserUseCase, EditFeedCommentUseCase editFeedCommentUseCase) {
         this.view = view;
         this.getCurrentUserUseCase = getCurrentUserUseCase;

@@ -7,11 +7,14 @@ import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class CreateFeedUseCase extends BaseUseCase<CreateFeed, ICallback<Feed>> {
     private FeedRepository feedRepository;
 
+    @Inject
     public CreateFeedUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }

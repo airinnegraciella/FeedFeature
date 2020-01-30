@@ -1,11 +1,9 @@
 package com.example.featurefeed.presentation.create_feed;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,27 +18,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.featurefeed.data.source.repository.FeedRepositoryImpl;
-import com.example.featurefeed.domain.usecase.CreateFeedUseCase;
-import com.example.featurefeed.domain.usecase.EditFeedUseCase;
 import com.example.main.R;
-import com.example.main.core.data.retrofit.IMyAPI;
-import com.example.main.core.data.retrofit.RetrofitClient;
-import com.example.main.core.data.sharedPreference.SharedPreferenceManager;
-import com.example.main.core.domain.user.repository.UserRepositoryImpl;
-import com.example.main.core.domain.user.usecase.GetCurrentUserUseCase;
 import com.example.main.core.utils.Constant;
 import com.example.main.core.utils.TakePhoto;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import retrofit2.Retrofit;
+import javax.inject.Inject;
 
-public class FeedCreateActivity extends AppCompatActivity
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class FeedCreateActivity extends DaggerAppCompatActivity
         implements FeedCreateContract.View {
 
     private final static String FEED_ID = "feedId";
@@ -60,12 +51,11 @@ public class FeedCreateActivity extends AppCompatActivity
                 .putExtra(POSITION_FEED, positionFeed);
     }
 
-    IMyAPI myAPI;
     TakePhoto takePhoto;
     ProgressDialog waitingDialog;
     ProgressBar progress_bar_photo;
+    @Inject
     FeedCreatePresenterImpl feedCreatePresenter;
-    SharedPreferenceManager spm;
 
     RelativeLayout btn_camera, btn_gallery, btn_delete_image, layout_image_post;
     ImageView iv_image_post;
@@ -78,14 +68,8 @@ public class FeedCreateActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_feed);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        initAPI();
-        initSP();
         initView();
         iniListener();
-        feedCreatePresenter = new FeedCreatePresenterImpl(this,
-                new CreateFeedUseCase(new FeedRepositoryImpl(myAPI)),
-                new GetCurrentUserUseCase(new UserRepositoryImpl(spm)),
-                new EditFeedUseCase(new FeedRepositoryImpl(myAPI)));
         feedCreatePresenter.onCreate(
                 getIntent().getIntExtra(FEED_ID, 0),
                 getIntent().getBooleanExtra(IS_CREATED, false),
@@ -113,19 +97,6 @@ public class FeedCreateActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void initAPI() {
-        //Init API
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(IMyAPI.class);
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private void initSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SP_APP, Context.MODE_PRIVATE);
-        spm = new SharedPreferenceManager(sp, sp.edit());
-    }
-
 
     private void initView() {
         btn_camera = findViewById(R.id.btn_camera);

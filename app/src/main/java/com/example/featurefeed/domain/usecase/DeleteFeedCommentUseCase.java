@@ -5,12 +5,15 @@ import com.example.featurefeed.domain.repository.FeedRepository;
 import com.example.main.core.base.BaseUseCase;
 import com.example.main.core.base.ICallback;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.Disposable;
 
 public class DeleteFeedCommentUseCase extends BaseUseCase<Integer, ICallback<ResponseDeleteFeedComment>> {
     
     private FeedRepository feedRepository;
     
+    @Inject
     public DeleteFeedCommentUseCase(FeedRepository feedRepository) {
         this.feedRepository = feedRepository;
     }
